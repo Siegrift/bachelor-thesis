@@ -4,6 +4,9 @@ import MonacoEditor, {
   EditorDidMount
 } from 'react-monaco-editor'
 import { withStyles } from '@material-ui/core'
+import { editor as Editor } from 'monaco-editor/esm/vs/editor/editor.api'
+import { compose } from 'recompose'
+import { CaptureKeysHOC } from './CaptureKeysHOC'
 
 const styles = {}
 
@@ -11,14 +14,15 @@ class App extends Component<{}, { code: string }> {
   state = {
     code: '// type your code...',
   }
+  editorRef?: Editor.IStandaloneCodeEditor
 
   editorDidMount: EditorDidMount = (editor, monaco) => {
-    console.log('editorDidMount', editor)
+    this.editorRef = editor
     editor.focus()
   }
 
   onChange: ChangeHandler = (newValue, e) => {
-    console.log('onChange', newValue, e)
+    this.setState({ code: newValue })
   }
 
   render() {
@@ -41,4 +45,7 @@ class App extends Component<{}, { code: string }> {
   }
 }
 
-export default withStyles(styles)(App)
+export default compose(
+  withStyles(styles),
+  CaptureKeysHOC,
+)(App)
