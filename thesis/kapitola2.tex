@@ -20,10 +20,6 @@ podkapitol
 \begin{itemize}
 \item  technické výzvy
 \item  algoritmy riešiace konkurentné modifikácie jedného zdroja
-\item  súčasný stav riešenej problematiky doma a v zahraničí,
-\item  cieľ práce,
-\item  metodika práce a metódy skúmania,
-\item  výsledky práce, 
 \end{itemize}
 
 \subsection{Technické výzvy}
@@ -41,6 +37,29 @@ Avšak rýchlosť komunikácie je obmedzená latenciou siete. To vytvára zákla
 užívatelia potrebujú okamžite vlastné úpravy, ktoré sú do dokumentu zapracované,
 ale ak sú začlenené okamžite, potom kvôli latencii komunikácie musia byť ich
 úpravy nevyhnutne vložené do rôznych verzií dokumentu.
+
+Problém súbežnej modifikácie jedného textového poľa je, že jednoduché textové operácie ako
+pridaj písmeno a zmaž písmneo, nie sú komutatívne \ref{obr:nekomutativita} a ani 
+idempotentné \ref{obr:neidempotentnost}. Keďže používatelia
+modifikujú dokument cez sieť, nemáme zaručené v akom poradí sa modifikácie uskutočnia. 
+\cite {medium_crdt}
+Ilustrujme tieto problémy na príklade:
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=0.6\textwidth]{images/nekomutativne_operacie}}
+%popis obrazku
+\caption[Nekomutativita textových operácii]{Nekomutativita textových operácii}
+%id obrazku, pomocou ktoreho sa budeme na obrazok odvolavat
+\label{obr:nekomutativita}
+\end{figure}
+
+\begin{figure}[h]
+\centerline{\includegraphics[width=0.6\textwidth]{images/neidempotentne_operacie}}
+%popis obrazku
+\caption[Neidempotentnosť textových operácii]{Neidempotentnosť textových operácii}
+%id obrazku, pomocou ktoreho sa budeme na obrazok odvolavat
+\label{obr:neidempotentnost}
+\end{figure}
 
 Výzvou v spolupráci v reálnom čase je teda presne zistiť, ako možno aplikovať úpravy
 od vzdialených používateľov, ktoré boli pôvodne vytvorené vo verziách dokumentu, ktor
@@ -78,47 +97,71 @@ Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algo
 V práci použijeme CRDT, pretože OT je predchodca CRDT a v praxi často nefunguje tak dobre,
 ako to autori zamýšľali. Taktiež použitie OT je komplikované a neškálovateľné \cite{ot_nonscalable}.
 
-\begin{flushleft}\textbf {CRDT}\end{flushleft}
-Problém súbežnej modifikácie jedného textového poľa je, že jednoduché operácie ako
-pridaj písmeno a zmaž písmneo, nie sú komutatívne. Keďže používatelia modifikujú dokument
-cez sieť, nemáme zaručené v akom poradí sa modifikácie uskutočnia. Ilustrujme tento
-problém na príklade:
+\begin{flushleft}\textbf {CRDT \cite{crdt_wiki}}\end{flushleft}
 
-\begin{figure}
-\centerline{\includegraphics[width=0.8\textwidth]{images/nekomutativne_operacie}}
+V distribuovanom výpočte je konfliktný replikovaný dátový typ (CRDT) dátová štruktúra,
+ktorá môže byť replikovaná vo viacerých počítačoch v sieti, pričom repliky je možné
+aktualizovať nezávisle a súbežne bez koordinácie medzi replikami a kde je vždy
+matematicky možné vyriešiť nezrovnalosti, ktoré by mohli vyplynúť.
+
+Koncept CRDT bol formálne definovaný v roku 2011 osobami
+Marc Shapiro, Nuno Preguiça, Carlos Baquero a Marek Zawirski \cite{crdt_definition}.
+
+CRDT fungujú tak, že každý znak v dokumente sa prerobí do objektu so špecifickými vlastnosťami:
+\begin{enumerate}
+\label{def_pozicie}
+  \item znak, ktoré objekt predstavuje
+  \item relatívna pozícia tohto znaku
+  \item množina pozícíi musí tvoriť úplné usporiadanie
+  \item priestor tvorený množinou pozícii musí byť hustý
+\end{enumerate}
+Vzhľadom na to, že každá z týchto znakov je jedinečná a môže byť identifikovaná
+týmito vlastnosťami, môžeme zabrániť vloženiu alebo vymazaniu znakov viac ako raz.
+To umožňuje komutativitu a idempotenciu. Nevýhodou tohto prístupu je veľké množstvo metaúdajov.
+Tým sa zvyšuje spotreba pamäte našej aplikácie.
+
+Zaujímavým aspektom CRDT, ktorý ho odlišuje od OT sú relatívne pozície znakov. Tieto pozície majú
+nasledovné vlastnosti:
+\begin{enumerate}
+  \item žiadne 2 CRDT objekty nemajú rovnakú pozíciu
+  \item pozícia nejakého objektu sa nidky nezmení
+  \item ak 2 CRDT objekty A a B operujú na tej istej pozícii v dokumente a objekt A
+  nastane skôr než B, tak relatívna pozícia A musí byť menšia ako B.
+\end{enumerate}
+Vytvorenie takýchto pozícii je celkom jednduché.
+Znaky si môžeme predstaviť ako vrcholy na strome, kde každý znak má väčsie číslo ako znak pred
+ním, no menšie ako znak po ňom. Pozície môžu vyzerať zhruba nasledovne:
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.6\textwidth]{images/relativne_pozicie1}}
 %popis obrazku
-\caption[Nekomutativita textových operácii]{Nekomutativita textových operácii}
+\caption[Relatívne pozície znakov]{Relatívne pozície znakov}
 %id obrazku, pomocou ktoreho sa budeme na obrazok odvolavat
-\label{obr:cursus}
+\label{obr:relativne}
 \end{figure}
 
-TODO: nieco o tom ako ako CRDT funguje
+Pridanie znaku potom funguje veľmi jednoducho. Nájdeme v strome vrcholy medzi ktoré
+chceme pridať ďalšie písmeno a ako pozíciu mu dáme priemer relatívnych pozícii daných
+vrcholov. Napríklad:
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.6\textwidth]{images/relativne_pozicie2}}
+%popis obrazku
+\caption[Pridanie relatívnej pozície znakov]{Pridanie relatívnej pozície znakov}
+%id obrazku, pomocou ktoreho sa budeme na obrazok odvolavat
+\label{obr:relativne_pridanie}
+\end{figure}
 
-\subsection{Súčasný stav}
-V časti súčasný stav riešenej problematiky doma a v zahraničí autor uvádza 
-dostupné informácie a poznatky týkajúce sa danej témy. Zdrojom pre spracovanie sú 
-aktuálne publikované práce domácich a zahraničných autorov.  Podiel tejto časti práce 
-má tvoriť približne 30 \% práce.
+\begin{flushleft}\textbf {Komutativita a idempotentnosť CRDT}\end{flushleft}
+Ak predpokladáme, že pozície spĺňajú podmienky z \ref{def_pozicie}, tak CRDT objekty sú
+komutatívne a idempotentné. 
 
-\subsection{Cieľ práce}
-Časť cieľ práce  školského diela jasne, výstižne a presne charakterizuje predmet 
-riešenia. Súčasťou sú aj rozpracované čiastkové ciele, ktoré podmieňujú dosiahnutie 
-cieľa hlavného. 
+Tým, že všetky relatívne pozície sú unikátne, tak je jedno v akom poradí vykonávame dané operácie,
+teda CRDT sú naozaj komutatívne.
 
-\subsection{Metodika práce a metódy skúmania}
-Časť metodika práce a metódy skúmania spravidla obsahuje:
-\begin{enumerate}
-\item  charakteristiku objektu skúmania,  
-\item  pracovné postupy, 
-\item  spôsob získavania údajov a ich zdroje, 
-\item  použité metódy vyhodnotenia a interpretácie výsledkov,
-\item  štatistické metódy.
-\end{enumerate}
+Idempotencia je daná tým, že ak chceme do dokumentu pridať znak s najekou relatívnou pozíciou, a tá
+sa tam už nachádza, teda znovu pridanie nič neurobí. Ak naopak sa snažíme vymazať niečo na
+pozícii, ktorá sa v dokumente už nenachádza, tak vieme, že uz vymazaná bola. Obe operácie teda
+zachovávajú idempotentnosť.
+\cite{nuno_preguica}
 
-\subsection{Výsledky práce a diskusia}
-Časti výsledky práce a diskusia sú najvýznamnejšími  časťami  školského diela. 
-Výsledky (vlastné postoje alebo vlastné riešenia), ku ktorým autor dospel, sa musia 
-logicky usporiadať a pri opisovaní sa musia dostatočne zhodnotiť. Zároveň sa 
-komentujú všetky skutočnosti a poznatky v konfrontácii s výsledkami iných autorov. 
-Výsledky práce a diskusia môžu tvoriť aj jednu samostatnú časť  a spoločne tvoria 
-spravidla 30 až 40 \% školského diela.  
+% TODO: obrazky

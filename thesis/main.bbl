@@ -1,10 +1,21 @@
 \newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
   \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{bonjour}
 Bonjour (software).
 \newblock \url{https://en.wikipedia.org/wiki/Bonjour_(software)}.
+
+\bibitem{crdt_wiki}
+Conflict-free replicated data type.
+\newblock
+  \url{https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type}.
+
+\bibitem{crdt_medium}
+Building conclave: a decentralized, real time, collaborative text editor,
+  January 2018.
+\newblock
+  \url{https://hackernoon.com/building-conclave-a-decentralized-real-time-collaborative-text-editor-a6ab438fe79f}.
 
 \bibitem{kniha}
 X.~Autor1 and Y.~Autor2.
@@ -39,6 +50,20 @@ Tobias Oetiker, Hubert Partl, Irene Hyna, and Elisabeth Schlegl.
 \newblock {\em Nie príliš stručný úvod do systému LaTeX2e}.
 \newblock 2002.
 \newblock Preklad Ján Buša ml. a st.
+
+\bibitem{nuno_preguica}
+Nuno Preguica, Joan~Manuel Marques, Marc Shapiro, and Mihai Letia.
+\newblock A commutative replicated data type for cooperative editing.
+\newblock In {\em Proceedings of the 2009 29th IEEE International Conference on
+  Distributed Computing Systems}, ICDCS '09, pages 395--403, Washington, DC,
+  USA, 2009. IEEE Computer Society.
+
+\bibitem{crdt_definition}
+Marc Shapiro, Nuno Pregui\c{c}a, Carlos Baquero, and Marek Zawirski.
+\newblock Conflict-free replicated data types.
+\newblock In {\em Proceedings of the 13th International Conference on
+  Stabilization, Safety, and Security of Distributed Systems}, SSS'11, pages
+  386--400, Berlin, Heidelberg, 2011. Springer-Verlag.
 
 \bibitem{smernica}
 {Univerzita Komenského v Bratislave}.
