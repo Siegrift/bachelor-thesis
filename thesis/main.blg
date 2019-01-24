@@ -3,46 +3,47 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main.aux
 The style file: plain.bst
 Database file #1: literatura.bib
+Warning--to sort, need author or key in bonjour
 Warning--empty publisher in Oetiker2000
-You've used 6 entries,
+You've used 8 entries,
             2118 wiz_defined-function locations,
-            526 strings with 5059 characters,
-and the built_in function-call counts, 1728 in all, are:
-= -- 158
-> -- 82
+            538 strings with 5407 characters,
+and the built_in function-call counts, 2282 in all, are:
+= -- 211
+> -- 106
 < -- 2
-+ -- 32
-- -- 26
-* -- 100
-:= -- 298
-add.period$ -- 19
-call.type$ -- 6
-change.case$ -- 29
++ -- 42
+- -- 34
+* -- 142
+:= -- 381
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 39
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 70
-empty$ -- 144
-format.name$ -- 26
-if$ -- 364
+cite$ -- 10
+duplicate$ -- 88
+empty$ -- 194
+format.name$ -- 34
+if$ -- 481
 int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 6
-newline$ -- 35
-num.names$ -- 12
-pop$ -- 44
+int.to.str$ -- 8
+missing$ -- 7
+newline$ -- 44
+num.names$ -- 14
+pop$ -- 60
 preamble$ -- 2
-purify$ -- 25
+purify$ -- 33
 quote$ -- 0
-skip$ -- 48
+skip$ -- 61
 stack$ -- 0
-substring$ -- 63
-swap$ -- 12
+substring$ -- 98
+swap$ -- 14
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
-warning$ -- 1
-while$ -- 15
-width$ -- 7
-write$ -- 67
-(There was 1 warning)
+type$ -- 28
+warning$ -- 2
+while$ -- 19
+width$ -- 9
+write$ -- 85
+(There were 2 warnings)

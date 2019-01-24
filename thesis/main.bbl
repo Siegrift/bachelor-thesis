@@ -2,6 +2,10 @@
   \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
 \begin{thebibliography}{1}
 
+\bibitem{bonjour}
+Bonjour (software).
+\newblock \url{https://en.wikipedia.org/wiki/Bonjour_(software)}.
+
 \bibitem{kniha}
 X.~Autor1 and Y.~Autor2.
 \newblock {\em Názov knihy}.
@@ -23,6 +27,12 @@ X.~Autor1 and Y.~Autor2.
 \newblock Názov technickej správy.
 \newblock Technical Report TR123/1999, Inštitút vydávajúci správu, June
   1999.
+
+\bibitem{ot_nonscalable}
+Abdessamad Imine, Micha\"{e}l Rusinowitch, G{\'e}rald Oster, and Pascal Molli.
+\newblock Formal design and verification of operational transformation
+  algorithms for copies convergence.
+\newblock {\em Theor. Comput. Sci.}, 351(2):167--183, February 2006.
 
 \bibitem{Oetiker2000}
 Tobias Oetiker, Hubert Partl, Irene Hyna, and Elisabeth Schlegl.

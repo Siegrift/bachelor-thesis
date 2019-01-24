@@ -14,13 +14,13 @@
 % --- Vyplnte podla vasho zadania
 % -------------------
 \def\mfrok{2018}
-\def\mfnazov{Názov vašej bakalárskej práce}
+\def\mfnazov{Učebné prostredie pre online kolektívny vývoj agilných programov za pomoci zdieľateľného editoru}
 \def\mftyp{Bakalárska práca}
-\def\mfautor{Meno Priezvisko, príp. tituly}
-\def\mfskolitel{tit. Meno Priezvisko, tit. }
+\def\mfautor{Emanuel Tesař}
+\def\mfskolitel{Ing. František Gyarfaš, CSc.}
 
 %ak mate konzultanta, odkomentujte aj jeho meno na titulnom liste
-\def\mfkonzultant{tit. Meno Priezvisko, tit. }  
+%\def\mfkonzultant{tit. Meno Priezvisko, tit. }  
 
 \def\mfmiesto{Bratislava, \mfrok}
 
@@ -30,7 +30,7 @@
 \def\program{ Informatika }
 % Ak je školiteľ z FMFI, uvádzate katedru školiteľa, zrejme by mala byť aj na zadaní z AIS2
 % Ak máte externého školiteľa, uvádzajte Katedru informatiky 
-\def\mfpracovisko{ Katedra informatiky }
+\def\mfpracovisko{ Katedra aplikovanej informatiky }
 
 \begin{document}     
 \frontmatter
@@ -125,7 +125,7 @@ Fakulta matematiky, fyziky a informatiky
 ~
 
 \vfill
-{\bf Poďakovanie:} Tu môžete poďakovať školiteľovi, prípadne
+{\bf Poďakovanie:} TODO: Tu môžete poďakovať školiteľovi, prípadne
 ďalším osobám, ktoré vám s prácou nejako pomohli, poradili,
 poskytli dáta a podobne.
 
@@ -138,11 +138,13 @@ poskytli dáta a podobne.
 \section*{Abstrakt}
 
 
-Slovenský abstrakt v rozsahu 100-500 slov, jeden odstavec. Abstrakt
-stručne sumarizuje výsledky práce. Mal by byť pochopiteľný pre bežného
-informatika. Nemal by teda využívať skratky, termíny alebo označenie
-zavedené v práci, okrem tých, ktoré sú všeobecne známe.
-
+Cieľom práce bol návrh a funkčná implementácia zdieľateľného editora podporujúca
+súbežné písanie kódu viacerých používateľov. Používatelia okrem písania kódu, možu pridávať
+testy, ktoré sa dajú spustiť vo virtuálnom prostredí na serveri. V prípade neskompilovateľného kódu, 
+chyby počas behu programu, prípadne inej chyby, zobrazí chybovú hlášku. Okrem pohodlného prostredia
+pre používateľa obsahuje aj administrátorské rozhranie, v ktorom sa dajú pridávať neviditeľné testy 
+pre používateľov. Toto rozhranie umožňuje profesorom vytvárať zadania pre
+študentov, ktorý následne možu úlohu riešit priamo vo webovom prehliadači.
 \paragraph*{Kľúčové slová:} jedno, druhé, tretie (prípadne štvrté, piate)
 % --- Koniec Abstrakt - Slovensky
 
@@ -153,11 +155,17 @@ zavedené v práci, okrem tých, ktoré sú všeobecne známe.
 \newpage 
 \section*{Abstract}
 
-Abstract in the English language (translation of the abstract in the
+TODO:  Abstract in the English language (translation of the abstract in the
 Slovak language).
 
 
 \paragraph*{Keywords:} 
+\begin{itemize}
+  \item  Latencia - reakčný čas označújúci dobu akciu a následnou reakciou. Vo webových 
+  technológiách sa pod letenciou rozumie čas, medzi poslaním webového request-u a následnej
+  odpovede zo servera.
+  \end{itemize}
+
 
 % --- Koniec Abstrakt - Anglicky
 
@@ -205,7 +213,9 @@ Slovak language).
 
 \input uvod.tex 
 
-\input kapitola.tex
+\input kapitola1.tex
+
+\input kapitola2.tex
 
 \input latex.tex
 
@@ -260,9 +270,3 @@ Slovak language).
 %\input AppendixB.tex
 
 \end{document}
-
-
-
-
-
-
