@@ -1,3 +1,36 @@
-\chapter{Izolované spúštanie kódu na serveri}
+\chapter{Funkcia servera}
 
-\label{kap:zakladne} % id kapitoly pre prikaz ref
+\label{kap:server} % id kapitoly pre prikaz ref
+
+Server má viacero funkcii:
+\begin{itemize}
+\item synchronizácia klientov
+\item prihlasovanie pre administrátorov
+\item ukladanie skrytých testov
+\item zbiehanie kódu, poskytovanie odpovede klientom
+\end{itemize}
+
+
+\subsection{Synchronozácia klientov}
+Najdôležitejšou funckiou servera, je synchronizácia všetkých klientov ak nastane nejaká zmena
+dokumentu. Server na toto nepotrebuje veľkú logiku, ale potrebuje korektne preposielať informácie
+medzi klientami a reagovať na prípadne komunikačné chyby (vačšinou odosľat správu znovu).
+
+
+\subsection{Prihlasovanie pre administrátorov}
+Súčasťou práce je aj administrátorské rozhranie, do ktorého sa dá prihlásiť a vytvárať v ňom
+skryté testy.
+
+\subsection{Prihlasovanie pre administrátorov}
+Administrátori vedia pridávať skryté testy, na ktorých
+sa dá spúštať klientský kód. Toto funguje na jednoduchom princípe skupín. Administrátor vytvorí 
+skupinu, do ktorej sa klienti vedia prihlásiť. Ak je klient súčasťou nejakej skupiny, tak vie svoj
+kód zbiehať voči testoch vytvoreným administrátorom.
+
+\subsection{Zbiehanie kódu, poskytovanie odpovede klientom}
+Ďalšou dôležitou častou je možnosť zbehnúť kód na serveri. Kód sa dá zbehnúť viacerými spôsobmi:
+\begin{itemize}
+\item na vlastných testoch
+\item na skrytých testoch (iba v prípadne ak je klient členom nejakej skupiny)
+\item na vlastnom vstupe
+\end{itemize}

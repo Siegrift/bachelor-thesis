@@ -1,36 +1,70 @@
-\chapter{Funkcia servera}
+\chapter{CRDT}
 
-\label{kap:server} % id kapitoly pre prikaz ref
+\label{kap:cdrt} % id kapitoly pre prikaz ref
 
-Server má viacero funkcii:
-\begin{itemize}
-\item synchronizácia klientov
-\item prihlasovanie pre administrátorov
-\item ukladanie skrytých testov
-\item zbiehanie kódu, poskytovanie odpovede klientom
-\end{itemize}
+V distribuovanom výpočte je konfliktný replikovaný dátový typ (CRDT) dátová štruktúra,
+ktorá môže byť replikovaná vo viacerých počítačoch v sieti, pričom repliky je možné
+aktualizovať nezávisle a súbežne bez koordinácie medzi replikami a kde je vždy
+matematicky možné vyriešiť nezrovnalosti, ktoré by mohli vyplynúť.
 
+Koncept CRDT bol formálne definovaný v roku 2011 osobami
+Marc Shapiro, Nuno Preguiça, Carlos Baquero a Marek Zawirski \cite{crdt_definition}.
 
-\subsection{Synchronozácia klientov}
-Najdôležitejšou funckiou servera, je synchronizácia všetkých klientov ak nastane nejaká zmena
-dokumentu. Server na toto nepotrebuje veľkú logiku, ale potrebuje korektne preposielať informácie
-medzi klientami a reagovať na prípadne komunikačné chyby (vačšinou odosľat správu znovu).
+CRDT fungujú tak, že každý znak v dokumente sa prerobí do objektu so špecifickými vlastnosťami:
+\begin{enumerate}
+\label{def_pozicie}
+  \item znak, ktoré objekt predstavuje
+  \item relatívna pozícia tohto znaku
+  \item množina pozícíi musí tvoriť úplné usporiadanie
+  \item priestor tvorený množinou pozícii musí byť hustý
+\end{enumerate}
+Vzhľadom na to, že každá z týchto znakov je jedinečná a môže byť identifikovaná
+týmito vlastnosťami, môžeme zabrániť vloženiu alebo vymazaniu znakov viac ako raz.
+To umožňuje komutativitu a idempotenciu. Nevýhodou tohto prístupu je veľké množstvo metaúdajov.
+Tým sa zvyšuje spotreba pamäte našej aplikácie.
 
+Zaujímavým aspektom CRDT, ktorý ho odlišuje od OT sú relatívne pozície znakov. Tieto pozície majú
+nasledovné vlastnosti:
+\begin{enumerate}
+  \item žiadne 2 CRDT objekty nemajú rovnakú pozíciu
+  \item pozícia nejakého objektu sa nidky nezmení
+  \item ak 2 CRDT objekty A a B operujú na tej istej pozícii v dokumente a objekt A
+  nastane skôr než B, tak relatívna pozícia A musí byť menšia ako B.
+\end{enumerate}
+Vytvorenie takýchto pozícii je celkom jednduché.
+Znaky si môžeme predstaviť ako vrcholy na strome, kde každý znak má väčsie číslo ako znak pred
+ním, no menšie ako znak po ňom. Pozície môžu vyzerať zhruba nasledovne:
 
-\subsection{Prihlasovanie pre administrátorov}
-Súčasťou práce je aj administrátorské rozhranie, do ktorého sa dá prihlásiť a vytvárať v ňom
-skryté testy.
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.6\textwidth]{images/relativne_pozicie1}}
+%popis obrazku
+\caption[Relatívne pozície znakov]{Relatívne pozície znakov}
+%id obrazku, pomocou ktoreho sa budeme na obrazok odvolavat
+\label{obr:relativne}
+\end{figure}
 
-\subsection{Prihlasovanie pre administrátorov}
-Administrátori vedia pridávať skryté testy, na ktorých
-sa dá spúštať klientský kód. Toto funguje na jednoduchom princípe skupín. Administrátor vytvorí 
-skupinu, do ktorej sa klienti vedia prihlásiť. Ak je klient súčasťou nejakej skupiny, tak vie svoj
-kód zbiehať voči testoch vytvoreným administrátorom.
+Pridanie znaku potom funguje veľmi jednoducho. Nájdeme v strome vrcholy medzi ktoré
+chceme pridať ďalšie písmeno a ako pozíciu mu dáme priemer relatívnych pozícii daných
+vrcholov. Napríklad:
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.6\textwidth]{images/relativne_pozicie2}}
+%popis obrazku
+\caption[Pridanie relatívnej pozície znakov]{Pridanie relatívnej pozície znakov}
+%id obrazku, pomocou ktoreho sa budeme na obrazok odvolavat
+\label{obr:relativne_pridanie}
+\end{figure}
 
-\subsection{Zbiehanie kódu, poskytovanie odpovede klientom}
-Ďalšou dôležitou častou je možnosť zbehnúť kód na serveri. Kód sa dá zbehnúť viacerými spôsobmi:
-\begin{itemize}
-\item na vlastných testoch
-\item na skrytých testoch (iba v prípadne ak je klient členom nejakej skupiny)
-\item na vlastnom vstupe
-\end{itemize}
+\begin{flushleft}\textbf {Komutativita a idempotentnosť CRDT}\end{flushleft}
+Ak predpokladáme, že pozície spĺňajú podmienky z \ref{def_pozicie}, tak CRDT objekty sú
+komutatívne a idempotentné. 
+
+Tým, že všetky relatívne pozície sú unikátne, tak je jedno v akom poradí vykonávame dané operácie,
+teda CRDT sú naozaj komutatívne.
+
+Idempotencia je daná tým, že ak chceme do dokumentu pridať znak s najekou relatívnou pozíciou, a tá
+sa tam už nachádza, teda znovu pridanie nič neurobí. Ak naopak sa snažíme vymazať niečo na
+pozícii, ktorá sa v dokumente už nenachádza, tak vieme, že uz vymazaná bola. Obe operácie teda
+zachovávajú idempotentnosť.
+\cite{nuno_preguica}
+
+% TODO: obrazky

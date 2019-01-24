@@ -4,10 +4,12 @@
 \BOOKMARK [1][-]{section.2.1}{Real time kolaborat\355vnt editor}{chapter.2}% 4
 \BOOKMARK [2][-]{subsection.2.1.1}{Technick\351 v\375zvy}{section.2.1}% 5
 \BOOKMARK [2][-]{subsection.2.1.2}{Algoritmy rie\235iace konkurentn\351 modifik\341cie}{section.2.1}% 6
-\BOOKMARK [0][-]{chapter.3}{Funkcia servera}{}% 7
-\BOOKMARK [1][-]{subsection.3.0.1}{Synchronoz\341cia klientov}{chapter.3}% 8
-\BOOKMARK [2][-]{subsection.3.0.2}{Prihlasovanie pre administr\341torov}{subsection.3.0.1}% 9
-\BOOKMARK [2][-]{subsection.3.0.3}{Prihlasovanie pre administr\341torov}{subsection.3.0.1}% 10
-\BOOKMARK [2][-]{subsection.3.0.4}{Zbiehanie k\363du, poskytovanie odpovede klientom}{subsection.3.0.1}% 11
-\BOOKMARK [0][-]{chapter.4}{Izolovan\351 sp\372\235tanie k\363du na serveri}{}% 12
-\BOOKMARK [0][-]{chapter*.9}{Z\341ver}{}% 13
+\BOOKMARK [0][-]{chapter.3}{CRDT}{}% 7
+\BOOKMARK [0][-]{chapter.4}{Funkcia servera}{}% 8
+\BOOKMARK [1][-]{subsection.4.0.1}{Synchronoz\341cia klientov}{chapter.4}% 9
+\BOOKMARK [2][-]{subsection.4.0.2}{Prihlasovanie pre administr\341torov}{subsection.4.0.1}% 10
+\BOOKMARK [2][-]{subsection.4.0.3}{Prihlasovanie pre administr\341torov}{subsection.4.0.1}% 11
+\BOOKMARK [2][-]{subsection.4.0.4}{Zbiehanie k\363du, poskytovanie odpovede klientom}{subsection.4.0.1}% 12
+\BOOKMARK [0][-]{chapter.5}{Izolovan\351 sp\372\235tanie k\363du na serveri}{}% 13
+\BOOKMARK [0][-]{chapter.6}{Pou\236itelnost a \235tatistika}{}% 14
+\BOOKMARK [0][-]{chapter*.9}{Z\341ver}{}% 15
