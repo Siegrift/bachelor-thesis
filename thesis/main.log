@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.19)  24 JAN 2019 18:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.19)  24 JAN 2019 18:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -540,9 +540,6 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 
 LaTeX Warning: Label `kap:zakladne' multiply defined.
 
-
-LaTeX Warning: Label `kap:zakladne' multiply defined.
-
 )
 \openout1 = `main.aux'.
 
@@ -656,7 +653,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 88.
  [3] [4
 
-] <images/zadanie.pdf, id=60, 597.23125pt x 845.1575pt>
+] <images/zadanie.pdf, id=76, 597.23125pt x 845.1575pt>
 File: images/zadanie.pdf Graphic file (type pdf)
 
 <use images/zadanie.pdf>
@@ -737,7 +734,7 @@ Package hyperref Warning: Composite letter `\textasciicaron+n'
 
 LaTeX Warning: Citation `medium_crdt' on page 6 undefined on input line 45.
 
-<images/nekomutativne_operacie.png, id=198, 619.31375pt x 388.45125pt>
+<images/nekomutativne_operacie.png, id=218, 619.31375pt x 388.45125pt>
 File: images/nekomutativne_operacie.png Graphic file (type png)
 
 <use images/nekomutativne_operacie.png>
@@ -745,7 +742,7 @@ Package pdftex.def Info: images/nekomutativne_operacie.png used on input line 4
 9.
 (pdftex.def)             Requested size: 264.61333pt x 165.97571pt.
 
-<images/neidempotentne_operacie.png, id=200, 769.87625pt x 450.68375pt>
+<images/neidempotentne_operacie.png, id=220, 769.87625pt x 450.68375pt>
 File: images/neidempotentne_operacie.png Graphic file (type png)
 
 <use images/neidempotentne_operacie.png>
@@ -771,14 +768,14 @@ l.68
                                                   \fi \fi 
 l.68 
       <./images/nekomutativne_operacie.png> <./images/neidempotentne_operacie.p
-ng>] [7] <images/relativne_pozicie1.png, id=224, 957.5775pt x 238.8925pt>
+ng>] [7] <images/relativne_pozicie1.png, id=244, 957.5775pt x 238.8925pt>
 File: images/relativne_pozicie1.png Graphic file (type png)
 
 <use images/relativne_pozicie1.png>
 Package pdftex.def Info: images/relativne_pozicie1.png used on input line 136.
 (pdftex.def)             Requested size: 264.61333pt x 66.01459pt.
 
-<images/relativne_pozicie2.png, id=225, 957.5775pt x 238.8925pt>
+<images/relativne_pozicie2.png, id=245, 957.5775pt x 238.8925pt>
 File: images/relativne_pozicie2.png Graphic file (type png)
 
 <use images/relativne_pozicie2.png>
@@ -813,11 +810,15 @@ RAVY JEDNÉHO DOKUMENTU
 
 ]
 Kapitola 3.
-) (./kapitola4.tex [11] [12
 
-]
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 14.
+
+[11]) (./kapitola4.tex [12]
 Kapitola 4.
-) (./zaver.tex [13] [14
+) (./zaver.tex [13
+
+] [14
 
 ]
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 12.
@@ -861,7 +862,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 273.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 273.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 273.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C32AD2FE24733BF041B4290DFC3F479E;656.
+(rerunfilecheck)             Checksum: CBDD874B1730813859D786BC4237AAC2;1032.
 
 
 LaTeX Warning: There were undefined references.
@@ -872,10 +873,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 273.
  ) 
 Here is how much of TeX's memory you used:
- 6845 strings out of 494919
- 96970 string characters out of 6179679
- 190296 words of memory out of 5000000
- 9943 multiletter control sequences out of 15000+600000
+ 6854 strings out of 494919
+ 97118 string characters out of 6179679
+ 190335 words of memory out of 5000000
+ 9948 multiletter control sequences out of 15000+600000
  16396 words of font info for 37 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
  29i,6n,28p,228b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -889,10 +890,10 @@ nappen/ec/ecbx1200.600pk> </home/siegrift/.texmf-var/fonts/pk/ljfour/jknappen/e
 c/ecrm1200.600pk> </home/siegrift/.texmf-var/fonts/pk/ljfour/jknappen/ec/eccc20
 74.600pk> </home/siegrift/.texmf-var/fonts/pk/ljfour/jknappen/ec/eccc1440.600pk
 ></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (34 pages, 322915 bytes).
+Output written on main.pdf (34 pages, 329222 bytes).
 PDF statistics:
- 803 PDF objects out of 1000 (max. 8388607)
- 297 compressed objects within 3 object streams
- 77 named destinations out of 1000 (max. 500000)
- 98 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 837 PDF objects out of 1000 (max. 8388607)
+ 318 compressed objects within 4 object streams
+ 81 named destinations out of 1000 (max. 500000)
+ 130 words of extra memory for PDF output out of 10000 (max. 10000000)
 

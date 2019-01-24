@@ -6,5 +6,9 @@
 \contentsline {subsection}{\numberline {2.1.1}Technick\IeC {\'e} v\IeC {\'y}zvy}{5}{subsection.2.1.1}
 \contentsline {subsection}{\numberline {2.1.2}Algoritmy rie\IeC {\v s}iace konkurentn\IeC {\'e} modifik\IeC {\'a}cie}{7}{subsection.2.1.2}
 \contentsline {chapter}{\numberline {3}Funkcia servera}{11}{chapter.3}
+\contentsline {subsection}{\numberline {3.0.1}Synchronoz\IeC {\'a}cia klientov}{11}{subsection.3.0.1}
+\contentsline {subsection}{\numberline {3.0.2}Prihlasovanie pre administr\IeC {\'a}torov}{11}{subsection.3.0.2}
+\contentsline {subsection}{\numberline {3.0.3}Prihlasovanie pre administr\IeC {\'a}torov}{11}{subsection.3.0.3}
+\contentsline {subsection}{\numberline {3.0.4}Zbiehanie k\IeC {\'o}du, poskytovanie odpovede klientom}{12}{subsection.3.0.4}
 \contentsline {chapter}{\numberline {4}Izolovan\IeC {\'e} sp\IeC {\'u}\IeC {\v s}tanie k\IeC {\'o}du na serveri}{13}{chapter.4}
 \contentsline {chapter}{Z\IeC {\'a}ver}{15}{chapter*.9}
