@@ -5,12 +5,12 @@
 \contentsline {section}{\numberline {2.1}Kolaborat\IeC {\'\i }vny editor v re\IeC {\'a}lnom \IeC {\v c}ase}{5}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}Technick\IeC {\'e} v\IeC {\'y}zvy}{5}{subsection.2.1.1}
 \contentsline {subsection}{\numberline {2.1.2}Algoritmy rie\IeC {\v s}iace konkurentn\IeC {\'e} modifik\IeC {\'a}cie}{7}{subsection.2.1.2}
-\contentsline {chapter}{\numberline {3}CRDT}{11}{chapter.3}
-\contentsline {chapter}{\numberline {4}Funkcia servera}{13}{chapter.4}
-\contentsline {subsection}{\numberline {4.0.1}Synchronoz\IeC {\'a}cia klientov}{13}{subsection.4.0.1}
-\contentsline {subsection}{\numberline {4.0.2}Prihlasovanie pre administr\IeC {\'a}torov}{13}{subsection.4.0.2}
-\contentsline {subsection}{\numberline {4.0.3}Prihlasovanie pre administr\IeC {\'a}torov}{13}{subsection.4.0.3}
-\contentsline {subsection}{\numberline {4.0.4}Zbiehanie k\IeC {\'o}du, poskytovanie odpovede klientom}{14}{subsection.4.0.4}
-\contentsline {chapter}{\numberline {5}Izolovan\IeC {\'e} sp\IeC {\'u}\IeC {\v s}tanie k\IeC {\'o}du na serveri}{15}{chapter.5}
-\contentsline {chapter}{\numberline {6}Pou\IeC {\v z}ite\IeC {\v l}nos\IeC {\v t} a \IeC {\v s}tatistika}{17}{chapter.6}
-\contentsline {chapter}{Z\IeC {\'a}ver}{19}{chapter*.9}
+\contentsline {chapter}{\numberline {3}CRDT}{9}{chapter.3}
+\contentsline {chapter}{\numberline {4}Funkcia servera}{11}{chapter.4}
+\contentsline {subsection}{\numberline {4.0.1}Synchronoz\IeC {\'a}cia klientov}{11}{subsection.4.0.1}
+\contentsline {subsection}{\numberline {4.0.2}Prihlasovanie pre administr\IeC {\'a}torov}{11}{subsection.4.0.2}
+\contentsline {subsection}{\numberline {4.0.3}Prihlasovanie pre administr\IeC {\'a}torov}{11}{subsection.4.0.3}
+\contentsline {subsection}{\numberline {4.0.4}Zbiehanie k\IeC {\'o}du, poskytovanie odpovede klientom}{12}{subsection.4.0.4}
+\contentsline {chapter}{\numberline {5}Izolovan\IeC {\'e} sp\IeC {\'u}\IeC {\v s}tanie k\IeC {\'o}du na serveri}{13}{chapter.5}
+\contentsline {chapter}{\numberline {6}Pou\IeC {\v z}ite\IeC {\v l}nos\IeC {\v t} v praxi}{15}{chapter.6}
+\contentsline {chapter}{Z\IeC {\'a}ver}{17}{chapter*.9}
