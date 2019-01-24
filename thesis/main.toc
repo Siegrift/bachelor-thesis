@@ -1,8 +1,8 @@
 \select@language {slovak}
 \contentsline {chapter}{\IeC {\'U}vod}{1}{chapter*.8}
-\contentsline {chapter}{\numberline {1}TODO: Z\IeC {\'a}kladn\IeC {\'e} pojmy a defin\IeC {\'\i }cie}{3}{chapter.1}
+\contentsline {chapter}{\numberline {1}Z\IeC {\'a}kladn\IeC {\'e} pojmy a defin\IeC {\'\i }cie}{3}{chapter.1}
 \contentsline {chapter}{\numberline {2}Editor umo\IeC {\v z}\IeC {\v n}uj\IeC {\'u}ci konkurentn\IeC {\'e} \IeC {\'u}pravy jedn\IeC {\'e}ho dokumentu}{5}{chapter.2}
-\contentsline {section}{\numberline {2.1}Real time kolaborat\IeC {\'\i }vnt editor}{5}{section.2.1}
+\contentsline {section}{\numberline {2.1}Kolaborat\IeC {\'\i }vny editor v re\IeC {\'a}lnom \IeC {\v c}ase}{5}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}Technick\IeC {\'e} v\IeC {\'y}zvy}{5}{subsection.2.1.1}
 \contentsline {subsection}{\numberline {2.1.2}Algoritmy rie\IeC {\v s}iace konkurentn\IeC {\'e} modifik\IeC {\'a}cie}{7}{subsection.2.1.2}
 \contentsline {chapter}{\numberline {3}CRDT}{11}{chapter.3}

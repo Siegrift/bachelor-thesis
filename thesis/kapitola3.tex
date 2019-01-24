@@ -10,20 +10,21 @@ matematicky možné vyriešiť nezrovnalosti, ktoré by mohli vyplynúť.
 Koncept CRDT bol formálne definovaný v roku 2011 osobami
 Marc Shapiro, Nuno Preguiça, Carlos Baquero a Marek Zawirski \cite{crdt_definition}.
 
-CRDT fungujú tak, že každý znak v dokumente sa prerobí do objektu so špecifickými vlastnosťami:
+
+CRDT funguje tak, že každý znak v dokumente sa prerobí do objektu so špecifickými vlastnosťami:
 \begin{enumerate}
 \label{def_pozicie}
-  \item znak, ktoré objekt predstavuje
+  \item znak, ktorý objekt predstavuje
   \item relatívna pozícia tohto znaku
-  \item množina pozícíi musí tvoriť úplné usporiadanie
-  \item priestor tvorený množinou pozícii musí byť hustý
+  \item množina pozícií musí tvoriť úplné usporiadanie
+  \item priestor tvorený množinou pozícií musí byť hustý
 \end{enumerate}
-Vzhľadom na to, že každá z týchto znakov je jedinečná a môže byť identifikovaná
+Vzhľadom na to, že každý z týchto objektov je jedinečný a môže byť identifikovaný
 týmito vlastnosťami, môžeme zabrániť vloženiu alebo vymazaniu znakov viac ako raz.
 To umožňuje komutativitu a idempotenciu. Nevýhodou tohto prístupu je veľké množstvo metaúdajov.
-Tým sa zvyšuje spotreba pamäte našej aplikácie.
+Tým sa zvyšuje spotreba pamäte aplikácie.
 
-Zaujímavým aspektom CRDT, ktorý ho odlišuje od OT sú relatívne pozície znakov. Tieto pozície majú
+Zaujímavým aspektom CRDT, ktorý ho odlišuje od OT, sú relatívne pozície znakov. Tieto pozície majú
 nasledovné vlastnosti:
 \begin{enumerate}
   \item žiadne 2 CRDT objekty nemajú rovnakú pozíciu
@@ -31,7 +32,7 @@ nasledovné vlastnosti:
   \item ak 2 CRDT objekty A a B operujú na tej istej pozícii v dokumente a objekt A
   nastane skôr než B, tak relatívna pozícia A musí byť menšia ako B.
 \end{enumerate}
-Vytvorenie takýchto pozícii je celkom jednduché.
+Vytvorenie takýchto pozícií je celkom jednduché.
 Znaky si môžeme predstaviť ako vrcholy na strome, kde každý znak má väčsie číslo ako znak pred
 ním, no menšie ako znak po ňom. Pozície môžu vyzerať zhruba nasledovne:
 
@@ -44,7 +45,7 @@ ním, no menšie ako znak po ňom. Pozície môžu vyzerať zhruba nasledovne:
 \end{figure}
 
 Pridanie znaku potom funguje veľmi jednoducho. Nájdeme v strome vrcholy medzi ktoré
-chceme pridať ďalšie písmeno a ako pozíciu mu dáme priemer relatívnych pozícii daných
+chceme pridať ďalší znak a ako pozíciu mu dáme priemer relatívnych pozícií daných
 vrcholov. Napríklad:
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.6\textwidth]{images/relativne_pozicie2}}
@@ -58,11 +59,11 @@ vrcholov. Napríklad:
 Ak predpokladáme, že pozície spĺňajú podmienky z \ref{def_pozicie}, tak CRDT objekty sú
 komutatívne a idempotentné. 
 
-Tým, že všetky relatívne pozície sú unikátne, tak je jedno v akom poradí vykonávame dané operácie,
+Keďže všetky relatívne pozície sú unikátne, tak nezáleží na poradí, v ktorom vykonávame dané operácie,
 teda CRDT sú naozaj komutatívne.
 
 Idempotencia je daná tým, že ak chceme do dokumentu pridať znak s najekou relatívnou pozíciou, a tá
-sa tam už nachádza, teda znovu pridanie nič neurobí. Ak naopak sa snažíme vymazať niečo na
+sa tam už nachádza, tak opätovné pridanie už nič neurobí. Ak naopak sa snažíme vymazať niečo na
 pozícii, ktorá sa v dokumente už nenachádza, tak vieme, že uz vymazaná bola. Obe operácie teda
 zachovávajú idempotentnosť.
 \cite{nuno_preguica}

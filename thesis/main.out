@@ -1,7 +1,7 @@
 \BOOKMARK [0][-]{chapter*.8}{\332vod}{}% 1
-\BOOKMARK [0][-]{chapter.1}{TODO: Z\341kladn\351 pojmy a defin\355cie}{}% 2
+\BOOKMARK [0][-]{chapter.1}{Z\341kladn\351 pojmy a defin\355cie}{}% 2
 \BOOKMARK [0][-]{chapter.2}{Editor umo\236nuj\372ci konkurentn\351 \372pravy jedn\351ho dokumentu}{}% 3
-\BOOKMARK [1][-]{section.2.1}{Real time kolaborat\355vnt editor}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.1}{Kolaborat\355vny editor v re\341lnom case}{chapter.2}% 4
 \BOOKMARK [2][-]{subsection.2.1.1}{Technick\351 v\375zvy}{section.2.1}% 5
 \BOOKMARK [2][-]{subsection.2.1.2}{Algoritmy rie\235iace konkurentn\351 modifik\341cie}{section.2.1}% 6
 \BOOKMARK [0][-]{chapter.3}{CRDT}{}% 7
