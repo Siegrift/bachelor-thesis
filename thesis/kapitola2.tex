@@ -8,10 +8,10 @@ Kolaboratívny editor umožnuje viacerým používateľom upravovať jeden dokum
 Tieto editory sa rozdeľujú na dve kategórie
 \begin{itemize}
   \item v reálnom čase - zmeny dokumentu sa okamžite zobrazia všetkým používateľom
-  \item s oneskorením - zmeny dokumentu sa nedejú okamžite (podobne ako pri verzionovacých
+  \item s oneskorením - zmeny dokumentu sa nedejú okamžite (podobne ako pri ver --- zionovacých
   systémoch ako Git, Mercurial)
 \end{itemize}
-My sa v práci zameriavame editormi so zmenami v reálnom čase, kde treba
+My sa v práci zaoberáme editormi so zmenami v reálnom čase, kde treba
 riešiť synchronizáciu editorových inštancií používateľov a riešenie možných konfliktov.
 
 Problematika kolaboratívnych editorov v reálnom čase sa dá rozdeliť do samostatných zmysluplných 
@@ -24,7 +24,7 @@ podkapitol
 \section{Technické výzvy}
 Technické výzvy pramenia z asynchrónnej komunikácie po sieti. Teoreticky, keby táto 
 komunikácia bola okamžitá, tak vytvorenie takéhoto editora, by nebolo veľmi odlišné od
-editora pre jedného používateľa. Algoritmus \label{algo:nesubezne_editovanie}, 
+editora pre jedného používateľa. Algoritmus\label{algo:nesubezne_editovanie}, 
 rišiaci takýto problém,  by mohol fungovať na  základe 
 \textit{upravovacieho zámku}. Fungoval by celkom jednoducho:
 \begin{enumerate}
@@ -39,7 +39,7 @@ ale ak sú začlenené okamžite, tak pre latenciu komunikácie musia byť ich
 úpravy nevyhnutne vložené do rôznych verzií dokumentu.
 
 Jednou s možností by mohlo byť zamedzenie konkurentných úprav zdroja (algoritmus by bol podobný
-\ref{algo:nesubezne_editovanie}). Ďalšou, pre používateľa príjemnejšou voľbou je optmistická
+\ref{algo:nesubezne_editovanie}). Ďalšou, pre používateľa príjemnejšou voľbou, je optmistická
 replikácia, kde sa zmeny v zdroji uplatňujú postupne a prípadné chyby a nekonzistentnosti sa
 riešia neskôr. Neskôr v texte ukážeme, že existuje spôsob akým docieliť konkurentné úpravy 
 textového dokumentu zaručene bez konfliktov. %TODO: ref na kapitolu kde to ukazem
@@ -75,7 +75,7 @@ Najsofistikovanejšie riešenia vyriešia tento problém spôsobom, ktorý nevy�
 nepoužíva uzamknutie (všetci používatelia môžu voľne upravovať všetky časti dokumentu súčasne) 
 a podporuje ľubovoľný počet používateľov (obmedzený iba zdrojmi počítačov). 
 \textit{UNA} a \textit{SubEthaEdit} sú príklady dvoch programov, ktoré využívajú tento prístup.
-Tieto programy sú však dostupné iba pre operačných systémoch macOS a využívajú technológie,
+Tieto programy sú však dostupné iba pre operačné systémy macOS a využívajú technológie,
 ako napríklad \cite{bonjour},ktoré sú špecifické pre tento operačný systém.
 
 Zatiaľ čo tieto sofistikované prístupy umožňujú najlepšiu používateľskú skúsenosť,
@@ -86,7 +86,7 @@ na zmeny vykonané v dokumente inými používateľmi.
 Určuje, ako majú tieto zmeny ovplyvňovať svoju lokálnu kópiu, a vysiela jej zmeny ostatným klientom.
 V niektorých modeloch sa zmeny na klientovi neodzrkadľujú dovtedy,
 kým sa zo servera nevráti oficiálna odpoveď, a to aj vtedy, ak boli tieto zmeny vykonané lokálne.
-Príkladom takéhoto editora je napríklad \textit{Gobby}.
+Príkladom takéhoto editora je napríklad editor \textit{Gobby}.
 
 My sme sa v práci rozhodli použiť klient-server model, pričom za synchronizáciu klientov
 je zodpovedný výhradne server. Podobný prístup používa napr. spoločnost Google v produkte 
