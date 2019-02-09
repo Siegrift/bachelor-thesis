@@ -14,7 +14,6 @@ Tieto editory sa rozdeľujú na dve kategórie
 My sa v práci zameriavame editormi so zmenami v reálnom čase, kde treba
 riešiť synchronizáciu editorových inštancií používateľov a riešenie možných konfliktov.
 
-\section{Kolaboratívny editor v reálnom čase}
 Problematika kolaboratívnych editorov v reálnom čase sa dá rozdeliť do samostatných zmysluplných 
 podkapitol
 \begin{itemize}
@@ -22,11 +21,12 @@ podkapitol
 \item  algoritmy riešiace konkurentné modifikácie jedného zdroja
 \end{itemize}
 
-\subsection{Technické výzvy}
+\section{Technické výzvy}
 Technické výzvy pramenia z asynchrónnej komunikácie po sieti. Teoreticky, keby táto 
 komunikácia bola okamžitá, tak vytvorenie takéhoto editora, by nebolo veľmi odlišné od
-editora pre jedného používateľa. Algoritmus, rišiaci takýto problém, by mohol fungovať na 
-základe \textit{upravovacieho zámku}. Fungoval by celkom jednoducho:
+editora pre jedného používateľa. Algoritmus \label{algo:nesubezne_editovanie}, 
+rišiaci takýto problém,  by mohol fungovať na  základe 
+\textit{upravovacieho zámku}. Fungoval by celkom jednoducho:
 \begin{enumerate}
   \item Požiadanie servera o \textit{upravovacý zámok}
   \item Počkanie na schválenie zo servera, že sme na rade s úpravou
@@ -37,6 +37,12 @@ Avšak rýchlosť komunikácie je obmedzená latenciou siete. To vytvára zákla
 používatelia potrebujú okamžite vidieť vlastné úpravy, ktoré sú do dokumentu zapracované,
 ale ak sú začlenené okamžite, tak pre latenciu komunikácie musia byť ich
 úpravy nevyhnutne vložené do rôznych verzií dokumentu.
+
+Jednou s možností by mohlo byť zamedzenie konkurentných úprav zdroja (algoritmus by bol podobný
+\ref{algo:nesubezne_editovanie}). Ďalšou, pre používateľa príjemnejšou voľbou je optmistická
+replikácia, kde sa zmeny v zdroji uplatňujú postupne a prípadné chyby a nekonzistentnosti sa
+riešia neskôr. Neskôr v texte ukážeme, že existuje spôsob akým docieliť konkurentné úpravy 
+textového dokumentu zaručene bez konfliktov. %TODO: ref na kapitolu kde to ukazem
 
 Problém súbežnej modifikácie jedného textového poľa je, že jednoduché textové operácie ako
 pridať alebo zmazať znak, nie sú komutatívne \ref{obr:nekomutativita} a ani 
@@ -86,7 +92,7 @@ My sme sa v práci rozhodli použiť klient-server model, pričom za synchroniz�
 je zodpovedný výhradne server. Podobný prístup používa napr. spoločnost Google v produkte 
 Google dokumenty.
 
-\subsection{Algoritmy riešiace konkurentné modifikácie}
+\section{Algoritmy riešiace konkurentné modifikácie}
 Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algoritmov.
 \begin{enumerate}
   \item OT - Prevádzková transformácia (Operational transformation)
