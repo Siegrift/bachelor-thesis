@@ -11,13 +11,18 @@ const captures = {
 }
 const handlers = mapObjIndexed(() => preventDefaultFn, captures)
 
+const HotKeysUntyped = HotKeys as any
 export const CaptureKeysHOC = (WrappedComponent: any) => {
   return class extends React.Component {
     render() {
       return (
-        <HotKeys keyMap={captures} handlers={handlers}>
+        <HotKeysUntyped
+          keyMap={captures}
+          handlers={handlers}
+          style={{ width: '100%', height: `100%` }}
+        >
           <WrappedComponent />
-        </HotKeys>
+        </HotKeysUntyped>
       )
     }
   }

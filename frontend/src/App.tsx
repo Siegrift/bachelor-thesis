@@ -1,58 +1,36 @@
-import React, { Component } from 'react'
-import MonacoEditor, {
-  ChangeHandler,
-  EditorDidMount
-} from 'react-monaco-editor'
-import { withStyles } from '@material-ui/core'
-import { editor as Editor } from 'monaco-editor/esm/vs/editor/editor.api'
-import { compose } from 'recompose'
-import { CaptureKeysHOC } from './CaptureKeysHOC'
-import { getSynchronizer, Synchronizer } from './codeSynchronizer'
+import React from 'react'
+import { createStyles, withStyles, WithStyles } from '@material-ui/core'
+import { compose } from 'redux'
+import { Theme } from '@material-ui/core/styles/createMuiTheme'
+import { CaptureKeysHOC } from './components/CaptureKeysHOC'
+import LoginScreen from './components/LoginScreen'
 
-const styles = {}
+const styles = (theme: Theme) =>
+  createStyles({
+    app: {
+      backgroundColor: theme.colors.background.default,
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  })
 
-class App extends Component<{}, { code: string }> {
-  state = {
-    code: '// type your code...',
-  }
-  editorRef?: Editor.IStandaloneCodeEditor
-  synchronizer?: Synchronizer
-
-  editorDidMount: EditorDidMount = async (editor, monaco) => {
-    this.editorRef = editor
-
-    this.synchronizer = await getSynchronizer()
-    this.synchronizer!.share.textarea.bindMonaco(this.editorRef!)
-
-    editor.focus()
-  }
-
-  onChange: ChangeHandler = (newValue, e) => {
-    this.setState({ code: newValue })
-  }
-
+interface Props extends WithStyles<typeof styles> {}
+class App extends React.Component<Props> {
   render() {
-    const code = this.state.code
-    const options = {
-      selectOnLineNumbers: true,
-    }
+    const { classes } = this.props
     return (
-      <MonacoEditor
-        width="800"
-        height="600"
-        // languages needs to be added in webpack too
-        language="cpp"
-        theme="vs-dark"
-        value={code}
-        options={options}
-        onChange={this.onChange}
-        editorDidMount={this.editorDidMount}
-      />
+      <div className={classes.app}>
+        <LoginScreen />
+      </div>
     )
   }
 }
 
 export default compose(
-  withStyles(styles),
+  // FIXME: this HOC has bugs! If tit's not first the app won't load
   CaptureKeysHOC,
-)(App)
+  withStyles(styles),
+)(App) as any // FIXME: short-term hack
