@@ -3,7 +3,7 @@ import { config as applyEnv } from 'dotenv'
 import { join } from 'path'
 
 // apply .env properties to `process.env`
-const configResult = applyEnv({ path: join(__dirname, '../.env') })
+const configResult = applyEnv({ path: join(__dirname, '../../.env') })
 if (configResult.error) throw configResult.error
 const { DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env
 
@@ -23,10 +23,10 @@ const config: Config = {
       charset: 'utf8',
     },
     migrations: {
-      directory: __dirname + '/migrations',
+      directory: join(__dirname, 'migrations'),
     },
     seeds: {
-      directory: __dirname + '/seeds',
+      directory: join(__dirname, 'seeds'),
     },
     debug: true,
     asyncStackTraces: true,

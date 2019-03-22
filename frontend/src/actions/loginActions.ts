@@ -1,4 +1,6 @@
 import { Action, Thunk } from '../redux/types'
+import { updateValue } from './sharedActions'
+import { ApiError } from '../types/common'
 
 export const toggleFormType = (): Action<void> => ({
   type: `Change login form type`,
@@ -7,6 +9,7 @@ export const toggleFormType = (): Action<void> => ({
     login: {
       ...state.login,
       type: state.login.type === 'login' ? 'register' : 'login',
+      errorMessage: undefined,
     },
   }),
 })
@@ -14,15 +17,43 @@ export const toggleFormType = (): Action<void> => ({
 export const loginUser = (): Thunk => async (
   dispatch,
   getState,
-  { logger },
+  { logger, api },
 ) => {
   logger.log('Login user')
+  const state = getState().login
+
+  try {
+    const user = await api.loginUser({
+      name: state.name,
+      password: state.password,
+    })
+
+    dispatch(updateValue(['user'], user))
+  } catch (err) {
+    if (err instanceof ApiError) {
+      dispatch(updateValue(['login', 'errorMessage'], await err.reason))
+    }
+  }
 }
 
 export const registerUser = (): Thunk => async (
   dispatch,
   getState,
-  { logger },
+  { logger, api },
 ) => {
   logger.log('Register user')
+  const state = getState().login
+
+  try {
+    const user = await api.registerUser({
+      name: state.name,
+      password: state.password,
+    })
+
+    dispatch(updateValue(['user'], user))
+  } catch (err) {
+    if (err instanceof ApiError) {
+      dispatch(updateValue(['login', 'errorMessage'], await err.reason))
+    }
+  }
 }

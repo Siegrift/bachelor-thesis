@@ -5,8 +5,26 @@ export interface LoginState {
   password: string
   repeatPassword: string
   type: 'login' | 'register'
+  errorMessage?: string
+}
+
+export interface User {
+  name: string
+  password: string
+  id: string
+  isAdmin: boolean
 }
 
 export interface Logger {
-  log: (message: string, payload?: any) => void
+  log: (reason: string, payload?: any) => void
+}
+
+export class ApiError {
+  reason: string
+  response?: Response
+
+  constructor(reason: string, response?: Response) {
+    this.reason = reason
+    this.response = response
+  }
 }

@@ -4,6 +4,10 @@ import { compose } from 'redux'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { CaptureKeysHOC } from './components/CaptureKeysHOC'
 import LoginScreen from './components/LoginScreen'
+import EditorScreen from './components/EditorScreen'
+import { connect } from 'react-redux'
+import { State } from './redux/types'
+import { User } from './types/common'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -17,13 +21,16 @@ const styles = (theme: Theme) =>
     },
   })
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  user?: User
+}
+
 class App extends React.Component<Props> {
   render() {
-    const { classes } = this.props
+    const { classes, user } = this.props
     return (
       <div className={classes.app}>
-        <LoginScreen />
+        {user ? <EditorScreen /> : <LoginScreen />}
       </div>
     )
   }
@@ -33,4 +40,7 @@ export default compose(
   // FIXME: this HOC has bugs! If tit's not first the app won't load
   CaptureKeysHOC,
   withStyles(styles),
+  connect((state: State) => ({
+    user: state.user,
+  })),
 )(App) as any // FIXME: short-term hack

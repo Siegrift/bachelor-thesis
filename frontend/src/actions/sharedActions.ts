@@ -21,7 +21,7 @@ export function updateValue<Value>(
   return {
     loggable: isLoggable(other),
     payload: value,
-    type: (other && other.type) || `Set value at ${path.toString()}`,
+    type: (other && other.type) || `Set value at ${JSON.stringify(path)}`,
     reducer: (state: State) => assocPath(path, value, state),
   }
 }

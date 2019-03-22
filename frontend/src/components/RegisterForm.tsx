@@ -11,7 +11,7 @@ import { State } from '../redux/types'
 import { LoginState } from '../types/common'
 import { updateValue as _updateValue } from '../actions/sharedActions'
 import {
-  loginUser as _loginUser,
+  registerUser as _registerUser,
   toggleFormType as _toggleFormType
 } from '../actions/loginActions'
 
@@ -36,7 +36,7 @@ interface Props extends WithStyles<typeof styles> {
   login: LoginState
   toggleFormType: typeof _toggleFormType
   updateValue: typeof _updateValue
-  loginUser: typeof _loginUser
+  registerUser: typeof _registerUser
 }
 
 class RegisterForm extends Component<Props> {
@@ -47,7 +47,7 @@ class RegisterForm extends Component<Props> {
   }
 
   render() {
-    const { classes, login, loginUser, toggleFormType } = this.props
+    const { classes, login, registerUser, toggleFormType } = this.props
     return (
       <div className={classes.form}>
         <Typography variant="h3" gutterBottom={true}>
@@ -82,7 +82,8 @@ class RegisterForm extends Component<Props> {
             onChange={this.changeFieldText('repeatPassword')}
           />
 
-          <Button variant="contained" color="primary" onClick={loginUser}>
+          {/* TODO: check if passwords match */}
+          <Button variant="contained" color="primary" onClick={registerUser}>
             Registrovať
           </Button>
 
@@ -105,7 +106,7 @@ export default compose(
     {
       toggleFormType: _toggleFormType,
       updateValue: _updateValue,
-      loginUser: _loginUser,
+      registerUser: _registerUser,
     },
   ),
   // FIXME: 'RegisterForm' does not have any construct or call signatures.

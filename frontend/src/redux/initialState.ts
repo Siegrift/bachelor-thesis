@@ -6,7 +6,9 @@ const state: State = {
     password: '',
     repeatPassword: '',
     type: 'login',
+    errorMessage: undefined,
   },
+  user: undefined,
 }
 
 export default () => state

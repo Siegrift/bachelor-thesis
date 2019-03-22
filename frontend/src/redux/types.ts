@@ -1,7 +1,9 @@
-import { Logger, LoginState } from '../types/common'
+import { Logger, LoginState, User } from '../types/common'
+import { Api } from '../api'
 
 export interface State {
   readonly login: LoginState
+  readonly user?: User
 }
 
 export type Path = string[]
@@ -14,6 +16,7 @@ export interface Action<Payload = undefined> {
 
 export interface ThunkExtra {
   logger: Logger
+  api: Api
 }
 
 export type Thunk = (
