@@ -1,15 +1,15 @@
 import { Action, Thunk } from '../redux/types'
-import uuid from 'uuid/v4'
 import { Tab, TaskFile } from '../types/common'
 import { updateValue } from './sharedActions'
 
-const createEditorTabs = (tabNames: string[], ids: string[]): Action<any> => ({
+const createEditorTabs = (tabNames: string[]): Action<any> => ({
   type: 'Create editor tabs from response',
-  payload: { tabNames, ids },
+  payload: { tabNames },
   reducer: (state) => {
     const tabs = tabNames.map(
       (tab, i): Tab => ({
-        id: ids[i],
+        // there can't be 2 files with same name in the same directory
+        id: tab,
         name: tab,
         active: i === 0,
         selected: i === 0,
@@ -26,15 +26,13 @@ export const downloadTaskFiles = (): Thunk => async (
 ) => {
   try {
     const taskFiles = await api.downloadTaskFiles()
-    const ids = taskFiles.map((_) => uuid())
-
-    dispatch(createEditorTabs(taskFiles, ids))
+    dispatch(createEditorTabs(taskFiles))
 
     // we want to do this asynchronously so that we are not blocking the editor
     taskFiles.forEach(async (file, i) => {
       const content = await api.getFile(file)
       dispatch(
-        updateValue(['files', ids[i]], {
+        updateValue(['files', taskFiles[i]], {
           name: taskFiles[i],
           content,
         } as TaskFile),
