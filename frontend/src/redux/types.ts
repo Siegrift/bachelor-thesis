@@ -1,11 +1,11 @@
-import { Logger, LoginState, Tab, User } from '../types/common'
+import { Logger, LoginState, Tab, TaskFile, User } from '../types/common'
 import { Api } from '../api'
 
 export interface State {
   readonly login: LoginState
   readonly user?: User
   readonly tabs: Tab[]
-  readonly files: { [key: string]: string }
+  readonly files: { [key: string]: TaskFile }
 }
 
 export type Path = string[]

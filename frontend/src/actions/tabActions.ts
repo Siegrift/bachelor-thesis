@@ -1,6 +1,6 @@
 import { Action, Thunk } from '../redux/types'
 import uuid from 'uuid/v4'
-import { Tab } from '../types/common'
+import { Tab, TaskFile } from '../types/common'
 import { updateValue } from './sharedActions'
 
 const createEditorTabs = (tabNames: string[], ids: string[]): Action<any> => ({
@@ -30,9 +30,15 @@ export const downloadTaskFiles = (): Thunk => async (
 
     dispatch(createEditorTabs(taskFiles, ids))
 
+    // we want to do this asynchronously so that we are not blocking the editor
     taskFiles.forEach(async (file, i) => {
       const content = await api.getFile(file)
-      dispatch(updateValue(['files', ids[i]], content))
+      dispatch(
+        updateValue(['files', ids[i]], {
+          name: taskFiles[i],
+          content,
+        } as TaskFile),
+      )
     })
   } catch (err) {
     console.log('Error fetching andle error', err)

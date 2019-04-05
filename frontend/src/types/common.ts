@@ -36,3 +36,8 @@ export interface Tab {
   toggled?: boolean
   loading?: boolean
 }
+
+export interface TaskFile {
+  name: string
+  content: string
+}

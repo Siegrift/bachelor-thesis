@@ -21,14 +21,14 @@ const link = 'http://localhost:3001'
 // create a connection
 const connection = io(link) // need to include LINK within io()...
 
-export const getSynchronizer = async () => {
+export const getSynchronizer = async (id: string) => {
   const synchronizer = await Y({
     db: {
       name: 'memory', // use the memory db adapter
     },
     connector: {
       name: 'websockets-client', // use the websockets-client connector
-      room: 'Textarea-example-dev',
+      room: 'Textarea-example-dev' + id,
       socket: connection, // passing connection above as the socket...
       url: link, // the connection endpoint (see y-websockets-server)
     },

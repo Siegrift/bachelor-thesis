@@ -1,90 +1,75 @@
 import React, { Component } from 'react'
 import MonacoEditor, { EditorDidMount } from 'react-monaco-editor'
 import { withStyles, WithStyles } from '@material-ui/core'
+import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { editor as Editor } from 'monaco-editor/esm/vs/editor/editor.api'
 import { getSynchronizer, Synchronizer } from '../codeSynchronizer'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { State } from '../redux/types'
-import { Tab } from '../types/common'
-import { find } from 'lodash'
+import { Tab, TaskFile } from '../types/common'
+import classNames from 'classnames'
+import { forEach } from 'lodash'
 
-const styles = {}
+const styles = (theme: Theme) => ({
+  wrapper: {
+    width: '100%',
+    height: '100%',
+    // hack to prevent background flashing when changing editor tabs
+    backgroundColor: theme.colors.background.editor,
+  },
+  hidden: {
+    display: 'none',
+  },
+})
 
 interface Props extends WithStyles<typeof styles> {
-  files: { [key: string]: string }
+  files: { [key: string]: TaskFile }
   activeTab?: Tab
 }
 
-interface LocalState {
-  models: {
+interface EditorScreenLocalState {
+  editors: {
     [key: string]: {
-      model: Editor.ITextModel;
-      state?: Editor.ICodeEditorViewState;
+      editorRef?: Editor.IStandaloneCodeEditor;
+      monacoRef?: typeof import('/home/siegrift/Documents/bachelor-thesis/frontend/node_modules/monaco-editor/esm/vs/editor/editor.api');
+      synchronizer?: Synchronizer;
     };
   }
-  // yjs will asynchronously trigger an onChange on monaco editor clearing the model
-  // to prevent this we wait for the first tick of onChange handler
-  yjsInitializationFinished: boolean
 }
 
-class EditorScreen extends Component<Props, LocalState> {
-  editorRef?: Editor.IStandaloneCodeEditor
-  monacoRef?: typeof import('/home/siegrift/Documents/bachelor-thesis/frontend/node_modules/monaco-editor/esm/vs/editor/editor.api')
-  synchronizer?: Synchronizer
-
+class EditorScreen extends Component<Props, EditorScreenLocalState> {
   constructor(props: any) {
     super(props)
-    this.state = { models: {}, yjsInitializationFinished: false }
+    this.state = { editors: {} }
   }
 
-  editorDidMount: EditorDidMount = async (editor, monaco) => {
-    this.editorRef = editor
-    this.monacoRef = monaco
-
+  editorDidMount = (id: string): EditorDidMount => async (editor, monaco) => {
+    console.log('mounting: ', id)
+    const synchronizer = await getSynchronizer(id)
     // when yjs synchronizes with monaco, it clears the editor and triggers onChange handler
-    this.synchronizer = await getSynchronizer()
-    await this.synchronizer!.share.textarea.bindMonaco(this.editorRef!)
-    this.setState({ yjsInitializationFinished: true })
-    this.initializeEditor()
+    await synchronizer!.share.textarea.bindMonaco(editor)
+
+    this.setState((state) => ({
+      editors: {
+        ...state.editors,
+        [id]: {
+          editorRef: editor,
+          monacoRef: monaco,
+          synchronizer,
+        },
+      },
+    }))
 
     editor.focus()
   }
 
-  initializeEditor = () => {
-    const { activeTab } = this.props
-
-    console.log('Initializing!')
-    this.setState({ yjsInitializationFinished: true })
-    this.updateEditorModels()
-    console.log('Setting model', this.state.models[activeTab!.id].model)
-    this.editorRef!.setModel(this.state.models[activeTab!.id].model)
+  handleResize = () => {
+    forEach(
+      this.state.editors,
+      ({ editorRef }) => editorRef && editorRef!.layout(),
+    )
   }
-
-  updateEditorModels = () => {
-    const { files } = this.props
-    const { models } = this.state
-
-    Object.keys(files).forEach((key) => {
-      if (models[key] === undefined) {
-        this.setState((state) => ({
-          models: {
-            ...state.models,
-            ...{
-              [key]: {
-                // TODO: yjs doesn't know anything about models, and tries to set editor value
-                // this is a problem  because users can have different tabs open
-                // TODO: this should be files[key]
-                model: this.monacoRef!.editor.createModel('', 'cpp'),
-              },
-            },
-          },
-        }))
-      }
-    })
-  }
-
-  handleResize = () => this.editorRef!.layout()
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
@@ -95,44 +80,54 @@ class EditorScreen extends Component<Props, LocalState> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { activeTab } = this.props
-    const { models, yjsInitializationFinished } = this.state
+    const { files } = this.props
+    const { editors } = this.state
 
-    if (!yjsInitializationFinished) return
-
-    this.updateEditorModels()
-    if (
-      activeTab &&
-      prevProps.activeTab !== activeTab &&
-      models[activeTab.id]
-      // TODO: uncomment && models[activeTab.id].state
-    ) {
-      console.log(prevProps.activeTab, activeTab)
-      this.editorRef!.setModel(models[activeTab.id].model)
-      // TODO: uncomment this.editorRef.restoreViewState(models[activeTab.id].state!)
-    }
+    // create an editor instance for each new donwloaded file from internet
+    forEach(files, (_, key) => {
+      if (editors[key] === undefined) {
+        this.setState((state) => ({
+          editors: {
+            ...state.editors,
+            [key]: {},
+          },
+        }))
+      }
+    })
   }
 
   render() {
-    const { activeTab } = this.props
-    const { models } = this.state
+    const { activeTab, classes } = this.props
+    const { editors } = this.state
     const options = { selectOnLineNumbers: true }
-    const activeModel = find(
-      models,
-      (_, key) => activeTab !== undefined && key === activeTab.id,
-    )
 
-    return (
-      <MonacoEditor
-        width="100%"
-        height="100%"
-        // languages needs to be added in webpack too
-        language="cpp"
-        theme="vs-dark"
-        options={options}
-        editorDidMount={this.editorDidMount}
-      />
-    )
+    // need to trigger editor resize after render otherwise editor has 5px :)
+    setTimeout(() => {
+      this.handleResize()
+    }, 0)
+
+    if (!activeTab) return null
+    else {
+      return Object.keys(editors).map((id) => (
+        <div
+          className={classNames(
+            classes.wrapper,
+            activeTab.id !== id && classes.hidden,
+          )}
+          key={id}
+        >
+          <MonacoEditor
+            width="100%"
+            height="100%"
+            // languages needs to be added in webpack too
+            language="cpp"
+            theme="vs-dark"
+            options={options}
+            editorDidMount={this.editorDidMount(id)}
+          />
+        </div>
+      ))
+    }
   }
 }
 
