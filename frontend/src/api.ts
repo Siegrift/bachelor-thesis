@@ -8,6 +8,12 @@ interface LoginUserRequest {
 
 type RegisterUserRequest = LoginUserRequest
 
+interface RequestOptions {
+  body?: any
+  headers?: { [key: string]: string }
+  responseAsText?: boolean
+}
+
 export class Api {
   readonly logger: Logger
 
@@ -16,19 +22,30 @@ export class Api {
   }
 
   async loginUser(user: LoginUserRequest) {
-    return this.request(`/login`, 'POST', user)
+    return this.request(`/login`, 'POST', { body: user })
   }
 
   async registerUser(user: RegisterUserRequest) {
-    return this.request(`/register`, 'POST', user)
+    return this.request(`/register`, 'POST', { body: user })
+  }
+
+  async downloadTaskFiles(): Promise<string[]> {
+    return this.request('/mockedFiles', 'GET')
+  }
+
+  async getFile(file: string): Promise<string> {
+    return this.request(`/mockedFiles/${file}`, 'GET', {
+      responseAsText: true,
+    })
   }
 
   private request(
     url: string,
     method: string,
-    body?: any,
-    headers?: { [key: string]: string },
+    reqOptions: RequestOptions = {},
   ) {
+    const { body, headers, responseAsText } = reqOptions
+
     const uri = `${BASE_URL}${url}`
     const options = {
       method,
@@ -44,10 +61,12 @@ export class Api {
           request: { uri, options },
           response,
         })
+
         if (response.status >= 200 && response.status < 300) {
-          return response.json()
+          return responseAsText ? response.text() : response.json()
+        } else {
+          throw new ApiError(await response.text(), response)
         }
-        throw new ApiError(await response.text(), response)
       }),
       new Promise((_, rej) => {
         setTimeout(() => {

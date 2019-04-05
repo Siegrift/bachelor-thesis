@@ -19,7 +19,6 @@ export const loginUser = (): Thunk => async (
   getState,
   { logger, api },
 ) => {
-  logger.log('Login user')
   const state = getState().login
 
   try {
@@ -41,7 +40,6 @@ export const registerUser = (): Thunk => async (
   getState,
   { logger, api },
 ) => {
-  logger.log('Register user')
   const state = getState().login
 
   try {

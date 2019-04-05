@@ -132,6 +132,7 @@ function extend(Y) {
                 line < change.range.startLineNumber;
                 i++
               ) {
+                //console.log("HUESTON", self._content, self._content[i])
                 if (self._content[i].val === "\n") {
                   line++;
                 }

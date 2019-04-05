@@ -17,6 +17,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     colors: {
       background: {
         default: '#444444';
+        editorTabColor: '#2b2b2b';
         editor: '#1e1e1e';
       };
     }
@@ -26,12 +27,14 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     colors?: {
       background: {
         default: '#444444';
+        editorTabColor: '#2b2b2b';
         editor: '#1e1e1e';
       };
     }
   }
 }
 
+const WHITE_COLOR = '#9da5ab'
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -51,19 +54,29 @@ const theme = createMuiTheme({
     MuiTypography: {
       h3: {
         textAlign: 'center',
+        color: WHITE_COLOR,
+      },
+      h6: {
+        textAlign: 'center',
+        color: WHITE_COLOR,
       },
       body2: {
         textAlign: 'center',
+        color: WHITE_COLOR,
       },
     },
   },
   palette: {
     type: 'dark',
+    common: {
+      white: WHITE_COLOR,
+    },
   },
   colors: {
     background: {
       default: '#444444',
       editor: '#1e1e1e',
+      editorTabColor: '#2b2b2b',
     },
   },
 })

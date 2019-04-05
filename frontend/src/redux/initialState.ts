@@ -9,6 +9,8 @@ const state: State = {
     errorMessage: undefined,
   },
   user: undefined,
+  tabs: [],
+  files: {},
 }
 
 export default () => state

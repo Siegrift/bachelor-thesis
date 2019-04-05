@@ -3,9 +3,10 @@ body,
   position: absolute;
   height: 100%;
   width: 100%;
+  /* prevent small white footer in browser */
+  overflow: hidden;
 }
 
-.react-monaco-editor-container {
-  margin: auto;
-  margin-top: 100px;
+.treabeard-hovered {
+  background-color: #1e1e1e;
 }

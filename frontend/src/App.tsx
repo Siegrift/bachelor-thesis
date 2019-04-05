@@ -4,10 +4,11 @@ import { compose } from 'redux'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { CaptureKeysHOC } from './components/CaptureKeysHOC'
 import LoginScreen from './components/LoginScreen'
-import EditorScreen from './components/EditorScreen'
 import { connect } from 'react-redux'
 import { State } from './redux/types'
 import { User } from './types/common'
+import MainScreen from './components/MainScreen'
+import { PROCEED_WITHOUT_SIGNIN } from './constants'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -30,7 +31,7 @@ class App extends React.Component<Props> {
     const { classes, user } = this.props
     return (
       <div className={classes.app}>
-        {user ? <EditorScreen /> : <LoginScreen />}
+        {user || PROCEED_WITHOUT_SIGNIN ? <MainScreen /> : <LoginScreen />}
       </div>
     )
   }

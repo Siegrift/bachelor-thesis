@@ -1,5 +1,7 @@
+import { join } from 'path'
 import { basicRequest } from './requestWrapper'
 import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
+import { listFiles, readFile } from './utils'
 
 const FORBIDDEN = 403
 const OK = 200
@@ -58,4 +60,16 @@ export const loginUser = basicRequest(async ({ request, response }) => {
   } else {
     response.status(OK).send(user)
   }
+})
+
+export const listMockedFiles = basicRequest(async ({ response }) => {
+  const PUBLIC_FILES_DIR = join(__dirname, '../mocked-data/public')
+  response.json(await listFiles(PUBLIC_FILES_DIR))
+})
+
+export const getMockedFile = basicRequest(async ({ request, response }) => {
+  const file = request.params.file
+  const filePath = join(__dirname, '../mocked-data/public', file)
+
+  response.send(await readFile(filePath))
 })

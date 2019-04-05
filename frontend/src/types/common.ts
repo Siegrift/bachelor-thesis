@@ -1,5 +1,13 @@
 // NOTE: for now should hold all state interfaces
+export class ApiError {
+  reason: string
+  response?: Response
 
+  constructor(reason: string, response?: Response) {
+    this.reason = reason
+    this.response = response
+  }
+}
 export interface LoginState {
   name: string
   password: string
@@ -19,12 +27,12 @@ export interface Logger {
   log: (reason: string, payload?: any) => void
 }
 
-export class ApiError {
-  reason: string
-  response?: Response
-
-  constructor(reason: string, response?: Response) {
-    this.reason = reason
-    this.response = response
-  }
+export interface Tab {
+  id: string
+  name: string
+  selected: boolean
+  active: boolean
+  children?: Tab[]
+  toggled?: boolean
+  loading?: boolean
 }
