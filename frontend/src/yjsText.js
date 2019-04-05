@@ -99,99 +99,103 @@ function extend(Y) {
         }
       }
       bindMonaco(monacoInstance, options) {
-        var self = this;
-        options = options || {};
+        return new Promise(resolve => {
+          var self = this;
+          options = options || {};
 
-        // this function makes sure that either the
-        // monaco event is executed, or the yjs observer is executed
-        var token = true;
-        function mutualExcluse(f) {
-          if (token) {
-            token = false;
-            try {
-              f();
-            } catch (e) {
+          // this function makes sure that either the
+          // monaco event is executed, or the yjs observer is executed
+          var token = true;
+          function mutualExcluse(f) {
+            if (token) {
+              token = false;
+              try {
+                f();
+              } catch (e) {
+                token = true;
+                throw new Error(e);
+              }
               token = true;
-              throw new Error(e);
             }
-            token = true;
           }
-        }
-        monacoInstance.setValue(this.toString());
+          monacoInstance.setValue(this.toString());
 
-        function monacoCallback(event) {
-          mutualExcluse(function() {
-            // compute start.. (col+row -> index position)
-            // We shouldn't compute the offset on the old model..
-            //    var start = monacoInstance.getModel().getOffsetAt({column: event.range.startColumn, lineNumber: event.range.startLineNumber})
-            // So we compute the offset using the _content of this type
-            //console.log(event, "event");
-            event.changes.forEach(change => {
-              for (
-                var i = 0, line = 1;
-                line < change.range.startLineNumber;
-                i++
-              ) {
-                //console.log("HUESTON", self._content, self._content[i])
-                if (self._content[i].val === "\n") {
-                  line++;
+          function monacoCallback(event) {
+            mutualExcluse(function() {
+              // compute start.. (col+row -> index position)
+              // We shouldn't compute the offset on the old model..
+              //    var start = monacoInstance.getModel().getOffsetAt({column: event.range.startColumn, lineNumber: event.range.startLineNumber})
+              // So we compute the offset using the _content of this type
+              //console.log(event, "event");
+              event.changes.forEach(change => {
+                for (
+                  var i = 0, line = 1;
+                  line < change.range.startLineNumber;
+                  i++
+                ) {
+                  //console.log("HUESTON", self._content, self._content[i])
+                  if (self._content[i].val === "\n") {
+                    line++;
+                  }
                 }
-              }
-              var start = i + change.range.startColumn - 1;
+                var start = i + change.range.startColumn - 1;
 
-              // apply the delete operation first
-              if (change.rangeLength > 0) {
-                self.delete(start, change.rangeLength);
-              }
-              // apply insert operation
-              self.insert(start, change.text);
+                // apply the delete operation first
+                if (change.rangeLength > 0) {
+                  self.delete(start, change.rangeLength);
+                }
+                // apply insert operation
+                self.insert(start, change.text);
+              });
             });
-          });
-        }
-        var disposeBinding = monacoInstance.onDidChangeModelContent(
-          monacoCallback
-        ).dispose;
+          }
+          var disposeBinding = monacoInstance.onDidChangeModelContent(
+            monacoCallback
+          ).dispose;
 
-        function yCallback(event) {
-          mutualExcluse(function() {
-            //console.log("Model: ", monacoInstance.getModel(), monacoInstance);
-            let start = monacoInstance.getModel().getPositionAt(event.index);
-            var end, text;
-            if (event.type === "insert") {
-              end = start;
-              text = event.values.join("");
-            } else if (event.type === "delete") {
-              end = monacoInstance
-                .getModel()
-                .modifyPosition(start, event.length);
-              text = "";
-            }
-            var range = {
-              startLineNumber: start.lineNumber,
-              startColumn: start.column,
-              endLineNumber: end.lineNumber,
-              endColumn: end.column
-            };
-            var id = {
-              major: monacoIdentifierTemplate.major,
-              minor: monacoIdentifierTemplate.minor++
-            };
-            monacoInstance.executeEdits("Yjs", [
-              {
-                id: id,
-                range: range,
-                text: text,
-                forceMoveMarkers: true
+          function yCallback(event) {
+            mutualExcluse(function() {
+              //console.log("Model: ", monacoInstance.getModel(), monacoInstance);
+              let start = monacoInstance.getModel().getPositionAt(event.index);
+              var end, text;
+              if (event.type === "insert") {
+                end = start;
+                text = event.values.join("");
+              } else if (event.type === "delete") {
+                end = monacoInstance
+                  .getModel()
+                  .modifyPosition(start, event.length);
+                text = "";
               }
-            ]);
+              var range = {
+                startLineNumber: start.lineNumber,
+                startColumn: start.column,
+                endLineNumber: end.lineNumber,
+                endColumn: end.column
+              };
+              var id = {
+                major: monacoIdentifierTemplate.major,
+                minor: monacoIdentifierTemplate.minor++
+              };
+              monacoInstance.executeEdits("Yjs", [
+                {
+                  id: id,
+                  range: range,
+                  text: text,
+                  forceMoveMarkers: true
+                }
+              ]);
+            });
+          }
+          this.observe(yCallback);
+          this.monacoInstances.push({
+            editor: monacoInstance,
+            yCallback: yCallback,
+            monacoCallback: monacoCallback,
+            disposeBinding: disposeBinding
           });
-        }
-        this.observe(yCallback);
-        this.monacoInstances.push({
-          editor: monacoInstance,
-          yCallback: yCallback,
-          monacoCallback: monacoCallback,
-          disposeBinding: disposeBinding
+
+          resolve();
         });
       }
       // CodeMirror implementation..

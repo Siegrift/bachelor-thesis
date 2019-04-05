@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import MonacoEditor, {
-  ChangeHandler,
-  EditorDidMount
-} from 'react-monaco-editor'
+import MonacoEditor, { EditorDidMount } from 'react-monaco-editor'
 import { withStyles, WithStyles } from '@material-ui/core'
 import { editor as Editor } from 'monaco-editor/esm/vs/editor/editor.api'
 import { getSynchronizer, Synchronizer } from '../codeSynchronizer'
@@ -47,36 +44,24 @@ class EditorScreen extends Component<Props, LocalState> {
 
     // when yjs synchronizes with monaco, it clears the editor and triggers onChange handler
     this.synchronizer = await getSynchronizer()
-    this.synchronizer!.share.textarea.bindMonaco(this.editorRef!)
+    await this.synchronizer!.share.textarea.bindMonaco(this.editorRef!)
+    this.setState({ yjsInitializationFinished: true })
+    this.initializeEditor()
+
     editor.focus()
   }
 
-  onChange: ChangeHandler = (newValue, edits) => {
-    const { yjsInitializationFinished } = this.state
-
-    if (!yjsInitializationFinished) {
-      this.setState({ yjsInitializationFinished: true })
-      this.createModels()
-    }
-
-    this.updateActiveModel(newValue)
-  }
-
-  updateActiveModel = (newValue: string) => {
-    const { models } = this.state
+  initializeEditor = () => {
     const { activeTab } = this.props
 
-    const activeModel = find(
-      models,
-      (_, key) => activeTab !== undefined && key === activeTab.id,
-    )
-
-    activeModel!.model.setValue(newValue)
+    console.log('Initializing!')
+    this.setState({ yjsInitializationFinished: true })
+    this.updateEditorModels()
+    console.log('Setting model', this.state.models[activeTab!.id].model)
+    this.editorRef!.setModel(this.state.models[activeTab!.id].model)
   }
 
-  handleResize = () => this.editorRef!.layout()
-
-  createModels = () => {
+  updateEditorModels = () => {
     const { files } = this.props
     const { models } = this.state
 
@@ -99,6 +84,8 @@ class EditorScreen extends Component<Props, LocalState> {
     })
   }
 
+  handleResize = () => this.editorRef!.layout()
+
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
   }
@@ -113,15 +100,16 @@ class EditorScreen extends Component<Props, LocalState> {
 
     if (!yjsInitializationFinished) return
 
-    this.createModels()
+    this.updateEditorModels()
     if (
       activeTab &&
-      this.editorRef &&
       prevProps.activeTab !== activeTab &&
-      models[activeTab.id] &&
-      models[activeTab.id].state
+      models[activeTab.id]
+      // TODO: uncomment && models[activeTab.id].state
     ) {
-      this.editorRef.restoreViewState(models[activeTab.id].state!)
+      console.log(prevProps.activeTab, activeTab)
+      this.editorRef!.setModel(models[activeTab.id].model)
+      // TODO: uncomment this.editorRef.restoreViewState(models[activeTab.id].state!)
     }
   }
 
@@ -141,9 +129,7 @@ class EditorScreen extends Component<Props, LocalState> {
         // languages needs to be added in webpack too
         language="cpp"
         theme="vs-dark"
-        value={activeModel ? activeModel.model.getValue() : ''}
         options={options}
-        onChange={this.onChange}
         editorDidMount={this.editorDidMount}
       />
     )
