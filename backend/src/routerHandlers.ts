@@ -1,7 +1,8 @@
 import { join } from 'path'
 import { basicRequest } from './requestWrapper'
 import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
-import { listFiles, readFile } from './utils'
+import { readFile } from './utils'
+import recursivelyLstFiles from 'recursive-readdir'
 
 const FORBIDDEN = 403
 const OK = 200
@@ -64,7 +65,8 @@ export const loginUser = basicRequest(async ({ request, response }) => {
 
 export const listMockedFiles = basicRequest(async ({ response }) => {
   const PUBLIC_FILES_DIR = join(__dirname, '../mocked-data/public')
-  response.json(await listFiles(PUBLIC_FILES_DIR))
+  const files = await recursivelyLstFiles(PUBLIC_FILES_DIR)
+  response.json(files.map((file) => file.split('public/').pop()))
 })
 
 export const getMockedFile = basicRequest(async ({ request, response }) => {
