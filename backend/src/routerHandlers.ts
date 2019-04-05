@@ -70,7 +70,7 @@ export const listMockedFiles = basicRequest(async ({ response }) => {
 })
 
 export const getMockedFile = basicRequest(async ({ request, response }) => {
-  const file = request.params.file
+  const file = request.params.file + request.params[0]
   const filePath = join(__dirname, '../mocked-data/public', file)
 
   response.send(await readFile(filePath))

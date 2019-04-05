@@ -30,8 +30,8 @@ export interface Logger {
 export interface Tab {
   id: string
   name: string
-  selected: boolean
-  active: boolean
+  selected?: boolean
+  active?: boolean
   children?: Tab[]
   toggled?: boolean
   loading?: boolean

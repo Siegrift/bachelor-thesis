@@ -13,7 +13,7 @@ const router = Router()
 router.get('/', testBackendConnection)
 router.get('/db', testDbConnection)
 router.get('/mockedFiles', listMockedFiles)
-router.get('/mockedFiles/:file', getMockedFile)
+router.get('/mockedFiles/:file*', getMockedFile)
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)

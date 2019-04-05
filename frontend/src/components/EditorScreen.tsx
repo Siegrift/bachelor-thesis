@@ -10,6 +10,7 @@ import { State } from '../redux/types'
 import { Tab, TaskFile } from '../types/common'
 import classNames from 'classnames'
 import { forEach } from 'lodash'
+import { activeTabSelector } from '../selectors/tabSelectors'
 
 const styles = (theme: Theme) => ({
   wrapper: {
@@ -144,6 +145,6 @@ export default compose(
   withStyles(styles),
   connect((state: State) => ({
     files: state.files,
-    activeTab: state.tabs.find((tab) => tab.active),
+    activeTab: activeTabSelector(state),
   })),
 )(EditorScreen) as any

@@ -25,10 +25,13 @@ import {
   closeTab as _closeTab,
   downloadTaskFiles as _downloadTaskFiles,
   selectTab as _selectTab,
-  setActiveTab as _setActiveTab
+  setActiveTab as _setActiveTab,
+  toggleTabExpand as _toggleTabExpand
 } from '../actions/tabActions'
 import { State } from '../redux/types'
 import { Tab as TabType } from '../types/common'
+import { activeTabSelector } from '../selectors/tabSelectors'
+import { filterTabs, mapTabs } from '../tabHelpers'
 
 const styles = (theme: Theme) => ({
   grid: { height: '100%' },
@@ -104,6 +107,8 @@ interface Props extends WithStyles<typeof styles> {
   selectTab: typeof _selectTab
   setActiveTab: typeof _setActiveTab
   closeTab: typeof _closeTab
+  toggleTabExpand: typeof _toggleTabExpand
+  activeTab?: TabType
 }
 
 class MainScren extends Component<Props, {}> {
@@ -112,7 +117,8 @@ class MainScren extends Component<Props, {}> {
   }
 
   onToggle = (tab: TabType) => {
-    this.props.selectTab(tab.id)
+    if (tab.children) this.props.toggleTabExpand(tab.id)
+    else this.props.selectTab(tab.id)
   }
 
   handleTabChange = (id: string) => () => {
@@ -124,7 +130,7 @@ class MainScren extends Component<Props, {}> {
   }
 
   render() {
-    const { classes, theme, tabs } = this.props
+    const { classes, theme, tabs, activeTab } = this.props
     const AnyTab = Tab as any
 
     return (
@@ -146,28 +152,26 @@ class MainScren extends Component<Props, {}> {
         </Grid>
 
         <Grid item={true} className={classes.tabbedEditor}>
-          {tabs.length && (
+          {tabs.length && activeTab && (
             <Tabs
               className={classes.tabs}
-              value={tabs.find((tab) => tab.active)!.id}
+              value={activeTab.id}
               variant="scrollable"
               scrollButtons="off"
               indicatorColor="primary"
               textColor="primary"
             >
-              {tabs
-                .filter((tab) => tab.selected)
-                .map((tab) => (
-                  <AnyTab
-                    onSelect={this.handleTabChange(tab.id)}
-                    onClose={this.handleTabClose(tab.id)}
-                    component={CustomTabComponent}
-                    classNames={classes}
-                    tabLabel={tab.name}
-                    value={tab.id}
-                    key={tab.id}
-                  />
-                ))}
+              {filterTabs(tabs, (tab) => !!tab.selected).map((tab) => (
+                <AnyTab
+                  onSelect={this.handleTabChange(tab.id)}
+                  onClose={this.handleTabClose(tab.id)}
+                  component={CustomTabComponent}
+                  classNames={classes}
+                  tabLabel={tab.name}
+                  value={tab.id}
+                  key={tab.id}
+                />
+              ))}
             </Tabs>
           )}
 
@@ -194,12 +198,14 @@ export default compose(
   connect(
     (state: State) => ({
       tabs: state.tabs,
+      activeTab: activeTabSelector(state),
     }),
     {
       downloadTaskFiles: _downloadTaskFiles,
       selectTab: _selectTab,
       setActiveTab: _setActiveTab,
       closeTab: _closeTab,
+      toggleTabExpand: _toggleTabExpand,
     },
   ),
 )(MainScren) as any
