@@ -8,9 +8,9 @@ const styles = (theme: Theme) => ({
     display: 'flex',
   },
   file: {
-    width: 16,
-    height: 16,
-    margin: 4,
+    width: 14,
+    height: 14,
+    margin: 5,
     color: theme.palette.common.white,
   },
 })

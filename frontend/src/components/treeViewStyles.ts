@@ -37,8 +37,8 @@ const createTreeViewStyles = (theme: Theme) => ({
           margin: '-8px 0 0 -4px',
           height: '10px',
         },
-        height: 10,
-        width: 10,
+        height: 12,
+        width: 12,
         arrow: {
           fill: theme.palette.common.white,
           strokeWidth: 0,
