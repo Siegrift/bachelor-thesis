@@ -9,12 +9,13 @@ var monacoIdentifierTemplate = { major: 0, minor: 0 };
 function extend(Y) {
   Y.requestModules(["Array"]).then(function() {
     class YText extends Y.Array.typeDefinition["class"] {
-      constructor(os, _model, _content) {
+      constructor(os, _model, _content, shouldInitializeByWebsckets) {
         super(os, _model, _content);
         this.textfields = [];
         this.aceInstances = [];
         this.codeMirrorInstances = [];
         this.monacoInstances = [];
+        this.shouldInitializeByWebsckets = shouldInitializeByWebsckets;
       }
       toString() {
         return this._content
@@ -98,10 +99,11 @@ function extend(Y) {
           this.unbindMonaco(this.monacoInstances[i].editor);
         }
       }
-      bindMonaco(monacoInstance, options) {
+      // NOTE: initializeEditorItself is responsible for setting the initial value of the file
+      // donwloaded from BE.
+      bindMonaco(monacoInstance, initializeEditorItself, id) {
         return new Promise(resolve => {
           var self = this;
-          options = options || {};
 
           // this function makes sure that either the
           // monaco event is executed, or the yjs observer is executed
@@ -118,9 +120,21 @@ function extend(Y) {
               token = true;
             }
           }
-          monacoInstance.setValue(this.toString());
+
+          if (this.shouldInitializeByWebsckets) {
+            console.log(`Initializing editor '${id}' by remote value`);
+            monacoInstance.setValue(this.toString());
+          } else {
+            console.log(`Initializing editor '${id}' by editor initial value`);
+            initializeEditorItself();
+          }
+
+          var disposeBinding = monacoInstance.onDidChangeModelContent(e =>
+            monacoCallback(e)
+          ).dispose;
 
           function monacoCallback(event) {
+            console.log(event);
             mutualExcluse(function() {
               // compute start.. (col+row -> index position)
               // We shouldn't compute the offset on the old model..
@@ -149,9 +163,6 @@ function extend(Y) {
               });
             });
           }
-          var disposeBinding = monacoInstance.onDidChangeModelContent(
-            monacoCallback
-          ).dispose;
 
           function yCallback(event) {
             mutualExcluse(function() {
@@ -187,6 +198,7 @@ function extend(Y) {
               ]);
             });
           }
+
           this.observe(yCallback);
           this.monacoInstances.push({
             editor: monacoInstance,
@@ -618,7 +630,9 @@ function extend(Y) {
         struct: "List",
         initType: function* YTextInitializer(os, model) {
           var _content = [];
+          let shouldInitializeByWebsckets = false;
           yield* Y.Struct.List.map.call(this, model, function(op) {
+            shouldInitializeByWebsckets = true;
             if (op.hasOwnProperty("opContent")) {
               throw new Error("Text must not contain types!");
             } else {
@@ -630,10 +644,10 @@ function extend(Y) {
               });
             }
           });
-          return new YText(os, model.id, _content);
+          return new YText(os, model.id, _content, shouldInitializeByWebsckets);
         },
         createType: function YTextCreator(os, model) {
-          return new YText(os, model.id, []);
+          return new YText(os, model.id, [], false);
         }
       })
     );

@@ -31,6 +31,7 @@ interface Props extends WithStyles<typeof styles> {
 interface EditorScreenLocalState {
   editors: {
     [key: string]: {
+      initialContent: string;
       editorRef?: Editor.IStandaloneCodeEditor;
       monacoRef?: typeof import('/home/siegrift/Documents/bachelor-thesis/frontend/node_modules/monaco-editor/esm/vs/editor/editor.api');
       synchronizer?: Synchronizer;
@@ -45,15 +46,23 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
   }
 
   editorDidMount = (id: string): EditorDidMount => async (editor, monaco) => {
+    const { editors } = this.state
+
     console.log('mounting: ', id)
     const synchronizer = await getSynchronizer(id)
     // when yjs synchronizes with monaco, it clears the editor and triggers onChange handler
-    await synchronizer!.share.textarea.bindMonaco(editor)
+    await synchronizer!.share.textarea.bindMonaco(
+      editor,
+      // TODO: editors[id].initialContent
+      () => editor.setValue(''),
+      id,
+    )
 
     this.setState((state) => ({
       editors: {
         ...state.editors,
         [id]: {
+          ...state.editors[id],
           editorRef: editor,
           monacoRef: monaco,
           synchronizer,
@@ -84,12 +93,14 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
     const { editors } = this.state
 
     // create an editor instance for each new donwloaded file from internet
-    forEach(files, (_, key) => {
+    forEach(files, (file, key) => {
       if (editors[key] === undefined) {
         this.setState((state) => ({
           editors: {
             ...state.editors,
-            [key]: {},
+            [key]: {
+              initialContent: file.content,
+            },
           },
         }))
       }
