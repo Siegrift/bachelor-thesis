@@ -1,10 +1,28 @@
 import React from 'react'
+import FileCopy from '@material-ui/icons/FileCopy'
+import { Theme } from '@material-ui/core/styles/createMuiTheme'
+import { withStyles, WithStyles } from '@material-ui/core'
 
-const customStyles = {
-  display: 'flex',
+const styles = (theme: Theme) => ({
+  container: {
+    display: 'flex',
+  },
+  file: {
+    width: 16,
+    height: 16,
+    margin: 4,
+    color: theme.palette.common.white,
+  },
+})
+
+interface Props extends WithStyles<typeof styles> {
+  style: any
+  decorators: any
+  onClick: any
+  node: any
+  terminal: any
 }
-
-class TreebeardContainer extends React.Component<any> {
+class TreebeardContainer extends React.Component<Props> {
   clickableRef = React.createRef() as any
 
   componentDidMount() {
@@ -22,39 +40,27 @@ class TreebeardContainer extends React.Component<any> {
     return (
       <div
         onClick={onClick}
-        style={{ ...style.container, ...customStyles }}
+        style={{ ...style.container }}
         ref={this.clickableRef}
       >
-        {!terminal ? this.renderToggle() : null}
+        {!terminal ? this.renderToggle() : this.renderTerminal()}
 
         <decorators.Header node={node} style={style.header} />
       </div>
     )
   }
 
-  renderToggle() {
-    const { animations } = this.props
+  renderTerminal = () => {
+    const { classes } = this.props
 
-    if (!animations) {
-      return this.renderToggleDecorator()
-    }
-
-    return (
-      <div
-      // animation={animations.toggle.animation}
-      // duration={animations.toggle.duration}
-      // ref={(ref) => (this.velocityRef = ref)}
-      >
-        {this.renderToggleDecorator()}
-      </div>
-    )
+    return <FileCopy className={classes.file} />
   }
 
-  renderToggleDecorator() {
+  renderToggle = () => {
     const { style, decorators } = this.props
 
     return <decorators.Toggle style={style.toggle} />
   }
 }
 
-export default TreebeardContainer
+export default withStyles(styles)(TreebeardContainer)
