@@ -16,6 +16,7 @@ function extend(Y) {
         this.codeMirrorInstances = [];
         this.monacoInstances = [];
         this.shouldInitializeByWebsckets = shouldInitializeByWebsckets;
+        this.isInitialized = false;
       }
       toString() {
         return this._content
@@ -121,6 +122,10 @@ function extend(Y) {
             }
           }
 
+          var disposeBinding = monacoInstance.onDidChangeModelContent(e =>
+            monacoCallback(e)
+          ).dispose;
+
           if (this.shouldInitializeByWebsckets) {
             console.log(`Initializing editor '${id}' by remote value`);
             monacoInstance.setValue(this.toString());
@@ -129,18 +134,22 @@ function extend(Y) {
             initializeEditorItself();
           }
 
-          var disposeBinding = monacoInstance.onDidChangeModelContent(e =>
-            monacoCallback(e)
-          ).dispose;
-
           function monacoCallback(event) {
-            console.log(event);
+            // console.log(event, self);
             mutualExcluse(function() {
               // compute start.. (col+row -> index position)
               // We shouldn't compute the offset on the old model..
               //    var start = monacoInstance.getModel().getOffsetAt({column: event.range.startColumn, lineNumber: event.range.startLineNumber})
               // So we compute the offset using the _content of this type
               //console.log(event, "event");
+
+              // if this callback is a result of remote initialization, we do not want to propagate
+              // changes as they are already on other remotes
+              if (self.shouldInitializeByWebsckets && !self.isInitialized) {
+                self.isInitialized = true;
+                return;
+              }
+
               event.changes.forEach(change => {
                 for (
                   var i = 0, line = 1;
@@ -655,7 +664,3 @@ function extend(Y) {
 }
 
 export default extend;
-// module.exports = extend;
-// if (typeof Y !== "undefined") {
-//   extend(Y);
-// }

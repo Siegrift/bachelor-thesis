@@ -50,11 +50,9 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
 
     console.log('mounting: ', id)
     const synchronizer = await getSynchronizer(id)
-    // when yjs synchronizes with monaco, it clears the editor and triggers onChange handler
     await synchronizer!.share.textarea.bindMonaco(
       editor,
-      // TODO: editors[id].initialContent
-      () => editor.setValue(''),
+      () => editor.setValue(editors[id].initialContent),
       id,
     )
 
