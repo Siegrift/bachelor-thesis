@@ -9,19 +9,18 @@ const addTabToContainer = (
   container: Tab[],
   rawPath: string,
   remainingPath: string[],
-  selected: boolean,
 ) => {
   const [first, ...rest] = remainingPath
   if (remainingPath.length > 1) {
     const dirTab = container.find((tab) => tab.name === first) as TabNode
-    if (dirTab) addTabToContainer(dirTab.children!, rawPath, rest, selected)
+    if (dirTab) addTabToContainer(dirTab.children!, rawPath, rest)
     else {
       const tab = {
         id: first,
         name: first,
         children: [],
       }
-      addTabToContainer(tab.children, rawPath, rest, selected)
+      addTabToContainer(tab.children, rawPath, rest)
       container.push(tab)
     }
   } else {
@@ -37,8 +36,8 @@ const createEditorTabs = (taskFilesPaths: string[]): Action<any> => ({
   payload: taskFilesPaths,
   reducer: (state) => {
     const tabs: Tab[] = []
-    taskFilesPaths.forEach((path, i) =>
-      addTabToContainer(tabs, path, path.split('/'), i === 0),
+    taskFilesPaths.forEach((path) =>
+      addTabToContainer(tabs, path, path.split('/')),
     )
     return { ...state, tabs }
   },
@@ -74,13 +73,10 @@ export const closeTab = (tabId: string): Action<string> => ({
   reducer: (state) => {
     let shouldChangeActiveTab = findTab(state.tabs, (tab) => tab.id === tabId)!
       .active
-    const shouldNotCloseTab =
-      filterTabs(state.tabs, (tab) => tab.selected).length === 1
     const tabs = mapTabs(
       state.tabs,
       (tab): Tab => {
-        if (shouldNotCloseTab) return tab
-        else if (tab.id === tabId) {
+        if (tab.id === tabId) {
           return { ...tab, selected: false, active: false }
         } else if (isTabLeaf(tab) && tab.selected && shouldChangeActiveTab) {
           shouldChangeActiveTab = false
