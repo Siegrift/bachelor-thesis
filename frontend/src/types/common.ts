@@ -27,14 +27,19 @@ export interface Logger {
   log: (reason: string, payload?: any) => void
 }
 
-export interface Tab {
+export type Tab = TabNode | TabLeaf
+export interface TabNode {
   id: string
   name: string
-  selected?: boolean
-  active?: boolean
-  children?: Tab[]
+  children: Tab[]
   toggled?: boolean
   loading?: boolean
+}
+export interface TabLeaf {
+  id: string
+  name: string
+  selected: boolean
+  active: boolean
 }
 
 export interface TaskFile {

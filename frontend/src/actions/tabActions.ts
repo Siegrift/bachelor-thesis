@@ -1,7 +1,7 @@
 import { Action, Thunk } from '../redux/types'
-import { Tab, TaskFile } from '../types/common'
+import { Tab, TabLeaf, TabNode, TaskFile } from '../types/common'
 import { updateValue } from './sharedActions'
-import { filterTabs, findTab, mapTabs } from '../tabHelpers'
+import { filterTabs, findTab, isTabLeaf, mapTabs } from '../tabHelpers'
 
 // NOTE: there can't be 2 files with same name in the same directory
 // for this reason we are using the file path as an id
@@ -13,7 +13,7 @@ const addTabToContainer = (
 ) => {
   const [first, ...rest] = remainingPath
   if (remainingPath.length > 1) {
-    const dirTab = container.find((tab) => tab.name === first)
+    const dirTab = container.find((tab) => tab.name === first) as TabNode
     if (dirTab) addTabToContainer(dirTab.children!, rawPath, rest, selected)
     else {
       const tab = {
@@ -28,9 +28,7 @@ const addTabToContainer = (
     container.push({
       id: rawPath,
       name: first,
-      active: selected,
-      selected,
-    })
+    } as TabLeaf)
   }
 }
 
@@ -70,7 +68,6 @@ export const downloadTaskFiles = (): Thunk => async (
   }
 }
 
-// FIXME: now wokring
 export const closeTab = (tabId: string): Action<string> => ({
   type: 'Close editor tab',
   payload: tabId,
@@ -78,14 +75,14 @@ export const closeTab = (tabId: string): Action<string> => ({
     let shouldChangeActiveTab = findTab(state.tabs, (tab) => tab.id === tabId)!
       .active
     const shouldNotCloseTab =
-      filterTabs(state.tabs, (tab) => !!tab.selected).length === 1
+      filterTabs(state.tabs, (tab) => tab.selected).length === 1
     const tabs = mapTabs(
       state.tabs,
       (tab): Tab => {
         if (shouldNotCloseTab) return tab
         else if (tab.id === tabId) {
           return { ...tab, selected: false, active: false }
-        } else if (tab.selected && shouldChangeActiveTab) {
+        } else if (isTabLeaf(tab) && tab.selected && shouldChangeActiveTab) {
           shouldChangeActiveTab = false
           return { ...tab, active: true }
         } else {
@@ -129,7 +126,8 @@ export const toggleTabExpand = (tabId: string): Action<string> => ({
   reducer: (state) => {
     const tabs: Tab[] = mapTabs(
       state.tabs,
-      (tab) => (tab.id === tabId ? { ...tab, toggled: !tab.toggled } : tab),
+      (tab) =>
+        tab.id === tabId ? { ...tab, toggled: !(tab as TabNode).toggled } : tab,
       true,
     )
     return { ...state, tabs }

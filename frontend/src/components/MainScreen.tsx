@@ -1,5 +1,5 @@
+import createTreeViewStyles from './treeViewStyles'
 import React, { Children, Component } from 'react'
-import { decorators, Treebeard } from 'react-treebeard'
 import { withTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -9,7 +9,7 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { withStyles, WithStyles } from '@material-ui/core'
 import EditorScreen from './EditorScreen'
 import CloseIcon from '@material-ui/icons/Close'
-import createTreeViewStyles from './treeViewStyles'
+import { decorators, Treebeard } from 'react-treebeard'
 import { compose } from 'redux'
 import {
   CONTROL_PANEL_WIDTH,
@@ -31,7 +31,7 @@ import {
 import { State } from '../redux/types'
 import { Tab as TabType } from '../types/common'
 import { activeTabSelector } from '../selectors/tabSelectors'
-import { filterTabs, mapTabs } from '../tabHelpers'
+import { filterTabs, isTabNode, mapTabs } from '../tabHelpers'
 
 const styles = (theme: Theme) => ({
   grid: { height: '100%' },
@@ -117,7 +117,7 @@ class MainScren extends Component<Props, {}> {
   }
 
   onToggle = (tab: TabType) => {
-    if (tab.children) this.props.toggleTabExpand(tab.id)
+    if (isTabNode(tab)) this.props.toggleTabExpand(tab.id)
     else this.props.selectTab(tab.id)
   }
 

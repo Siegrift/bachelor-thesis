@@ -1,14 +1,22 @@
-import { Tab } from './types/common'
+import { Tab, TabLeaf, TabNode } from './types/common'
+
+export function isTabLeaf(tab: Tab): tab is TabLeaf {
+  return (tab as any).children === undefined
+}
+
+export function isTabNode(tab: Tab): tab is TabNode {
+  return !isTabLeaf(tab)
+}
 
 export const filterTabs = (
   tabs: Tab[],
-  predicate: (tab: Tab) => boolean,
-): Tab[] => {
-  const res: Tab[] = []
+  predicate: (tab: TabLeaf) => boolean,
+): TabLeaf[] => {
+  const res: TabLeaf[] = []
   tabs.forEach((tab) => {
-    if (!tab.children && predicate(tab)) {
+    if (isTabLeaf(tab) && predicate(tab)) {
       res.push(tab)
-    } else if (tab.children) {
+    } else if (isTabNode(tab)) {
       res.push(...filterTabs(tab.children, predicate))
     }
   })
@@ -17,8 +25,8 @@ export const filterTabs = (
 
 export const findTab = (
   tabs: Tab[],
-  predicate: (tab: Tab) => boolean,
-): Tab | undefined => {
+  predicate: (tab: TabLeaf) => boolean,
+): TabLeaf | undefined => {
   return filterTabs(tabs, predicate)[0]
 }
 
@@ -28,7 +36,7 @@ export const mapTabs = (
   traverseNodes?: boolean,
 ): Tab[] => {
   return tabs.map((tab) => {
-    if (!tab.children) {
+    if (isTabLeaf(tab)) {
       return predicate(tab)
     } else {
       return {
