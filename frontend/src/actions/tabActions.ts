@@ -63,7 +63,7 @@ export const downloadTaskFiles = (): Thunk => async (
       )
     })
   } catch (err) {
-    console.log('Error fetching andle error', err)
+    console.error('Error fetching andle error', err)
   }
 }
 

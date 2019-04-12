@@ -49,7 +49,6 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
   editorDidMount = (id: string): EditorDidMount => async (editor, monaco) => {
     const { editors } = this.state
 
-    console.log('mounting: ', id)
     const synchronizer = await getSynchronizer(id)
     await synchronizer!.share.textarea.bindMonaco(
       editor,
@@ -68,8 +67,6 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
         },
       },
     }))
-
-    editor.focus()
   }
 
   handleResize = () => {
