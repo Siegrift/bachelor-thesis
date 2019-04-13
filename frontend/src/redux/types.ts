@@ -1,11 +1,21 @@
-import { Logger, LoginState, Tab, TaskFile, User } from '../types/common'
+import {
+  EditorState,
+  Logger,
+  LoginState,
+  ObjectOf,
+  Tab,
+  TaskFile,
+  User
+} from '../types/common'
 import { Api } from '../api'
 
 export interface State {
   readonly login: LoginState
   readonly user?: User
   readonly tabs: Tab[]
-  readonly files: { [key: string]: TaskFile }
+  readonly files: ObjectOf<TaskFile>
+  /** Properties of this object are populated lazily */
+  readonly editors: ObjectOf<EditorState | undefined>
 }
 
 export type Path = string[]

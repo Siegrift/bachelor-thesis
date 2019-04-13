@@ -11,6 +11,7 @@ const state: State = {
   user: undefined,
   tabs: [],
   files: {},
+  editors: {},
 }
 
 export default () => state

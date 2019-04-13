@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
 import MonacoEditor, { EditorDidMount } from 'react-monaco-editor'
+import { compose } from 'redux'
 import { withStyles, WithStyles } from '@material-ui/core'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
-import { editor as Editor } from 'monaco-editor/esm/vs/editor/editor.api'
-import { getSynchronizer, Synchronizer } from '../codeSynchronizer'
+import { getSynchronizer } from '../codeSynchronizer'
 import { connect } from 'react-redux'
-import { compose } from 'redux'
+import React, { Component } from 'react'
 import { State } from '../redux/types'
-import { Tab, TaskFile } from '../types/common'
+import { EditorState, ObjectOf, Tab, TaskFile } from '../types/common'
 import classNames from 'classnames'
 import { forEach } from 'lodash'
 import { activeTabSelector } from '../selectors/tabSelectors'
+import { addEditorInstance as _addEditorInstance } from '../actions/editorActions'
 
 const styles = (theme: Theme) => ({
   wrapper: {
@@ -25,55 +25,35 @@ const styles = (theme: Theme) => ({
 })
 
 interface Props extends WithStyles<typeof styles> {
-  files: { [key: string]: TaskFile }
+  files: ObjectOf<TaskFile>
+  editors: ObjectOf<EditorState | undefined>
   activeTab?: Tab
+  addEditorInstance: typeof _addEditorInstance
 }
 
-interface EditorScreenLocalState {
-  editors: {
-    [key: string]: {
-      initialContent: string;
-      editorRef?: Editor.IStandaloneCodeEditor;
-      monacoRef?: typeof import('/home/siegrift/Documents/bachelor-thesis/frontend/node_modules/monaco-editor/esm/vs/editor/editor.api');
-      synchronizer?: Synchronizer;
-    };
-  }
-}
-
-class EditorScreen extends Component<Props, EditorScreenLocalState> {
+class EditorScreen extends Component<Props> {
   constructor(props: any) {
     super(props)
-    this.state = { editors: {} }
   }
 
-  editorDidMount = (id: string): EditorDidMount => async (editor, monaco) => {
-    const { editors } = this.state
+  editorDidMount = (id: string): EditorDidMount => async (
+    editorRef,
+    monacoRef,
+  ) => {
+    const { files, addEditorInstance } = this.props
 
     const synchronizer = await getSynchronizer(id)
     await synchronizer!.share.textarea.bindMonaco(
-      editor,
-      () => editor.setValue(editors[id].initialContent),
+      editorRef,
+      () => editorRef.setValue(files[id].content),
       id,
     )
 
-    this.setState((state) => ({
-      editors: {
-        ...state.editors,
-        [id]: {
-          ...state.editors[id],
-          editorRef: editor,
-          monacoRef: monaco,
-          synchronizer,
-        },
-      },
-    }))
+    addEditorInstance(id, { editorRef, monacoRef, synchronizer })
   }
 
   handleResize = () => {
-    forEach(
-      this.state.editors,
-      ({ editorRef }) => editorRef && editorRef!.layout(),
-    )
+    forEach(this.props.editors, (editor) => editor && editor.editorRef!.layout())
   }
 
   componentDidMount() {
@@ -84,28 +64,8 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
     window.removeEventListener('resize', this.handleResize)
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { files } = this.props
-    const { editors } = this.state
-
-    // create an editor instance for each new donwloaded file from internet
-    forEach(files, (file, key) => {
-      if (editors[key] === undefined) {
-        this.setState((state) => ({
-          editors: {
-            ...state.editors,
-            [key]: {
-              initialContent: file.content,
-            },
-          },
-        }))
-      }
-    })
-  }
-
   render() {
-    const { activeTab, classes } = this.props
-    const { editors } = this.state
+    const { activeTab, classes, editors } = this.props
     const options = { selectOnLineNumbers: true }
 
     // need to trigger editor resize after render otherwise editor has 5px :)
@@ -113,35 +73,37 @@ class EditorScreen extends Component<Props, EditorScreenLocalState> {
       this.handleResize()
     }, 0)
 
-    if (!activeTab) return null
-    else {
-      return Object.keys(editors).map((id) => (
-        <div
-          className={classNames(
-            classes.wrapper,
-            activeTab.id !== id && classes.hidden,
-          )}
-          key={id}
-        >
-          <MonacoEditor
-            width="100%"
-            height="100%"
-            // languages needs to be added in webpack too
-            language="cpp"
-            theme="vs-dark"
-            options={options}
-            editorDidMount={this.editorDidMount(id)}
-          />
-        </div>
-      ))
-    }
+    return Object.keys(editors).map((id) => (
+      <div
+        className={classNames(classes.wrapper, {
+          [classes.hidden]: !activeTab || activeTab.id !== id,
+        })}
+        key={id}
+      >
+        <MonacoEditor
+          width="100%"
+          height="100%"
+          // languages needs to be added in webpack too
+          language="cpp"
+          theme="vs-dark"
+          options={options}
+          editorDidMount={this.editorDidMount(id)}
+        />
+      </div>
+    ))
   }
 }
 
 export default compose(
   withStyles(styles),
-  connect((state: State) => ({
-    files: state.files,
-    activeTab: activeTabSelector(state),
-  })),
+  connect(
+    (state: State) => ({
+      files: state.files,
+      editors: state.editors,
+      activeTab: activeTabSelector(state),
+    }),
+    {
+      addEditorInstance: _addEditorInstance,
+    },
+  ),
 )(EditorScreen) as any

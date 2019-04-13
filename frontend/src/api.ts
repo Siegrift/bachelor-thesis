@@ -1,4 +1,4 @@
-import { ApiError, Logger } from './types/common'
+import { ApiError, Logger, ObjectOf } from './types/common'
 import { BASE_URL, REQUEST_TIMEOUT } from './constants'
 
 interface LoginUserRequest {
@@ -10,8 +10,9 @@ type RegisterUserRequest = LoginUserRequest
 
 interface RequestOptions {
   body?: any
-  headers?: { [key: string]: string }
+  headers?: ObjectOf<string>
   responseAsText?: boolean
+  convertToJson?: boolean
 }
 
 export class Api {
@@ -21,39 +22,60 @@ export class Api {
     this.logger = logger
   }
 
-  async loginUser(user: LoginUserRequest) {
-    return this.request(`/login`, 'POST', { body: user })
+  loginUser(user: LoginUserRequest) {
+    return this.request(`/login`, 'POST', {
+      body: user,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
   }
 
-  async registerUser(user: RegisterUserRequest) {
-    return this.request(`/register`, 'POST', { body: user })
+  registerUser(user: RegisterUserRequest) {
+    return this.request(`/register`, 'POST', {
+      body: user,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
-  async downloadTaskFiles(): Promise<string[]> {
+  downloadTaskFiles(): Promise<string[]> {
     return this.request('/mockedFiles', 'GET')
   }
 
-  async getFile(file: string): Promise<string> {
+  getFile(file: string): Promise<string> {
     return this.request(`/mockedFiles/${file}`, 'GET', {
       responseAsText: true,
     })
   }
 
+  saveFiles(files: FormData) {
+    return this.request(`/saveFiles`, 'POST', {
+      body: files,
+      convertToJson: false,
+      responseAsText: true,
+    })
+  }
+
+  private createRequestBody({ body, convertToJson }: RequestOptions) {
+    if (!body) return undefined
+    if (!convertToJson) return body
+    return JSON.stringify(body)
+  }
+
   private request(
     url: string,
-    method: string,
+    method: 'POST' | 'GET',
     reqOptions: RequestOptions = {},
   ) {
-    const { body, headers, responseAsText } = reqOptions
+    const { headers, responseAsText } = reqOptions
 
     const uri = `${BASE_URL}${url}`
     const options = {
       method,
       headers: new Headers({
-        ['Content-Type']: 'application/json',
         ...headers,
       }),
-      body: body ? JSON.stringify(body) : undefined,
+      body: this.createRequestBody(reqOptions),
     }
     return Promise.race([
       fetch(uri, options).then(async (response) => {

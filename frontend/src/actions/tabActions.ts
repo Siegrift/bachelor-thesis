@@ -1,7 +1,7 @@
-import { Action, Thunk } from '../redux/types'
+import { Action, State, Thunk } from '../redux/types'
 import { Tab, TabLeaf, TabNode, TaskFile } from '../types/common'
 import { updateValue } from './sharedActions'
-import { filterTabs, findTab, isTabLeaf, mapTabs } from '../tabHelpers'
+import { findTab, isTabLeaf, mapTabs } from '../tabHelpers'
 
 // NOTE: there can't be 2 files with same name in the same directory
 // for this reason we are using the file path as an id
@@ -43,6 +43,21 @@ const createEditorTabs = (taskFilesPaths: string[]): Action<any> => ({
   },
 })
 
+/**
+ * This action will save the file content to redux and initializes an empty editor,
+ * which will be later populated in EditorScreen component. We use the filename as
+ * key, because we have guaranteed that it will be unique.
+ */
+const addTaskFile = (taskFile: TaskFile): Action<TaskFile> => ({
+  type: 'Add task file to state',
+  payload: taskFile,
+  reducer: (state: State) => ({
+    ...state,
+    files: { ...state.files, [taskFile.name]: taskFile },
+    editors: { ...state.editors, [taskFile.name]: undefined },
+  }),
+})
+
 export const downloadTaskFiles = (): Thunk => async (
   dispatch,
   getState,
@@ -56,10 +71,10 @@ export const downloadTaskFiles = (): Thunk => async (
     taskFiles.forEach(async (file, i) => {
       const content = await api.getFile(file)
       dispatch(
-        updateValue(['files', taskFiles[i]], {
+        addTaskFile({
           name: taskFiles[i],
           content,
-        } as TaskFile),
+        }),
       )
     })
   } catch (err) {

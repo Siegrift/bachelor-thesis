@@ -7,6 +7,9 @@ import React, { Component } from 'react'
 import { withStyles, WithStyles } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { compose } from 'redux'
+import { saveFiles as _saveFiles } from '../actions/editorActions'
+import { State } from '../redux/types'
+import { connect } from 'react-redux'
 
 const styles = (theme: Theme) => ({
   controlPanel: {
@@ -27,11 +30,17 @@ const styles = (theme: Theme) => ({
   },
 })
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  saveFiles: typeof _saveFiles
+}
 
 class ControlPanel extends Component<Props, {}> {
+  handleSave = () => {
+    this.props.saveFiles('Save - ' + new Date().getTime())
+  }
+
   render() {
-    const { classes } = this.props
+    const { classes, saveFiles } = this.props
 
     return (
       <Grid container={true} className={classes.controlPanel}>
@@ -40,7 +49,12 @@ class ControlPanel extends Component<Props, {}> {
           <SettingsIcon className={classes.rightIcon} />
         </Button>
 
-        <Button variant="contained" color="primary" className={classes.button}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={this.handleSave}
+        >
           ULožiť
           <SaveIcon className={classes.rightIcon} />
         </Button>
@@ -54,4 +68,14 @@ class ControlPanel extends Component<Props, {}> {
   }
 }
 
-export default compose(withStyles(styles))(ControlPanel) as any
+export default compose(
+  withStyles(styles),
+  connect(
+    (state: State) => ({
+      editors: state.editors,
+    }),
+    {
+      saveFiles: _saveFiles,
+    },
+  ),
+)(ControlPanel) as any

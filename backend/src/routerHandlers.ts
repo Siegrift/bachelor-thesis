@@ -1,12 +1,16 @@
 import { join } from 'path'
 import { basicRequest } from './requestWrapper'
 import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
-import { readFile } from './utils'
+import { ensureFile, readFile, writeFile } from 'fs-extra'
 import recursivelyLstFiles from 'recursive-readdir'
+import { SAVE_ENTRY_AS_KEY } from './constants'
+import { forEach, omit } from 'lodash'
 
 const FORBIDDEN = 403
 const OK = 200
 const BAD_REQUEST = 400
+
+const UPLOADS_PATH = join(__dirname, '../uploads')
 
 export const testBackendConnection = basicRequest(async ({ response }) => {
   response.json('Backend working :)')
@@ -74,4 +78,19 @@ export const getMockedFile = basicRequest(async ({ request, response }) => {
   const filePath = join(__dirname, '../mocked-data/public', file)
 
   response.send(await readFile(filePath))
+})
+
+export const saveFiles = basicRequest(async ({ request, response }) => {
+  const saveEntryName = request.body[SAVE_ENTRY_AS_KEY]
+  const filesToSave = omit(request.body, [SAVE_ENTRY_AS_KEY])
+
+  forEach(filesToSave, async (content: string, name: string) => {
+    const SAVE_PATH = join(UPLOADS_PATH, saveEntryName, name)
+    await ensureFile(SAVE_PATH)
+    // we just fire the save actions, no need to wait as we don't handle errors anyway
+    await writeFile(SAVE_PATH, content)
+    console.log(content)
+  })
+
+  response.status(OK).send()
 })

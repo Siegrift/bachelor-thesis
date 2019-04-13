@@ -9,3 +9,6 @@ export const CONTROL_PANEL_WIDTH = 250
 export const TAB_VIEW_HEIGHT = 30
 export const TAB_CLOSE_ICON_PADDING = 8
 export const TAB_TEXT_LEFT_PADDING = TAB_CLOSE_ICON_PADDING
+
+// the same property is used in BE, be sure to keep in sync
+export const SAVE_ENTRY_AS_KEY = '__saveEntryName__'

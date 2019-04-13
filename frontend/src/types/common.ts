@@ -1,4 +1,7 @@
-// NOTE: for now should hold all state interfaces
+// NOTE: this file should hold all state interfaces for now
+import { editor as Editor } from 'monaco-editor/esm/vs/editor/editor.api'
+import { Synchronizer } from '../codeSynchronizer'
+
 export class ApiError {
   reason: string
   response?: Response
@@ -8,6 +11,11 @@ export class ApiError {
     this.response = response
   }
 }
+
+export interface ObjectOf<T> {
+  [key: string]: T
+}
+
 export interface LoginState {
   name: string
   password: string
@@ -45,4 +53,10 @@ export interface TabLeaf {
 export interface TaskFile {
   name: string
   content: string
+}
+
+export interface EditorState {
+  editorRef: Editor.IStandaloneCodeEditor
+  monacoRef: typeof import('/home/siegrift/Documents/bachelor-thesis/frontend/node_modules/monaco-editor/esm/vs/editor/editor.api')
+  synchronizer: Synchronizer
 }
