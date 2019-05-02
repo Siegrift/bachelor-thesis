@@ -3,3 +3,7 @@ export const printFormData = (formData: FormData) => {
     console.log(pair[0] + ', ' + pair[1])
   }
 }
+
+export const formatRunCodeAutosaveFolderName = () => {
+  return `Autosave-${new Date().getTime()}`
+}

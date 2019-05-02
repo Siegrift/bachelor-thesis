@@ -4,6 +4,7 @@ import { readFile } from 'fs-extra'
 import { join } from 'path'
 import {
   DEFAULT_TIMEOUT,
+  PROBLEMS_PATH,
   SANDBOX_TESTING_PATH,
   UPLOADS_PATH
 } from '../constants'
@@ -31,8 +32,15 @@ class DockerSandbox {
       const dest = join(SANDBOX_TESTING_PATH, this.folder)
       exec(
         `mkdir ${dest}` +
-          ` && cp ${join(__dirname, '/payload/*')} ${dest}` +
-          ` && cp -r ${join(UPLOADS_PATH, this.folder, '*')} ${dest}` +
+          ` && cp ${join(__dirname, 'payload/*')} ${dest}` +
+          ` && mkdir ${join(dest, 'public')}` +
+          ` && cp -r ${join(UPLOADS_PATH, this.folder, '*')} ${join(
+            dest,
+            'public',
+          )}` +
+          // TODO: this only works for one problem
+          ` && cp -r ${join(PROBLEMS_PATH, 'mocked-data/hidden')} ` +
+          `${join(dest)}` +
           ` && chmod 777 ${dest}`,
         (err: ExecException | null) => {
           if (err) {

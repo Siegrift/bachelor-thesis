@@ -13,6 +13,7 @@ import {
 } from '../actions/editorActions'
 import { State } from '../redux/types'
 import { connect } from 'react-redux'
+import { formatRunCodeAutosaveFolderName } from '../utils'
 
 const styles = (theme: Theme) => ({
   controlPanel: {
@@ -40,8 +41,12 @@ interface Props extends WithStyles<typeof styles> {
 
 class ControlPanel extends Component<Props, {}> {
   handleSave = () => {
-    // TODO: use helper or allow user to set name
-    this.props.saveFiles('Save - ' + new Date().getTime())
+    // import { format } from 'date-fns'
+    // import skLocale from 'date-fns/locale/sk'
+    // format(new Date(), 'MM-DD-YYYY HH:mm:ss', {
+    //   locale: skLocale,
+    // })
+    this.props.saveFiles(formatRunCodeAutosaveFolderName())
   }
 
   render() {

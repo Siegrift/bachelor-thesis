@@ -3,7 +3,7 @@ import { basicRequest } from './requestWrapper'
 import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
 import { ensureFile, readFile, writeFile } from 'fs-extra'
 import recursivelyLstFiles from 'recursive-readdir'
-import { SAVE_ENTRY_AS_KEY, UPLOADS_PATH } from './constants'
+import { PROBLEMS_PATH, SAVE_ENTRY_AS_KEY, UPLOADS_PATH } from './constants'
 import { forEach, omit } from 'lodash'
 import { runInSandBox } from './sandbox/sandbox'
 
@@ -67,14 +67,14 @@ export const loginUser = basicRequest(async ({ request, response }) => {
 })
 
 export const listMockedFiles = basicRequest(async ({ response }) => {
-  const PUBLIC_FILES_DIR = join(__dirname, '../mocked-data/public')
+  const PUBLIC_FILES_DIR = join(PROBLEMS_PATH, 'mocked-data/public')
   const files = await recursivelyLstFiles(PUBLIC_FILES_DIR)
   response.json(files.map((file) => file.split('public/').pop()))
 })
 
 export const getMockedFile = basicRequest(async ({ request, response }) => {
   const file = request.params.file + request.params[0]
-  const filePath = join(__dirname, '../mocked-data/public', file)
+  const filePath = join(PROBLEMS_PATH, 'mocked-data/public', file)
 
   response.send(await readFile(filePath))
 })
@@ -88,7 +88,6 @@ export const saveFiles = basicRequest(async ({ request, response }) => {
     await ensureFile(SAVE_PATH)
     // we just fire the save actions, no need to wait as we don't handle errors anyway
     await writeFile(SAVE_PATH, content)
-    console.log(content)
   })
 
   response.status(OK).send()
@@ -96,11 +95,10 @@ export const saveFiles = basicRequest(async ({ request, response }) => {
 
 export const runSavedCode = basicRequest(async ({ request, response }) => {
   const folder = decodeURIComponent(request.params.folder)
+  // TODO: this only works for one problem folder
   const compileScriptPath = join(
-    UPLOADS_PATH,
-    folder,
-    'hidden',
-    'run_script.json',
+    PROBLEMS_PATH,
+    'mocked-data/hidden/run_script.json',
   )
 
   try {
