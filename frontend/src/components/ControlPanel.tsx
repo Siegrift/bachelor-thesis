@@ -1,13 +1,16 @@
+import { withStyles, WithStyles } from '@material-ui/core'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
-import Grid from '@material-ui/core/Grid'
 import RunIcon from '@material-ui/icons/Send'
 import SaveIcon from '@material-ui/icons/CloudUpload'
 import SettingsIcon from '@material-ui/icons/Settings'
 import React, { Component } from 'react'
-import { withStyles, WithStyles } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import { compose } from 'redux'
-import { saveFiles as _saveFiles } from '../actions/editorActions'
+import {
+  runCode as _runCode,
+  saveFiles as _saveFiles
+} from '../actions/editorActions'
 import { State } from '../redux/types'
 import { connect } from 'react-redux'
 
@@ -32,15 +35,17 @@ const styles = (theme: Theme) => ({
 
 interface Props extends WithStyles<typeof styles> {
   saveFiles: typeof _saveFiles
+  runCode: typeof _runCode
 }
 
 class ControlPanel extends Component<Props, {}> {
   handleSave = () => {
+    // TODO: use helper or allow user to set name
     this.props.saveFiles('Save - ' + new Date().getTime())
   }
 
   render() {
-    const { classes, saveFiles } = this.props
+    const { classes, runCode } = this.props
 
     return (
       <Grid container={true} className={classes.controlPanel}>
@@ -55,11 +60,16 @@ class ControlPanel extends Component<Props, {}> {
           className={classes.button}
           onClick={this.handleSave}
         >
-          ULožiť
+          Uložiť
           <SaveIcon className={classes.rightIcon} />
         </Button>
 
-        <Button variant="contained" color="primary" className={classes.button}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={runCode}
+        >
           Spustiť
           <RunIcon className={classes.rightIcon} />
         </Button>
@@ -76,6 +86,7 @@ export default compose(
     }),
     {
       saveFiles: _saveFiles,
+      runCode: _runCode,
     },
   ),
 )(ControlPanel) as any

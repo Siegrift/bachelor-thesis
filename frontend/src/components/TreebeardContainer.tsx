@@ -40,7 +40,7 @@ class TreebeardContainer extends React.Component<Props> {
     return (
       <div
         onClick={onClick}
-        style={{ ...style.container }}
+        // TODO: this break the application style={{ ...style.container }}
         ref={this.clickableRef}
       >
         {!terminal ? this.renderToggle() : this.renderTerminal()}

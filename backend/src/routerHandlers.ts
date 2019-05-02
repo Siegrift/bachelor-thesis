@@ -3,14 +3,13 @@ import { basicRequest } from './requestWrapper'
 import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
 import { ensureFile, readFile, writeFile } from 'fs-extra'
 import recursivelyLstFiles from 'recursive-readdir'
-import { SAVE_ENTRY_AS_KEY } from './constants'
+import { SAVE_ENTRY_AS_KEY, UPLOADS_PATH } from './constants'
 import { forEach, omit } from 'lodash'
+import { runInSandBox } from './sandbox/sandbox'
 
 const FORBIDDEN = 403
 const OK = 200
 const BAD_REQUEST = 400
-
-const UPLOADS_PATH = join(__dirname, '../uploads')
 
 export const testBackendConnection = basicRequest(async ({ response }) => {
   response.json('Backend working :)')
@@ -93,4 +92,27 @@ export const saveFiles = basicRequest(async ({ request, response }) => {
   })
 
   response.status(OK).send()
+})
+
+export const runSavedCode = basicRequest(async ({ request, response }) => {
+  const folder = decodeURIComponent(request.params.folder)
+  const compileScriptPath = join(
+    UPLOADS_PATH,
+    folder,
+    'hidden',
+    'run_script.json',
+  )
+
+  try {
+    const compileScript = JSON.parse(
+      (await readFile(compileScriptPath)).toString(),
+    )
+
+    const sandboxOutput = await runInSandBox(folder, compileScript)
+
+    response.status(OK).send(sandboxOutput)
+  } catch (err) {
+    response.status(BAD_REQUEST).send(err)
+    return
+  }
 })

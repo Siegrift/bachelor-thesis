@@ -4,6 +4,7 @@ import {
   listMockedFiles,
   loginUser,
   registerUser,
+  runSavedCode,
   saveFiles,
   testBackendConnection,
   testDbConnection
@@ -24,5 +25,6 @@ router.post('/login', loginUser)
 // the functions itself is a middleware, which will check if the request is multipart
 // and if not, it will leave the processing of the request to next middleware.
 router.post('/saveFiles', upload.none(), saveFiles)
+router.post('/runSavedCode/:folder', runSavedCode)
 
 export default router

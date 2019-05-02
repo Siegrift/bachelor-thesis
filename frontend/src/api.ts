@@ -56,6 +56,10 @@ export class Api {
     })
   }
 
+  runSavedCode(folder: string) {
+    return this.request(`/runSavedCode/${encodeURIComponent(folder)}`, 'POST')
+  }
+
   private createRequestBody({ body, convertToJson }: RequestOptions) {
     if (!body) return undefined
     if (!convertToJson) return body
@@ -69,7 +73,7 @@ export class Api {
   ) {
     const { headers, responseAsText } = reqOptions
 
-    const uri = `${BASE_URL}${url}`
+    const uri = encodeURI(`${BASE_URL}${url}`)
     const options = {
       method,
       headers: new Headers({

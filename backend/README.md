@@ -28,3 +28,17 @@ To be able to work with the database, follow these steps:
 Do not modify the database directly! Use knex cli to generate
 [migrations](https://knexjs.org/#Migrations). _(Useful commands are `knex migrate:make "name"` and
 `knex migrate:latest`)_
+
+## Running code to test
+
+Code is run in a dockerized environment. This is not 100% safe, and best solution would be 
+to use a proper virtual environment and restrict the libraries user can use... But it's still
+better than nothing.
+
+**The work is heavily inspired and ported from: https://github.com/remoteinterview/compilebox**
+
+The setup was not working and small changes needed to be done *(at least in ./installMint script)*.
+
+## Compile and run script
+
+TODO:

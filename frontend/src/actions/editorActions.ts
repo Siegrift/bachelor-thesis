@@ -2,6 +2,8 @@ import { Action, State, Thunk } from '../redux/types'
 import { EditorState } from '../types/common'
 import { forEach } from 'lodash'
 import { SAVE_ENTRY_AS_KEY } from '../constants'
+import { format } from 'date-fns'
+import skLocale from 'date-fns/locale/sk'
 
 export const addEditorInstance = (
   id: string,
@@ -31,4 +33,22 @@ export const saveFiles = (saveEntryName: string): Thunk => async (
   })
 
   api.saveFiles(formData)
+}
+
+const formatRunCodeAutosaveFolderName = () => {
+  return `Autosave - ${format(new Date(), 'MM-DD-YYYY HH:mm:ss', {
+    locale: skLocale,
+  })}`
+}
+
+export const runCode = (): Thunk => async (
+  dispatch,
+  getState,
+  { api, logger },
+) => {
+  logger.log('Upload and run code')
+  const folder = formatRunCodeAutosaveFolderName()
+
+  await dispatch(saveFiles(folder))
+  api.runSavedCode(folder)
 }
