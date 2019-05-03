@@ -1,16 +1,16 @@
-import MonacoEditor, { EditorDidMount } from 'react-monaco-editor'
 import { compose } from 'redux'
+import { State } from '../redux/types'
 import { withStyles, WithStyles } from '@material-ui/core'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { getSynchronizer } from '../codeSynchronizer'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { State } from '../redux/types'
+import MonacoEditor, { EditorDidMount } from 'react-monaco-editor'
 import { EditorState, ObjectOf, Tab, TaskFile } from '../types/common'
 import classNames from 'classnames'
-import { forEach } from 'lodash'
 import { activeTabSelector } from '../selectors/tabSelectors'
 import { addEditorInstance as _addEditorInstance } from '../actions/editorActions'
+import { difference, forEach, keys } from 'lodash'
 
 const styles = (theme: Theme) => ({
   wrapper: {
@@ -47,6 +47,7 @@ class EditorScreen extends Component<Props> {
       editorRef,
       () => editorRef.setValue(files[id].content),
       id,
+      files[id].forceLocalInitialization,
     )
 
     addEditorInstance(id, { editorRef, monacoRef, synchronizer })
@@ -62,6 +63,18 @@ class EditorScreen extends Component<Props> {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const oldEditors = prevProps.editors
+    const newEditors = this.props.editors
+
+    const removed = difference(keys(oldEditors), keys(newEditors))
+    forEach(removed, (key) => {
+      oldEditors[key]!.synchronizer.share.textarea.unbindMonaco(
+        oldEditors[key]!.editorRef,
+      )
+    })
   }
 
   render() {

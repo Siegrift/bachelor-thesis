@@ -4,6 +4,6 @@ export const printFormData = (formData: FormData) => {
   }
 }
 
-export const formatRunCodeAutosaveFolderName = () => {
-  return `Autosave-${new Date().getTime()}`
+export const formatSaveFolderName = (saveFolderName: string) => {
+  return `${saveFolderName}-${new Date().getTime()}`
 }

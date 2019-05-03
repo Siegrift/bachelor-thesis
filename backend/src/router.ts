@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import {
   getMockedFile,
+  getUploadedFile,
   listMockedFiles,
+  listUploadedFiles,
+  listUploads,
   loginUser,
   registerUser,
   runSavedCode,
@@ -17,7 +20,10 @@ const router = Router()
 router.get('/', testBackendConnection)
 router.get('/db', testDbConnection)
 router.get('/mockedFiles', listMockedFiles)
-router.get('/mockedFiles/:file*', getMockedFile)
+router.get('/mockedFiles/:file', getMockedFile)
+router.get('/uploads', listUploads)
+router.get('/uploads/:upload', listUploadedFiles)
+router.get('/uploads/:upload/:file', getUploadedFile)
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)

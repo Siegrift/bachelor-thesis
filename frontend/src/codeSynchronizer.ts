@@ -21,7 +21,7 @@ const link = 'http://localhost:3001'
 // create a connection
 const connection = io(link) // need to include LINK within io()...
 
-export const getSynchronizer = async (id: string) => {
+export const getSynchronizer = async (id: string): Promise<Synchronizer> => {
   const synchronizer = await Y({
     db: {
       name: 'memory', // use the memory db adapter
@@ -44,7 +44,13 @@ export const getSynchronizer = async (id: string) => {
 export interface Synchronizer {
   share: {
     textarea: {
-      bindMonaco: (editor: Editor.IStandaloneCodeEditor) => void;
+      bindMonaco: (
+        editor: Editor.IStandaloneCodeEditor,
+        initialize: () => void,
+        id: string,
+        forceLocalInitialization?: boolean,
+      ) => void;
+      unbindMonaco: (editor: Editor.IStandaloneCodeEditor) => void;
     };
   }
 }

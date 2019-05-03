@@ -35,6 +35,10 @@ export interface Logger {
   log: (reason: string, payload?: any) => void
 }
 
+export interface Refetchable {
+  fetching: boolean
+}
+
 export type Tab = TabNode | TabLeaf
 export interface TabNode {
   id: string
@@ -53,10 +57,23 @@ export interface TabLeaf {
 export interface TaskFile {
   name: string
   content: string
+  forceLocalInitialization?: boolean
 }
 
 export interface EditorState {
   editorRef: Editor.IStandaloneCodeEditor
   monacoRef: typeof import('/home/siegrift/Documents/bachelor-thesis/frontend/node_modules/monaco-editor/esm/vs/editor/editor.api')
   synchronizer: Synchronizer
+}
+
+export type DialogType = 'save' | 'load' | 'run' | 'submit' | undefined
+
+export interface UploadState extends Refetchable {
+  entries: string[]
+}
+
+export interface SandboxResponse {
+  data: string
+  executionTime: number
+  error: string
 }

@@ -9,6 +9,7 @@ import { State } from './redux/types'
 import { User } from './types/common'
 import MainScreen from './components/MainScreen'
 import { PROCEED_WITHOUT_SIGNIN } from './constants'
+import Dialog from './components/dialogs/DialogContainer'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -32,6 +33,7 @@ class App extends React.Component<Props> {
     return (
       <div className={classes.app}>
         {user || PROCEED_WITHOUT_SIGNIN ? <MainScreen /> : <LoginScreen />}
+        <Dialog />
       </div>
     )
   }

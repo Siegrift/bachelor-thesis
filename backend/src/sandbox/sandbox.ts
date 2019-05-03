@@ -8,6 +8,8 @@ export interface CompileScript {
   timeout?: number
   compilerName: string
   additionalArguments?: string
+  // custom input has higher precedence than 'inputFile'
+  customInput?: string
 }
 
 export const runInSandBox = (

@@ -102,7 +102,13 @@ function extend(Y) {
       }
       // NOTE: initializeEditorItself is responsible for setting the initial value of the file
       // donwloaded from BE.
-      bindMonaco(monacoInstance, initializeEditorItself, id) {
+      bindMonaco(
+        monacoInstance,
+        initializeEditorItself,
+        id,
+        forceLocalInitialization
+      ) {
+        if (forceLocalInitialization) this.shouldInitializeByWebsckets = false;
         return new Promise(resolve => {
           var self = this;
 

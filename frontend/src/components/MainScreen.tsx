@@ -23,11 +23,11 @@ import TreebeardContainer from './TreebeardContainer'
 import { connect } from 'react-redux'
 import {
   closeTab as _closeTab,
-  downloadTaskFiles as _downloadTaskFiles,
   selectTab as _selectTab,
   setActiveTab as _setActiveTab,
   toggleTabExpand as _toggleTabExpand
 } from '../actions/tabActions'
+import { downloadTaskFiles as _downloadTaskFiles } from '../actions/editorActions'
 import { State } from '../redux/types'
 import { Tab as TabType } from '../types/common'
 import { activeTabSelector } from '../selectors/tabSelectors'
@@ -152,7 +152,7 @@ class MainScren extends Component<Props, {}> {
         </Grid>
 
         <Grid item={true} className={classes.tabbedEditor}>
-          {tabs.length && activeTab && (
+          {!!tabs.length && activeTab && (
             <Tabs
               className={classes.tabs}
               value={activeTab.id}

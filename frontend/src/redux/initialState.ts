@@ -12,6 +12,11 @@ const state: State = {
   tabs: [],
   files: {},
   editors: {},
+  dialog: undefined,
+  uploads: {
+    entries: [],
+    fetching: false,
+  },
 }
 
 export default () => state

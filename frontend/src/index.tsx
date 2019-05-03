@@ -19,6 +19,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         default: '#444444';
         editorTabColor: '#2b2b2b';
         editor: '#1e1e1e';
+        lightGray: '#585858';
       };
     }
   }
@@ -29,6 +30,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         default: '#444444';
         editorTabColor: '#2b2b2b';
         editor: '#1e1e1e';
+        lightGray: '#585858';
       };
     }
   }
@@ -77,6 +79,7 @@ const theme = createMuiTheme({
       default: '#444444',
       editor: '#1e1e1e',
       editorTabColor: '#2b2b2b',
+      lightGray: '#585858',
     },
   },
 })

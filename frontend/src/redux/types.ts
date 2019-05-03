@@ -1,10 +1,12 @@
 import {
+  DialogType,
   EditorState,
   Logger,
   LoginState,
   ObjectOf,
   Tab,
   TaskFile,
+  UploadState,
   User
 } from '../types/common'
 import { Api } from '../api'
@@ -16,6 +18,8 @@ export interface State {
   readonly files: ObjectOf<TaskFile>
   /** Properties of this object are populated lazily */
   readonly editors: ObjectOf<EditorState | undefined>
+  readonly dialog: DialogType
+  readonly uploads: UploadState
 }
 
 export type Path = string[]
@@ -31,8 +35,8 @@ export interface ThunkExtra {
   api: Api
 }
 
-export type Thunk = (
-  dispatch: (action: any) => void,
+export type Thunk<PromiseType = void> = (
+  dispatch: (action: any) => any,
   getState: () => State,
   e: ThunkExtra,
-) => Promise<void>
+) => Promise<PromiseType>

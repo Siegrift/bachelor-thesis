@@ -1,7 +1,6 @@
 {
   "compiler": "'g++ -o /usercode/a.out' ",
   "sources": "public/kod.cpp",
-  "inputFile": "hidden/input",
   "executable": "/usercode/a.out",
   "compilerName": "C++",
   "additionalArguments": ""

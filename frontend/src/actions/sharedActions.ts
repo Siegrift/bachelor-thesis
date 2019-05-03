@@ -2,7 +2,7 @@ import { Action, Path, State } from '../redux/types'
 import { assocPath } from 'ramda'
 
 interface SetValueOptions {
-  type: string
+  type?: string
   loggable?: boolean
 }
 

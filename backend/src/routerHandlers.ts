@@ -1,8 +1,8 @@
 import { join } from 'path'
 import { basicRequest } from './requestWrapper'
 import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
-import { ensureFile, readFile, writeFile } from 'fs-extra'
-import recursivelyLstFiles from 'recursive-readdir'
+import { ensureFile, readdir, readFile, writeFile } from 'fs-extra'
+import recursivelyListFiles from 'recursive-readdir'
 import { PROBLEMS_PATH, SAVE_ENTRY_AS_KEY, UPLOADS_PATH } from './constants'
 import { forEach, omit } from 'lodash'
 import { runInSandBox } from './sandbox/sandbox'
@@ -68,12 +68,12 @@ export const loginUser = basicRequest(async ({ request, response }) => {
 
 export const listMockedFiles = basicRequest(async ({ response }) => {
   const PUBLIC_FILES_DIR = join(PROBLEMS_PATH, 'mocked-data/public')
-  const files = await recursivelyLstFiles(PUBLIC_FILES_DIR)
+  const files = await recursivelyListFiles(PUBLIC_FILES_DIR)
   response.json(files.map((file) => file.split('public/').pop()))
 })
 
 export const getMockedFile = basicRequest(async ({ request, response }) => {
-  const file = request.params.file + request.params[0]
+  const file = decodeURIComponent(request.params.file)
   const filePath = join(PROBLEMS_PATH, 'mocked-data/public', file)
 
   response.send(await readFile(filePath))
@@ -95,22 +95,50 @@ export const saveFiles = basicRequest(async ({ request, response }) => {
 
 export const runSavedCode = basicRequest(async ({ request, response }) => {
   const folder = decodeURIComponent(request.params.folder)
+  const customInput = request.body
   // TODO: this only works for one problem folder
   const compileScriptPath = join(
     PROBLEMS_PATH,
     'mocked-data/hidden/run_script.json',
   )
 
+  console.log('cusotm input: ', customInput)
+
   try {
     const compileScript = JSON.parse(
       (await readFile(compileScriptPath)).toString(),
     )
 
-    const sandboxOutput = await runInSandBox(folder, compileScript)
+    const sandboxOutput = await runInSandBox(folder, {
+      ...compileScript,
+      customInput,
+    })
 
     response.status(OK).send(sandboxOutput)
   } catch (err) {
     response.status(BAD_REQUEST).send(err)
     return
   }
+})
+
+export const listUploads = basicRequest(async ({ response }) => {
+  const files = await readdir(UPLOADS_PATH)
+  response.json(files)
+})
+
+export const getUploadedFile = basicRequest(async ({ request, response }) => {
+  const upload = request.params.upload
+  const file = decodeURIComponent(request.params.file)
+
+  const filePath = join(UPLOADS_PATH, upload, file)
+
+  response.send(await readFile(filePath))
+})
+
+export const listUploadedFiles = basicRequest(async ({ request, response }) => {
+  const upload = request.params.upload
+  const uploadsPath = join(UPLOADS_PATH, upload)
+
+  const files = await recursivelyListFiles(uploadsPath)
+  response.json(files.map((file) => file.split(`${upload}/`).pop()))
 })

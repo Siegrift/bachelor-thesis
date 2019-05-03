@@ -1,6 +1,5 @@
-import { Action, State, Thunk } from '../redux/types'
-import { Tab, TabLeaf, TabNode, TaskFile } from '../types/common'
-import { updateValue } from './sharedActions'
+import { Action } from '../redux/types'
+import { Tab, TabLeaf, TabNode } from '../types/common'
 import { findTab, isTabLeaf, mapTabs } from '../tabHelpers'
 
 // NOTE: there can't be 2 files with same name in the same directory
@@ -31,7 +30,7 @@ const addTabToContainer = (
   }
 }
 
-const createEditorTabs = (taskFilesPaths: string[]): Action<any> => ({
+export const createEditorTabs = (taskFilesPaths: string[]): Action<any> => ({
   type: 'Create editor tabs from response',
   payload: taskFilesPaths,
   reducer: (state) => {
@@ -42,45 +41,6 @@ const createEditorTabs = (taskFilesPaths: string[]): Action<any> => ({
     return { ...state, tabs }
   },
 })
-
-/**
- * This action will save the file content to redux and initializes an empty editor,
- * which will be later populated in EditorScreen component. We use the filename as
- * key, because we have guaranteed that it will be unique.
- */
-const addTaskFile = (taskFile: TaskFile): Action<TaskFile> => ({
-  type: 'Add task file to state',
-  payload: taskFile,
-  reducer: (state: State) => ({
-    ...state,
-    files: { ...state.files, [taskFile.name]: taskFile },
-    editors: { ...state.editors, [taskFile.name]: undefined },
-  }),
-})
-
-export const downloadTaskFiles = (): Thunk => async (
-  dispatch,
-  getState,
-  { api },
-) => {
-  try {
-    const taskFiles = await api.downloadTaskFiles()
-    dispatch(createEditorTabs(taskFiles))
-
-    // we want to do this asynchronously so that we are not blocking the editor
-    taskFiles.forEach(async (file, i) => {
-      const content = await api.getFile(file)
-      dispatch(
-        addTaskFile({
-          name: taskFiles[i],
-          content,
-        }),
-      )
-    })
-  } catch (err) {
-    console.error('Error fetching andle error', err)
-  }
-}
 
 export const closeTab = (tabId: string): Action<string> => ({
   type: 'Close editor tab',

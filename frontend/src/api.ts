@@ -1,5 +1,5 @@
-import { ApiError, Logger, ObjectOf } from './types/common'
-import { BASE_URL, REQUEST_TIMEOUT } from './constants'
+import { ApiError, Logger, ObjectOf, SandboxResponse } from './types/common'
+import { BASE_URL, DEFAULT_REQUEST_TIMEOUT } from './constants'
 
 interface LoginUserRequest {
   name: string
@@ -13,6 +13,7 @@ interface RequestOptions {
   headers?: ObjectOf<string>
   responseAsText?: boolean
   convertToJson?: boolean
+  timeout?: number
 }
 
 export class Api {
@@ -43,7 +44,7 @@ export class Api {
   }
 
   getFile(file: string): Promise<string> {
-    return this.request(`/mockedFiles/${file}`, 'GET', {
+    return this.request(`/mockedFiles/${encodeURIComponent(file)}`, 'GET', {
       responseAsText: true,
     })
   }
@@ -56,12 +57,35 @@ export class Api {
     })
   }
 
-  runSavedCode(folder: string) {
-    return this.request(`/runSavedCode/${encodeURIComponent(folder)}`, 'POST')
+  runSavedCode(folder: string, customInput: string): Promise<SandboxResponse> {
+    return this.request(`/runSavedCode/${folder}`, 'POST', {
+      timeout: 10000,
+      body: customInput,
+      convertToJson: false,
+    })
   }
 
-  private createRequestBody({ body, convertToJson }: RequestOptions) {
-    if (!body) return undefined
+  listUploads(): Promise<string[]> {
+    return this.request('/uploads', 'GET')
+  }
+
+  listUploadFiles(upload: string): Promise<string[]> {
+    return this.request(`/uploads/${upload}`, 'GET')
+  }
+
+  downloadUploadFile(upload: string, filename: string): Promise<string> {
+    return this.request(
+      `/uploads/${upload}/${encodeURIComponent(filename)}`,
+      'GET',
+      {
+        responseAsText: true,
+      },
+    )
+  }
+
+  private createRequestBody({ body, convertToJson = true }: RequestOptions) {
+    // test undefined explicitely as empty string is valid body
+    if (body === undefined) return undefined
     if (!convertToJson) return body
     return JSON.stringify(body)
   }
@@ -71,7 +95,11 @@ export class Api {
     method: 'POST' | 'GET',
     reqOptions: RequestOptions = {},
   ) {
-    const { headers, responseAsText } = reqOptions
+    const {
+      headers,
+      responseAsText,
+      timeout = DEFAULT_REQUEST_TIMEOUT,
+    } = reqOptions
 
     const uri = encodeURI(`${BASE_URL}${url}`)
     const options = {
@@ -97,7 +125,7 @@ export class Api {
       new Promise((_, rej) => {
         setTimeout(() => {
           rej(new ApiError(`Žiadna odpoveď zo servera!`))
-        }, REQUEST_TIMEOUT)
+        }, timeout)
       }),
     ])
   }
