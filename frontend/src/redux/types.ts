@@ -20,6 +20,8 @@ export interface State {
   readonly editors: ObjectOf<EditorState | undefined>
   readonly dialog: DialogType
   readonly uploads: UploadState
+  readonly leftPanelExpanded: boolean
+  readonly rightPanelExpanded: boolean
 }
 
 export type Path = string[]

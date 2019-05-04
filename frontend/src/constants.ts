@@ -5,7 +5,8 @@ export const PROCEED_WITHOUT_SIGNIN = true
 
 // main screen style constants
 export const TREE_VIEW_WIDTH = 300
-export const CONTROL_PANEL_WIDTH = 250
+export const CONTROL_PANEL_WIDTH = 300
+export const COLLAPSED_SIDE_PANEL_WIDTH = 31
 export const TAB_VIEW_HEIGHT = 30
 export const TAB_CLOSE_ICON_PADDING = 8
 export const TAB_TEXT_LEFT_PADDING = TAB_CLOSE_ICON_PADDING

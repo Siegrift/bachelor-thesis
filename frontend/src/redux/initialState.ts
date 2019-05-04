@@ -17,6 +17,8 @@ const state: State = {
     entries: [],
     fetching: false,
   },
+  leftPanelExpanded: true,
+  rightPanelExpanded: true,
 }
 
 export default () => state
