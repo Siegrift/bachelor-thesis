@@ -65,12 +65,20 @@ class EditorScreen extends Component<Props> {
     window.removeEventListener('resize', this.handleResize)
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const oldEditors = prevProps.editors
-    const newEditors = this.props.editors
+  // we need to use component will update, because the editor needs to be mounted
+  // when we execute setValue on it.
+  // TODO: refactor. We can mark the old editors to be removed in redux, then inside here
+  // do the cleanup work and afterwards trigger a redux action to remove editor.
+  UNSAFE_componentWillUpdate(nextProps: Props) {
+    const oldEditors = this.props.editors
+    const newEditors = nextProps.editors
 
     const removed = difference(keys(oldEditors), keys(newEditors))
     forEach(removed, (key) => {
+      // only unbinding the editors is not enough, because after loading new ones
+      // the other instances treat that as a new text added (because nothing was really
+      // removed).
+      oldEditors[key]!.editorRef.setValue('')
       oldEditors[key]!.synchronizer.share.textarea.unbindMonaco(
         oldEditors[key]!.editorRef,
       )
