@@ -12,6 +12,8 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { UploadState } from '../../types/common'
 import { format } from 'date-fns'
 import skLocale from 'date-fns/locale/sk'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
 
 const styles = (theme: Theme) => ({
   list: {
@@ -33,7 +35,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class LoadDialog extends React.Component<Props> {
-  state = { selectedEntry: undefined }
+  state = { selectedEntry: undefined, hideAutosaved: true }
 
   onLoadFiles = () => {
     const { closeDialog, loadFiles } = this.props
@@ -47,6 +49,10 @@ class LoadDialog extends React.Component<Props> {
     this.setState({ selectedEntry: clickedItem })
   }
 
+  toggleHideAutosaved = () => {
+    this.setState({ hideAutosaved: !this.state.hideAutosaved })
+  }
+
   componentDidMount() {
     const { uploads, refetchUploads } = this.props
 
@@ -58,7 +64,7 @@ class LoadDialog extends React.Component<Props> {
 
   render() {
     const { closeDialog, classes, uploads } = this.props
-    const { selectedEntry } = this.state
+    const { selectedEntry, hideAutosaved } = this.state
 
     const uploadEntries = uploads.entries
       .map((upload) => {
@@ -67,6 +73,7 @@ class LoadDialog extends React.Component<Props> {
         const time = parseInt(upload.substr(last + 1), 10)
         return { filename, time, raw: upload }
       })
+      .filter((upload) => (hideAutosaved ? upload.filename !== 'Autosave' : true))
       .sort((e1, e2) => {
         // latest entries first
         return e2.time - e1.time
@@ -98,6 +105,16 @@ class LoadDialog extends React.Component<Props> {
             )
           })}
         </List>
+        <FormControlLabel
+          control={
+            <Switch
+              color="primary"
+              checked={hideAutosaved}
+              onChange={this.toggleHideAutosaved}
+            />
+          }
+          label="Hide autosaved entries"
+        />
       </DialogContent>,
       <DialogActions key="actions">
         <Button onClick={closeDialog} color="primary" variant="contained">
