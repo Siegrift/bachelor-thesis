@@ -122,6 +122,9 @@ export default compose(
       files: state.files,
       editors: state.editors,
       activeTab: activeTabSelector(state),
+      // TODO: these are needed to rerender the component and do re-layout of the editors
+      leftPanelExpanded: state.leftPanelExpanded,
+      rightPanelExpanded: state.rightPanelExpanded,
     }),
     {
       addEditorInstance: _addEditorInstance,

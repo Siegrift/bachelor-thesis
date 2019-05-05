@@ -39,6 +39,9 @@ import IconButton from '@material-ui/core/IconButton'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
+// TODO: the layout is extremely fragile as Drawer component is fixed positioned, and it's wrapper
+// is inside flex and sometimes this component has 0 width... For some reason, when explicitely
+// setting the width of the individual elements everything works.
 const styles = (theme: Theme) => ({
   grid: { height: '100%' },
   treeViewExpanded: {
@@ -48,7 +51,6 @@ const styles = (theme: Theme) => ({
     width: COLLAPSED_SIDE_PANEL_WIDTH,
   },
   tabbedEditor: {
-    flex: 1,
     height: '100%',
   },
   editor: {
@@ -259,7 +261,19 @@ class MainScren extends Component<Props, {}> {
           </Drawer>
         </Grid>
 
-        <Grid item={true} className={classes.tabbedEditor}>
+        <Grid
+          item={true}
+          className={classes.tabbedEditor}
+          style={{
+            width: `calc(100% - ${
+              leftPanelExpanded ? TREE_VIEW_WIDTH : COLLAPSED_SIDE_PANEL_WIDTH
+            }px - ${
+              rightPanelExpanded
+                ? CONTROL_PANEL_WIDTH
+                : COLLAPSED_SIDE_PANEL_WIDTH
+            }px)`,
+          }}
+        >
           {!!tabs.length && activeTab && (
             <Tabs
               className={classes.tabs}
