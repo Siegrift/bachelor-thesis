@@ -46,9 +46,17 @@ const styles = (theme: Theme) => ({
   grid: { height: '100%' },
   treeViewExpanded: {
     width: TREE_VIEW_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   treeViewCollapsed: {
     width: COLLAPSED_SIDE_PANEL_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   tabbedEditor: {
     height: '100%',
@@ -65,9 +73,17 @@ const styles = (theme: Theme) => ({
   },
   controlPanelExpanded: {
     width: CONTROL_PANEL_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   controlPanelCollapsed: {
     width: COLLAPSED_SIDE_PANEL_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   tabs: {
     // this overrides mui default (min-height: 48px)
@@ -100,18 +116,34 @@ const styles = (theme: Theme) => ({
   drawerFilesPaperExpended: {
     backgroundColor: theme.colors.background.editorTabColor,
     width: TREE_VIEW_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   drawerFilesPaperCollapsed: {
     backgroundColor: theme.colors.background.editorTabColor,
     width: COLLAPSED_SIDE_PANEL_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   drawerControlPanelPaperExpanded: {
     backgroundColor: theme.colors.background.editorTabColor,
     width: CONTROL_PANEL_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   drawerControlPanelPaperCollapsed: {
     backgroundColor: theme.colors.background.editorTabColor,
     width: COLLAPSED_SIDE_PANEL_WIDTH,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.short,
+    }),
   },
   drawerHeader: {
     display: 'flex',
@@ -207,59 +239,50 @@ class MainScren extends Component<Props, {}> {
 
     return (
       <Grid container={true} className={classes.grid}>
-        <Grid
-          item={true}
-          className={
-            leftPanelExpanded
+        <Drawer
+          variant="persistent"
+          anchor="left"
+          open={true}
+          classes={{
+            root: leftPanelExpanded
               ? classes.treeViewExpanded
-              : classes.treeViewCollapsed
-          }
+              : classes.treeViewCollapsed,
+            paper: leftPanelExpanded
+              ? classes.drawerFilesPaperExpended
+              : classes.drawerFilesPaperCollapsed,
+          }}
         >
-          <Drawer
-            variant="persistent"
-            anchor="left"
-            open={true}
-            classes={{
-              paper: leftPanelExpanded
-                ? classes.drawerFilesPaperExpended
-                : classes.drawerFilesPaperCollapsed,
-            }}
-          >
-            <div className={classes.drawerHeader}>
-              {leftPanelExpanded && (
-                <Typography
-                  variant="h6"
-                  className={classes.sidePanelHeaderText}
-                >
-                  Zoznam súborov
-                </Typography>
-              )}
-
-              <IconButton
-                onClick={this.handleLeftPanelExpandToggle}
-                className={classes.drawerExpandButton}
-              >
-                {leftPanelExpanded ? (
-                  <ChevronLeftIcon className={classes.drawerChevron} />
-                ) : (
-                  <ChevronRightIcon className={classes.drawerChevron} />
-                )}
-              </IconButton>
-            </div>
-
+          <div className={classes.drawerHeader}>
             {leftPanelExpanded && (
-              <Treebeard
-                data={tabs}
-                onToggle={this.onToggle}
-                style={createTreeViewStyles(theme)}
-                // NOTE: react-treebeard applies these styles to all elements which makes it
-                // impossible to hover over list items (the whole tree is selected instead) without
-                // using a custom container component.
-                decorators={{ ...decorators, Container: TreebeardContainer }}
-              />
+              <Typography variant="h6" className={classes.sidePanelHeaderText}>
+                Zoznam súborov
+              </Typography>
             )}
-          </Drawer>
-        </Grid>
+
+            <IconButton
+              onClick={this.handleLeftPanelExpandToggle}
+              className={classes.drawerExpandButton}
+            >
+              {leftPanelExpanded ? (
+                <ChevronLeftIcon className={classes.drawerChevron} />
+              ) : (
+                <ChevronRightIcon className={classes.drawerChevron} />
+              )}
+            </IconButton>
+          </div>
+
+          {leftPanelExpanded && (
+            <Treebeard
+              data={tabs}
+              onToggle={this.onToggle}
+              style={createTreeViewStyles(theme)}
+              // NOTE: react-treebeard applies these styles to all elements which makes it
+              // impossible to hover over list items (the whole tree is selected instead) without
+              // using a custom container component.
+              decorators={{ ...decorators, Container: TreebeardContainer }}
+            />
+          )}
+        </Drawer>
 
         <Grid
           item={true}
@@ -302,49 +325,40 @@ class MainScren extends Component<Props, {}> {
           </Grid>
         </Grid>
 
-        <Grid
-          item={true}
-          className={
-            rightPanelExpanded
+        <Drawer
+          variant="persistent"
+          anchor="right"
+          open={true}
+          classes={{
+            root: rightPanelExpanded
               ? classes.controlPanelExpanded
-              : classes.controlPanelCollapsed
-          }
+              : classes.controlPanelCollapsed,
+            paper: rightPanelExpanded
+              ? classes.drawerControlPanelPaperExpanded
+              : classes.drawerControlPanelPaperCollapsed,
+          }}
         >
-          <Drawer
-            variant="persistent"
-            anchor="right"
-            open={true}
-            classes={{
-              paper: rightPanelExpanded
-                ? classes.drawerControlPanelPaperExpanded
-                : classes.drawerControlPanelPaperCollapsed,
-            }}
-          >
-            <div className={classes.drawerHeader}>
-              <IconButton
-                onClick={this.handleRightPanelExpandToggle}
-                className={classes.drawerExpandButton}
-              >
-                {rightPanelExpanded ? (
-                  <ChevronRightIcon className={classes.drawerChevron} />
-                ) : (
-                  <ChevronLeftIcon className={classes.drawerChevron} />
-                )}
-              </IconButton>
-
-              {rightPanelExpanded && (
-                <Typography
-                  variant="h6"
-                  className={classes.sidePanelHeaderText}
-                >
-                  Ovládací panel
-                </Typography>
+          <div className={classes.drawerHeader}>
+            <IconButton
+              onClick={this.handleRightPanelExpandToggle}
+              className={classes.drawerExpandButton}
+            >
+              {rightPanelExpanded ? (
+                <ChevronRightIcon className={classes.drawerChevron} />
+              ) : (
+                <ChevronLeftIcon className={classes.drawerChevron} />
               )}
-            </div>
+            </IconButton>
 
-            {rightPanelExpanded && <ControlPanel />}
-          </Drawer>
-        </Grid>
+            {rightPanelExpanded && (
+              <Typography variant="h6" className={classes.sidePanelHeaderText}>
+                Ovládací panel
+              </Typography>
+            )}
+          </div>
+
+          {rightPanelExpanded && <ControlPanel />}
+        </Drawer>
       </Grid>
     )
   }
