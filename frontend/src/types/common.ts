@@ -77,3 +77,8 @@ export interface SandboxResponse {
   executionTime: number
   error: string
 }
+
+export interface SubmitResponse {
+  result: string
+  input: number
+}

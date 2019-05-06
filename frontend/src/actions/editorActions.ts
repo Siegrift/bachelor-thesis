@@ -3,6 +3,7 @@ import {
   DialogType,
   EditorState,
   SandboxResponse,
+  SubmitResponse,
   TaskFile,
   UploadState
 } from '../types/common'
@@ -162,4 +163,16 @@ export const downloadTaskFiles = (): Thunk => async (
   } catch (err) {
     console.error('Error fetching task files', err)
   }
+}
+
+export const submitCode = (): Thunk<SubmitResponse> => async (
+  dispatch,
+  getState,
+  { api, logger },
+): Promise<SubmitResponse> => {
+  logger.log('Submit code')
+  const folder = formatSaveFolderName('Autosave')
+
+  await dispatch(saveFiles(folder))
+  return api.submitCode(folder)
 }

@@ -1,4 +1,10 @@
-import { ApiError, Logger, ObjectOf, SandboxResponse } from './types/common'
+import {
+  ApiError,
+  Logger,
+  ObjectOf,
+  SandboxResponse,
+  SubmitResponse
+} from './types/common'
 import { BASE_URL, DEFAULT_REQUEST_TIMEOUT } from './constants'
 
 interface LoginUserRequest {
@@ -71,6 +77,12 @@ export class Api {
 
   listUploadFiles(upload: string): Promise<string[]> {
     return this.request(`/uploads/${upload}`, 'GET')
+  }
+
+  submitCode(folder: string): Promise<SubmitResponse> {
+    return this.request(`/submit/${folder}`, 'POST', {
+      timeout: 10000,
+    })
   }
 
   downloadUploadFile(upload: string, filename: string): Promise<string> {

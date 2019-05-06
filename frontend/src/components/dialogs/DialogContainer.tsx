@@ -1,19 +1,26 @@
-import MuiDialog from '@material-ui/core/Dialog'
-import React from 'react'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { State } from '../../redux/types'
 import {
   listUploads as _listUploads,
   loadFiles as _loadFiles,
   runCode as _runCode,
   saveFiles as _saveFiles,
-  setDialogValue as _setDialogValue
+  setDialogValue as _setDialogValue,
+  submitCode as _submitCode
 } from '../../actions/editorActions'
-import { DialogType, SandboxResponse, UploadState } from '../../types/common'
+import MuiDialog from '@material-ui/core/Dialog'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { State } from '../../redux/types'
+import React from 'react'
+import {
+  DialogType,
+  SandboxResponse,
+  SubmitResponse,
+  UploadState
+} from '../../types/common'
 import SaveDialog from './SaveDialog'
 import LoadDialog from './LoadDialog'
 import RunDialog from './RunDialog'
+import SubmitDialog from './SubmitDialog'
 
 interface Props {
   dialog: DialogType
@@ -23,6 +30,7 @@ interface Props {
   saveFiles: typeof _saveFiles
   listUploads: typeof _listUploads
   loadFiles: typeof _loadFiles
+  submitCode: () => Promise<SubmitResponse>
 }
 
 class DialogContainer extends React.Component<Props> {
@@ -38,6 +46,7 @@ class DialogContainer extends React.Component<Props> {
       listUploads,
       loadFiles,
       runCode,
+      submitCode,
     } = this.props
 
     if (dialog === 'save') {
@@ -55,6 +64,10 @@ class DialogContainer extends React.Component<Props> {
       )
     } else if (dialog === 'run') {
       return <RunDialog closeDialog={this.handleClose} runCode={runCode} />
+    } else if (dialog === 'submit') {
+      return (
+        <SubmitDialog closeDialog={this.handleClose} submitCode={submitCode} />
+      )
     } else {
       throw new Error(`Unknown dialog type ${dialog}`)
     }
@@ -92,6 +105,7 @@ export default compose(
       setDialogValue: _setDialogValue,
       listUploads: _listUploads,
       loadFiles: _loadFiles,
+      submitCode: _submitCode,
     },
   ),
 )(DialogContainer as any)

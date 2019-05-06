@@ -9,6 +9,7 @@ import {
   registerUser,
   runSavedCode,
   saveFiles,
+  submit,
   testBackendConnection,
   testDbConnection
 } from './routerHandlers'
@@ -32,5 +33,6 @@ router.post('/login', loginUser)
 // and if not, it will leave the processing of the request to next middleware.
 router.post('/saveFiles', upload.none(), saveFiles)
 router.post('/runSavedCode/:folder', runSavedCode)
+router.post('/submit/:folder', submit)
 
 export default router
