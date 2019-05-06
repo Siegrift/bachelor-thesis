@@ -2,22 +2,27 @@
 
 \label{kap:cdrt} % id kapitoly pre prikaz ref
 
-% TODO: definicie
-% vymysli termonologiu pre zdroj/repliku
-% hostitelia - entity zdielajuce zdroj ine pristupujuce k zdroju
+\section{Úvod}
+V nasledovnom texte budeme používať termíny, ktoré nám zjednušia opisovanie myšlienky
+bezkonfliktných replikovateľných dátovych typov. Uvádzame tieto pojmy v úvode tejto
+kapitoly.
 
-Súbežné úpravy inštancie jedného zdroja bez koordinácie medzi jednotlivými hostiteľskými
-počítačmi môže viesť k nekonzistentosti medzi zdrojmi, ktoré vo všeobecnosti nie je možné
-vyriešiť. Riešenie konzistentnosti v takýchto prípadoch vyžaduje vrátenie niektorch operácii.
+% TODO: hostitelia - entity zdielajuce dokument
 
-V distribuovanom výpočte je konfliktný replikovaný dátový typ (CRDT) dátová štruktúra,
+Súbežné úpravy dokumentu bez koordinácie medzi jednotlivými hostiteľskými
+počítačmi môže viesť k nekonzistentostiam, ktoré vo všeobecnosti nie je možné
+vyriešiť. Na zabezpečenie konzistentnosti sa v takýchto prípadoch vyžaduje vrátenie (rollback)
+niektorch operácii.
+
+V distribuovanom výpočte je bezkonfliktný replikovaný dátový typ (CRDT) dátová štruktúra,
 ktorá môže byť replikovaná vo viacerých počítačoch v sieti, pričom jednotlivé inštancie je možné
 aktualizovať nezávisle a súbežne bez koordinácie medzi ostanými inštanciami a kde je vždy
-matematicky možné vyriešiť nezrovnalosti, ktoré by mohli vyplynúť. Z toho vyplýva, že použitím
+matematicky možné vyriešiť nezrovnalosti, ktoré by mohli nastať. Z toho vyplýva, že použitím
 CRDT nemôže nastať situácia, kedy by sme museli nejakú operáciu vrátiť. 
 
 Koncept CRDT bol formálne definovaný v roku 2011 osobami
 Marc Shapiro, Nuno Preguiça, Carlos Baquero a Marek Zawirski \cite{crdt_definition}.
+Ide teda o celkom nový koncept, ktorý rýchlo našiel v informatike podporu.
 
 \section{Typy CRDT}
 V súčastnosti sú preskúmané 2 typy CRDT:
@@ -28,8 +33,8 @@ V súčastnosti sú preskúmané 2 typy CRDT:
 
 \subsection{CRDT založené na operáciách}
 CRDT založené na operáciách sú označované ako komutatívne replikované dátové typy alebo 
-\textit{CmRDT}. CmRDT menia zdroj vysielaním iba operácie, ktoré sa potom aplikujú lokálne
-u všetkých, ktoré zdroj zdieľajú. Operácie musia byť komutatívne, avšak nemusia 
+\textit{CmRDT}. CmRDT menia dokument vysielaním iba operácie, ktoré sa potom aplikujú lokálne
+u všetkých, ktoré dokument zdieľajú. Operácie musia byť komutatívne, avšak nemusia 
 byť idempotentné. Je preto nutné zaručiť idempotenciu pomocou vhodnej implementácie
 komunikácie (správa musí byť vyslaná práve raz). 
 CmRDT je vhodné použiť napríklad na aktualizovanie počtu zdieľaní
@@ -40,7 +45,7 @@ CRDT založené na stavoch sa nazývajú konvergentné replikované dátové typ
 Na rozdiel od CmRDT posielajú celý svoj stav, kde stavy sa potom zlučujú funkciou,
 ktorá musí byť komutatívna, asociatívna a idempotentná.
 
-Posielanie celého stavu nie je vždy optimálne. Častokrát stačí posielať zmeny, ktoré sa na zdroji
+Posielanie celého stavu nie je vždy optimálne. Častokrát stačí posielať zmeny, ktoré sa na dokumente
 uskutočňujú. Takéto CRDT označujeme ako \textit{Delta CRDTs}
 
 \section{Princíp fungovania CRDT}
