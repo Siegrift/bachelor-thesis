@@ -3,50 +3,50 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main.aux
 The style file: plain.bst
 Database file #1: literatura.bib
-Warning--I didn't find a database entry for "medium_crdt"
 Warning--to sort, need author or key in bonjour
 Warning--to sort, need author or key in crdt_wiki
+Warning--to sort, need author or key in latency_bottleneck
 Warning--to sort, need author or key in crdt_medium
 Warning--empty publisher in Oetiker2000
-You've used 12 entries,
+You've used 13 entries,
             2118 wiz_defined-function locations,
-            564 strings with 6313 characters,
-and the built_in function-call counts, 3666 in all, are:
-= -- 356
-> -- 154
+            567 strings with 6449 characters,
+and the built_in function-call counts, 3829 in all, are:
+= -- 371
+> -- 155
 < -- 4
-+ -- 63
++ -- 64
 - -- 50
-* -- 227
-:= -- 572
-add.period$ -- 36
-call.type$ -- 12
-change.case$ -- 59
+* -- 235
+:= -- 589
+add.period$ -- 38
+call.type$ -- 13
+change.case$ -- 62
 chr.to.int$ -- 0
-cite$ -- 16
-duplicate$ -- 148
-empty$ -- 318
+cite$ -- 18
+duplicate$ -- 155
+empty$ -- 341
 format.name$ -- 50
-if$ -- 802
+if$ -- 842
 int.to.chr$ -- 0
-int.to.str$ -- 12
+int.to.str$ -- 13
 missing$ -- 9
-newline$ -- 62
+newline$ -- 66
 num.names$ -- 18
-pop$ -- 94
+pop$ -- 103
 preamble$ -- 2
-purify$ -- 49
+purify$ -- 51
 quote$ -- 0
-skip$ -- 111
+skip$ -- 118
 stack$ -- 0
-substring$ -- 183
-swap$ -- 36
+substring$ -- 188
+swap$ -- 37
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 44
-warning$ -- 4
+type$ -- 48
+warning$ -- 5
 while$ -- 29
-width$ -- 14
-write$ -- 128
+width$ -- 15
+write$ -- 136
 (There were 5 warnings)

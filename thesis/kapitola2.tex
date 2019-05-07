@@ -50,11 +50,11 @@ upravovať daný dokument (musia sa striedať).
 Ďalšou, pre používateľa príjemnejšou voľbou, je optmistická
 replikácia, kde sa zmeny v dokumente uplatňujú postupne a prípadné chyby a nekonzistentnosti sa
 riešia neskôr. Neskôr v texte ukážeme, že existuje spôsob akým docieliť konkurentné úpravy 
-dokumentu zaručene bez konfliktov. %TODO: ref na kapitolu kde to ukazem
+dokumentu zaručene bez konfliktov. Takýto algoritmus je popísaný v kapitole \ref{kap:cdrt}.
 
 Obmedzme sa teraz iba na textový editor. Aj keď algoritmus, ktorý neskôr v texte ukážeme je 
 všeobecnejší a fungoval by aj pre iné typy editorov, podporujúce náročnejšie operácie ako
-obrázky, rôzne varianty textu\dots 
+obrázky, rôzne varianty textu... 
 
 \medskip
 
@@ -62,7 +62,6 @@ Problém súbežnej modifikácie jedného textového dokumentu je, že jednoduch
 pridať alebo zmazať znak, nie sú komutatívne \ref{obr:nekomutativita} a ani 
 idempotentné \ref{obr:neidempotentnost}. Keďže používatelia
 modifikujú dokument cez sieť, nie je zaručené v akom poradí sa modifikácie uskutočnia. 
-\cite {medium_crdt}
 Ilustrujme tieto problémy na príklade:
 
 \begin{figure}[h]
@@ -82,17 +81,16 @@ Ilustrujme tieto problémy na príklade:
 \end{figure}
 
 % TODO: prepis ma
-Výzvou v spolupráci v reálnom čase je teda presne zistiť, ako možno aplikovať úpravy
-od vzdialených používateľov, ktoré boli pôvodne vytvorené vo verziách dokumentu,
-nikdy lokálne neexistovali a môžu byť v rozpore s vlastnými miestnymi úpravami používateľa. 
+Výzvou v spolupráci v reálnom čase je teda presne zistiť, ako možno aplikovať úpravy od vzdialených
+používateľov, ktoré boli pôvodne vytvorené vo verziách dokumentu, nikdy lokálne neexistovali a môžu
+byť v rozpore s vlastnými miestnymi úpravami používateľa. 
 
-Najsofistikovanejšie riešenia vyriešia tento problém spôsobom, ktorý nevyžaduje server,
-nepoužíva uzamknutie (všetci používatelia môžu voľne upravovať všetky časti dokumentu súčasne) 
-a podporuje ľubovoľný počet používateľov (obmedzený iba zdrojmi počítačov). 
-\textit{UNA} a \textit{SubEthaEdit} sú príklady dvoch programov, ktoré využívajú tento prístup.
-Tieto programy sú však dostupné iba pre operačné systémy macOS a využívajú technológie,
-ako napríklad \cite{bonjour}, ktoré sú špecifické pre tento operačný systém. Viac sa o
-existujúcich progrmaoch podporujúcich kolaboratívne úpravy dozviete v kapitole % TODO: link na kapitolu s porovnanim
+Najsofistikovanejšie riešenia vyriešia tento problém spôsobom, ktorý nevyžaduje server, nepoužíva
+uzamknutie (všetci používatelia môžu voľne upravovať všetky časti dokumentu súčasne) a podporuje
+ľubovoľný počet používateľov (obmedzený iba zdrojmi počítačov). Tento prístup využíva napríklad
+\textit{SubEthaEdit}. Tento program je však dostupný iba pre operačné systémy macOS a využívajú
+technológie, ako napríklad \cite{bonjour}, ktoré sú špecifické pre tento operačný systém. Viac sa o
+existujúcich progrmaoch podporujúcich kolaboratívne úpravy dozviete v kapitole \ref{kap:usability_and_similar}
 
 Pri klient-server riešení je pri otvorení dokumentu priradená jednej z inštancií editora
 úloha servera. Tento server zaisťuje, že ostatné editory sú synchronizované. Pri každej zmene
@@ -102,7 +100,7 @@ V niektorých modeloch sa zmeny na klientovi neodzrkadľujú dovtedy,
 kým sa zo servera nevráti odpoveď, že dané zmeny boli aplikované u všetkých používateľov.
 Príkladom takéhoto editora je napríklad editor \textit{Gobby}. Tieto riešenia, sú 
 jednoduchšie na implementáciu, ale používateľov výrazne obmedzujú. Ak je latencia siete
-príliš vysoká, používateľ musí dlho čakať\dots
+príliš vysoká, používateľ musí dlho čakať...
 
 My sme sa v práci rozhodli použiť klient-server model, pričom za synchronizáciu klientov
 je zodpovedný výhradne server. Podobný prístup používa napr. spoločnost Google v 

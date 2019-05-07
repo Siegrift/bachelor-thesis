@@ -11,6 +11,11 @@ Conflict-free replicated data type.
 \newblock
   \url{https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type}.
 
+\bibitem{latency_bottleneck}
+Latency: The new web performance bottleneck, July 2012.
+\newblock
+  \url{https://www.igvita.com/2012/07/19/latency-the-new-web-performance-bottleneck}.
+
 \bibitem{crdt_medium}
 Building conclave: a decentralized, real time, collaborative text editor,
   January 2018.
