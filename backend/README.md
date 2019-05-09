@@ -6,6 +6,10 @@ Using PostgreSQL database with [knex](https://github.com/tgriesser/knex) query b
 to work with the database, follow these steps:
 
 1. Install PostrgreSQL
+
+    If you have problems with postgreSQL installation [this
+    link](https://superuser.com/questions/1366175/unmet-dependencies-for-postgresql-10-under-ubuntu-16-04-5-lts-xenial)
+    worked for me.
 2. Open psql terminal: `sudo -u postgres psql`.
 
    If you have multiple psql instances installed, you might have to specify different port than
