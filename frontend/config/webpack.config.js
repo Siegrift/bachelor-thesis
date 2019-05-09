@@ -588,7 +588,37 @@ module.exports = function(webpackEnv) {
           silent: true,
           formatter: typescriptFormatter
         }),
-      new MonacoWebpackPlugin({ languages: ["cpp"] })
+      new MonacoWebpackPlugin({
+        // there are more supported languages at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+        languages: [
+          "clojure",
+          "cpp",
+          "csharp",
+          "css",
+          "go",
+          "html",
+          "java",
+          "javascript",
+          "json",
+          "less",
+          "lua",
+          "markdown",
+          "objective",
+          "perl",
+          "php",
+          "python",
+          "ruby",
+          "rust",
+          "scss",
+          "shell",
+          "sql",
+          "swift",
+          "typescript",
+          "vb",
+          "xml",
+          "yaml"
+        ]
+      })
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

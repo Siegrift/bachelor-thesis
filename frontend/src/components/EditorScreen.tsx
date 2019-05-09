@@ -11,6 +11,7 @@ import classNames from 'classnames'
 import { activeTabSelector } from '../selectors/tabSelectors'
 import { addEditorInstance as _addEditorInstance } from '../actions/editorActions'
 import { difference, forEach, keys } from 'lodash'
+import { parseLanguageFromFileName } from '../utils'
 
 const styles = (theme: Theme) => ({
   wrapper: {
@@ -105,7 +106,7 @@ class EditorScreen extends Component<Props> {
           width="100%"
           height="100%"
           // languages needs to be added in webpack too
-          language="cpp"
+          language={parseLanguageFromFileName(id)}
           theme="vs-dark"
           options={options}
           editorDidMount={this.editorDidMount(id)}
