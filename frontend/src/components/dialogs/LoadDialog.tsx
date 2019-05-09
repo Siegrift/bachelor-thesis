@@ -113,7 +113,7 @@ class LoadDialog extends React.Component<Props> {
               onChange={this.toggleHideAutosaved}
             />
           }
-          label="Hide autosaved entries"
+          label="Skryť automaticky uložené"
         />
       </DialogContent>,
       <DialogActions key="actions">
