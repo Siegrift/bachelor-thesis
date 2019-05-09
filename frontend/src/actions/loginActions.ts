@@ -46,6 +46,7 @@ export const registerUser = (): Thunk => async (
     const user = await api.registerUser({
       name: state.name,
       password: state.password,
+      repeatPassword: state.repeatPassword,
     })
 
     dispatch(updateValue(['user'], user))

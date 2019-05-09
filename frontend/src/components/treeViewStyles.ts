@@ -22,28 +22,6 @@ const createTreeViewStyles = (theme: Theme) => ({
       activeLink: {
         background: '#31363F',
       },
-      toggle: {
-        base: {
-          position: 'relative',
-          display: 'inline-block',
-          verticalAlign: 'top',
-          height: '24px',
-          width: '24px',
-        },
-        wrapper: {
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          margin: '-8px 0 0 -4px',
-          height: '10px',
-        },
-        height: 12,
-        width: 12,
-        arrow: {
-          fill: theme.palette.common.white,
-          strokeWidth: 0,
-        },
-      },
       header: {
         base: {
           display: 'inline-block',

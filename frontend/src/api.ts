@@ -12,7 +12,9 @@ interface LoginUserRequest {
   password: string
 }
 
-type RegisterUserRequest = LoginUserRequest
+interface RegisterUserRequest extends LoginUserRequest {
+  repeatPassword: string
+}
 
 interface RequestOptions {
   body?: any

@@ -1,5 +1,7 @@
 import React from 'react'
 import FileCopy from '@material-ui/icons/FileCopy'
+import ToggleExpanded from '@material-ui/icons/ArrowDropDown'
+import ToggleCollapsed from '@material-ui/icons/ArrowRight'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { withStyles, WithStyles } from '@material-ui/core'
 
@@ -8,9 +10,14 @@ const styles = (theme: Theme) => ({
     display: 'flex',
   },
   file: {
-    width: 14,
-    height: 14,
-    margin: 5,
+    width: 12,
+    height: 12,
+    margin: 6,
+    color: theme.palette.common.white,
+  },
+  toggle: {
+    width: 24,
+    height: 24,
     color: theme.palette.common.white,
   },
 })
@@ -57,9 +64,11 @@ class TreebeardContainer extends React.Component<Props> {
   }
 
   renderToggle = () => {
-    const { style, decorators } = this.props
+    const { classes, node } = this.props
 
-    return <decorators.Toggle style={style.toggle} />
+    if (node.toggled) {
+      return <ToggleExpanded className={classes.toggle} />
+    } else return <ToggleCollapsed className={classes.toggle} />
   }
 }
 

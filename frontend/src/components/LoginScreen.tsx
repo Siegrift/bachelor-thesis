@@ -12,13 +12,13 @@ const styles = (theme: Theme) =>
   createStyles({
     loginPanel: {
       width: '400px',
-      height: '450px',
       backgroundColor: theme.colors.background.editor,
       borderRadius: 10,
       border: `solid 3px ${theme.palette.common.black}`,
     },
     errorMessage: {
       color: theme.palette.error.dark,
+      marginBottom: theme.spacing.unit * 2,
     },
   })
 

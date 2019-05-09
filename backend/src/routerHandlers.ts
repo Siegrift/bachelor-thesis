@@ -18,6 +18,7 @@ export const testBackendConnection = basicRequest(async ({ response }) => {
 interface LoginUserRequest {
   name: string
   password: string
+  repeatPassword: string
 }
 function isLoginUserRequest(arg: any): arg is LoginUserRequest {
   return arg.name && arg.password
@@ -41,7 +42,9 @@ export const registerUser = basicRequest(async ({ request, response }) => {
   }
 
   const user = await getUserByName(userRequest.name)
-  if (user) {
+  if (userRequest.password !== userRequest.repeatPassword) {
+    response.status(FORBIDDEN).send(`Heslá sa nezhodujú!`)
+  } else if (user) {
     response
       .status(FORBIDDEN)
       .send(`Používateľ ${userRequest.name} už existuje!`)
