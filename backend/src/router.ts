@@ -1,22 +1,59 @@
 import { Router } from 'express'
 import {
+  addUserGroup,
+  createGroup,
+  getGroup,
+  getGroups,
   getMockedFile,
   getUploadedFile,
+  getUser,
+  getUserGroups,
+  getUsers,
   listMockedFiles,
   listUploadedFiles,
   listUploads,
   loginUser,
   registerUser,
+  removeGroup,
+  removeUser,
+  removeUserGroup,
   runSavedCode,
   saveFiles,
   submit,
   testBackendConnection,
-  testDbConnection
+  testDbConnection,
+  updateGroup,
+  updateUser
 } from './routerHandlers'
 import multer from 'multer'
 
 const upload = multer({})
 const router = Router()
+
+// Admin dashboard uses react-admin and it expects a few endpoints exist.
+// https://github.com/marmelab/react-admin/tree/master/packages/ra-data-json-server
+// The API needs following endpoints:
+// GET_LIST	GET - always needed
+// GET_ONE	GET - needed only for edit
+// CREATE	POST - needed only for create
+// UPDATE	PUT - needed only for edit
+// DELETE	DELETE - neeeded only for edit
+// GET_MANY	GET - TODO: when is it needed?
+// GET_MANY_REFERENCE	GET - TODO: when is it needed?
+router.get('/users', getUsers)
+router.get('/users/:userId', getUser)
+router.put('/users/:userId', updateUser)
+router.delete('/users/:userId', removeUser)
+
+router.get('/groups', getGroups)
+router.get('/groups/:groupId', getGroup)
+router.post('/groups', createGroup)
+router.put('/groups/:groupId', updateGroup)
+router.delete('/groups/:groupId', removeGroup)
+
+router.get('/userGroups', getUserGroups)
+router.post('/userGroups', addUserGroup)
+router.delete('/userGroups/:userGroupId', removeUserGroup)
 
 router.get('/', testBackendConnection)
 router.get('/db', testDbConnection)

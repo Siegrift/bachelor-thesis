@@ -1,6 +1,23 @@
 import { join } from 'path'
 import { basicRequest } from './requestWrapper'
-import { createUser, getUserByName, sampleInsertToTestDb } from './db/service'
+import {
+  createGroup as createGroupInDb,
+  createUser,
+  createUserGroup,
+  getGroup as getGroupFromDb,
+  getGroupByName,
+  getGroups as getGroupsFromDb,
+  getUser as getUserFromDb,
+  getUserByName,
+  getUserGroups as getUserGroupsFromDb,
+  getUsers as getUsersFromDb,
+  removeGroup as removeGroupFromDb,
+  removeUser as removeUserFromDb,
+  removeUserGroup as removeUserGroupInDb,
+  sampleInsertToTestDb,
+  updateGroup as updateGroupInDb,
+  updateUser as updateUserInDb
+} from './db/service'
 import { ensureFile, readdir, readFile, writeFile } from 'fs-extra'
 import recursivelyListFiles from 'recursive-readdir'
 import { PROBLEMS_PATH, SAVE_ENTRY_AS_KEY, UPLOADS_PATH } from './constants'
@@ -200,4 +217,129 @@ export const submit = basicRequest(async ({ request, response }) => {
     response.status(OK).send(err)
     return
   }
+})
+
+export const getUsers = basicRequest(async ({ response }) => {
+  const users = await getUsersFromDb()
+  response.set('X-Total-Count', users.length)
+  response.json(users)
+})
+
+export const getGroups = basicRequest(async ({ response }) => {
+  const groups = await getGroupsFromDb()
+  response.set('X-Total-Count', groups.length)
+  response.json(groups)
+})
+
+interface CreateGroupRequest {
+  name: string
+}
+function isCreateGroupRequest(arg: any): arg is CreateGroupRequest {
+  return arg.name
+}
+export const createGroup = basicRequest(async ({ request, response }) => {
+  const body = request.body
+  if (!isCreateGroupRequest(body)) {
+    response.status(BAD_REQUEST).send(`Frontend poslal nesprávne dáta!`)
+    return
+  }
+
+  const groupName = body.name
+  const group = await getGroupByName(groupName)
+  if (group) {
+    response.status(FORBIDDEN).send(`Skupina ${groupName} už existuje!`)
+  } else {
+    const newGroup = await createGroupInDb(groupName)
+    response.json(newGroup)
+  }
+})
+
+interface UpdateUserRequest {
+  name: string
+  password?: string
+  groups: string[]
+}
+function isUpdateUserRequest(arg: any): arg is UpdateUserRequest {
+  return arg.name && Array.isArray(arg.groups)
+}
+
+export const updateUser = basicRequest(async ({ response, request }) => {
+  const userId = request.params.userId
+  const updateUserBody = request.body
+  if (!isUpdateUserRequest(updateUserBody)) {
+    response.status(BAD_REQUEST).send(`Frontend poslal nesprávne dáta!`)
+    return
+  }
+
+  await updateUserInDb(userId, updateUserBody)
+  // we can't return the updated user data, because it will break react admin
+  // optimistic rendering
+  response.json(updateUserBody)
+})
+
+export const addUserGroup = basicRequest(async ({ request, response }) => {
+  const { userId, groupId } = request.body
+
+  const userGroup = await createUserGroup(userId, groupId)
+  response.json(userGroup)
+})
+
+export const removeUserGroup = basicRequest(async ({ request, response }) => {
+  const { userGroupId } = request.params
+
+  const userGroup = await removeUserGroupInDb(userGroupId)
+  response.json(userGroup)
+})
+
+export const getUserGroups = basicRequest(async ({ response }) => {
+  const groups = await getUserGroupsFromDb()
+  response.set('X-Total-Count', groups.length)
+  response.json(groups)
+})
+
+export const getUser = basicRequest(async ({ request, response }) => {
+  const { userId } = request.params
+
+  const user = await getUserFromDb(userId)
+  response.json(user)
+})
+
+export const removeUser = basicRequest(async ({ request, response }) => {
+  const { userId } = request.params
+
+  const user = await removeUserFromDb(userId)
+  response.json(user)
+})
+
+export const getGroup = basicRequest(async ({ request, response }) => {
+  const { groupId } = request.params
+
+  const group = await getGroupFromDb(groupId)
+  response.json(group)
+})
+
+export const removeGroup = basicRequest(async ({ request, response }) => {
+  const { groupId } = request.params
+
+  const group = await removeGroupFromDb(groupId)
+  response.json(group)
+})
+
+interface UpdateGroupRequest {
+  name: string
+}
+function isUpdateGroupRequest(arg: any): arg is UpdateGroupRequest {
+  return arg.name
+}
+
+export const updateGroup = basicRequest(async ({ response, request }) => {
+  const { groupId } = request.params
+  const updateGroupBody = request.body
+  if (!isUpdateGroupRequest(updateGroupBody)) {
+    response.status(BAD_REQUEST).send(`Frontend poslal nesprávne dáta!`)
+    return
+  }
+
+  const updatedGroup = await updateGroupInDb(groupId, updateGroupBody)
+  response.json(updatedGroup)
 })

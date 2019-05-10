@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("test", table => {
-    table.string("testField");
+    table.string("test_field");
   });
 };
 
