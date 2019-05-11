@@ -61,3 +61,8 @@ export const uniqueUserGroupValidation = async (
 
   if (size(errors) > 0) return Promise.reject(errors)
 }
+
+// TODO: implement
+export const uniqueProblemNameValidation = async (values: any) => {
+  return Promise.resolve()
+}

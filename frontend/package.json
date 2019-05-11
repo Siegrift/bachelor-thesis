@@ -97,7 +97,7 @@
     "yjs": "^12.3.3"
   },
   "scripts": {
-    "start": "BROWSER=none node scripts/start.js",
+    "start": "BROWSER=none node --max-old-space-size=4096 scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "fix": "tslint --fix --project tsconfig.json"

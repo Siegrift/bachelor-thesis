@@ -23,3 +23,8 @@ export interface GetUserGroupsQueryParams {
   // user group can be queried by userId and groupId. Default query is disjnuction .
   conjunction?: boolean
 }
+
+export interface GetProblemQueryParams {
+  name?: string
+  exact?: boolean
+}

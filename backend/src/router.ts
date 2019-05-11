@@ -23,7 +23,15 @@ import {
   removeUserGroup,
   updateUserGroup
 } from './handlers/userGroupHandlers'
-import { getMockedFile, listMockedFiles } from './handlers/problemHandlers'
+import {
+  createProblem,
+  getMockedFile,
+  getProblem,
+  getProblems,
+  listMockedFiles,
+  removeProblem,
+  updateProblem
+} from './handlers/problemHandlers'
 import {
   getUploadedFile,
   listUploadedFiles,
@@ -68,8 +76,15 @@ router.post('/userGroups', createUserGroup)
 router.put('/userGroups/:userGroupId', updateUserGroup)
 router.delete('/userGroups/:userGroupId', removeUserGroup)
 
+router.get('/problems', getProblems)
+router.get('/problems/:problemId', getProblem)
+router.post('/problems', createProblem)
+router.put('/problems/:problemId', updateProblem)
+router.delete('/problems/:problemId', removeProblem)
+// TODO: these are obsolete
 router.get('/mockedFiles', listMockedFiles)
 router.get('/mockedFiles/:file', getMockedFile)
+
 router.get('/uploads', listUploads)
 router.get('/uploads/:upload', listUploadedFiles)
 router.get('/uploads/:upload/:file', getUploadedFile)

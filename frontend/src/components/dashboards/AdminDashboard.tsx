@@ -1,17 +1,31 @@
-import React, { Component } from 'react'
-import { Admin, fetchUtils, Resource } from 'react-admin'
+import { Admin, Resource } from 'react-admin'
+import {
+  CreateUserGroup,
+  EditUserGroup,
+  UserGroupList
+} from './UserGroupResource'
 import jsonServerProvider from 'ra-data-json-server'
 import { BASE_URL } from '../../constants'
-import { CreateUser, EditUser, UserList } from './UserList'
-import { CreateUserGroup, EditUserGroup, UserGroupList } from './UserGroupList'
-import { CreateGroup, EditGroup, GroupList } from './GroupList'
+import { CreateUser, EditUser, UserList } from './UserResource'
+import React, { Component } from 'react'
+import { CreateGroup, EditGroup, GroupList } from './GroupResource'
 import UsersIcon from '@material-ui/icons/AccountCircle'
 import GroupsIcon from '@material-ui/icons/Group'
 import UserGroupsIcon from '@material-ui/icons/SettingsEthernet'
+import ProblemsIcon from '@material-ui/icons/Assignment'
+import { CreateProblem, EditProblem, ProblemList } from './ProblemResource'
 
 const dataProvider = jsonServerProvider(BASE_URL)
 
 export class AdminDashboard extends Component {
+  componentDidMount() {
+    [...(document.getElementsByClassName('fixedWindow') as any)].forEach(
+      (elem) => {
+        elem.classList.toggle('fixedWindow')
+      },
+    )
+  }
+
   render() {
     return (
       <Admin dataProvider={dataProvider}>
@@ -36,6 +50,13 @@ export class AdminDashboard extends Component {
           create={CreateUserGroup}
           icon={UserGroupsIcon}
           options={{ label: 'Connections' }}
+        />
+        <Resource
+          name="problems"
+          list={ProblemList}
+          edit={EditProblem}
+          create={CreateProblem}
+          icon={ProblemsIcon}
         />
       </Admin>
     )

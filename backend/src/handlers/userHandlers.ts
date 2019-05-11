@@ -66,6 +66,7 @@ export const updateUser = basicRequest(async ({ response, request }) => {
   // optimistic rendering
   response.json(updateUserBody)
 })
+
 export const getUser = basicRequest(async ({ request, response }) => {
   const { userId } = request.params
 

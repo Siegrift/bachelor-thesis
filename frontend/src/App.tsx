@@ -16,6 +16,7 @@ import MainScreen from './components/MainScreen'
 import { PROCEED_WITHOUT_SIGNIN } from './constants'
 import Dialog from './components/dialogs/DialogContainer'
 import AdminDashboard from './components/dashboards/AdminDashboard'
+import classNames from 'classnames'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -38,7 +39,7 @@ class App extends React.Component<Props> {
     const { classes, user, theme } = this.props
     return (
       <div
-        className={classes.app}
+        className={classNames(user && !user.isAdmin && classes.app)}
         style={{
           backgroundColor:
             // TODO: instead of !user, there should be user
