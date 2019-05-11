@@ -1,10 +1,6 @@
 import knex from '../knex'
 import uuid from 'uuid/v4'
-import {
-  EntityByIdQueryParams,
-  GetUserGroupsQueryParams,
-  isEntityByIdQuery
-} from '../../types/dbTypes'
+import { GetUserGroupsQueryParams } from '../../types/dbTypes'
 import {
   applyDefaultFilterQueryParams,
   countDbRows,
@@ -34,14 +30,7 @@ export const getUserGroup = (userGroupId: string) => {
 }
 
 export const countUserGroups = () => countDbRows('user_group')
-export const getUserGroups = async (
-  params: GetUserGroupsQueryParams | EntityByIdQueryParams,
-) => {
-  if (isEntityByIdQuery(params)) {
-    // get entities request should always return an array of results
-    return [await getUserGroup(params.id)]
-  }
-
+export const getUserGroups = async (params: GetUserGroupsQueryParams) => {
   const {
     groupId,
     userId,

@@ -5,11 +5,7 @@ import {
   LoginUserRequest,
   UpdateUserRequest
 } from '../../types/userRequestTypes'
-import {
-  EntityByIdQueryParams,
-  GetUsersQueryParams,
-  isEntityByIdQuery
-} from '../../types/dbTypes'
+import { GetUsersQueryParams } from '../../types/dbTypes'
 import {
   applyDefaultFilterQueryParams,
   countDbRows,
@@ -30,14 +26,7 @@ export const createUser = (user: LoginUserRequest) => {
 }
 
 export const countUsers = () => countDbRows('user')
-export const getUsers = async (
-  params: GetUsersQueryParams | EntityByIdQueryParams,
-) => {
-  if (isEntityByIdQuery(params)) {
-    // get entities request should always return an array of results
-    return [await getUser(params.id)]
-  }
-
+export const getUsers = async (params: GetUsersQueryParams) => {
   const {
     name,
     _sort,

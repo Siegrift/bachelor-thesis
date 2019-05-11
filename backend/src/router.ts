@@ -44,6 +44,8 @@ const router = Router()
 // CREATE	POST - needed only for create
 // UPDATE	PUT - needed only for edit
 // DELETE	DELETE - neeeded only for edit
+// GET_MANY_REFERENCE - needed only for referencing multiple entities from single entity
+//                      (e.g. when visualizing user as he has multiple groups)
 router.get('/users', getUsers)
 router.get('/users/:userId', getUser)
 router.put('/users/:userId', updateUser)

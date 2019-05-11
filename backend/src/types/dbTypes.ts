@@ -1,5 +1,5 @@
 export interface EntityByIdQueryParams {
-  id: string
+  id: string | string[]
 }
 export const isEntityByIdQuery = (
   query: any,

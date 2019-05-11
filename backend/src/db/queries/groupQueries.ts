@@ -18,7 +18,16 @@ export const getGroups = async (
 ) => {
   if (isEntityByIdQuery(params)) {
     // get entities request should always return an array of results
-    return [await getGroup(params.id)]
+    if (typeof params.id === 'string') return [await getGroup(params.id)]
+    else {
+      return knex('group')
+        .select('*')
+        .modify((query: any) => {
+          (params.id as string[]).forEach((id) => {
+            query.orWhere({ id })
+          })
+        })
+    }
   }
 
   const {
@@ -31,7 +40,7 @@ export const getGroups = async (
   } = applyDefaultFilterQueryParams(params)
 
   return knex('group')
-    .select(['group.name', 'group.id'])
+    .select('*')
     .modify((query: any) => {
       if (name) {
         query.where('name', 'like', formatFilterToSqlTarget(name, exact))
