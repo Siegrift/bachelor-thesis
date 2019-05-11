@@ -1,11 +1,14 @@
+import { stringify } from 'query-string'
 import {
   ApiError,
+  Group,
   Logger,
   ObjectOf,
   SandboxResponse,
   SubmitResponse
 } from './types/common'
 import { BASE_URL, DEFAULT_REQUEST_TIMEOUT } from './constants'
+import { merge } from 'lodash'
 
 interface LoginUserRequest {
   name: string
@@ -16,14 +19,22 @@ interface RegisterUserRequest extends LoginUserRequest {
   repeatPassword: string
 }
 
+interface GetGroupsRequest {
+  name: string
+  exact: boolean
+}
+
 interface RequestOptions {
   body?: any
   headers?: ObjectOf<string>
   responseAsText?: boolean
   convertToJson?: boolean
   timeout?: number
+  queryParams?: any
 }
 
+// NOTE: personal advice is to create instance of this class from redux store. Use the exported
+// helpers to get the api outside of redux.
 export class Api {
   readonly logger: Logger
 
@@ -97,6 +108,12 @@ export class Api {
     )
   }
 
+  getGroups(params: GetGroupsRequest): Promise<Group[]> {
+    return this.request(`/groups`, 'GET', {
+      queryParams: params,
+    })
+  }
+
   private createRequestBody({ body, convertToJson = true }: RequestOptions) {
     // test undefined explicitely as empty string is valid body
     if (body === undefined) return undefined
@@ -113,9 +130,12 @@ export class Api {
       headers,
       responseAsText,
       timeout = DEFAULT_REQUEST_TIMEOUT,
+      queryParams,
     } = reqOptions
 
-    const uri = encodeURI(`${BASE_URL}${url}`)
+    const uri = encodeURI(
+      `${BASE_URL}${url}${queryParams ? `?${stringify(queryParams)}` : ''}`,
+    )
     const options = {
       method,
       headers: new Headers({
@@ -143,4 +163,16 @@ export class Api {
       }),
     ])
   }
+}
+
+let apiInstance: Api | undefined
+
+export const createApi = (logger: Logger): Api => {
+  apiInstance = new Api(logger)
+  return apiInstance
+}
+
+export const getApi = (): Api => {
+  if (apiInstance === undefined) throw new Error('API has not been created!')
+  return apiInstance
 }

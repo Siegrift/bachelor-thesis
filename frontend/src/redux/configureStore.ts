@@ -5,7 +5,7 @@ import rootReducer from './rootReducer'
 import getInitialState from './initialState'
 import { Action } from './types'
 import { Logger } from '../types/common'
-import { Api } from '../api'
+import { createApi } from '../api'
 
 export default () => {
   const logger: Logger = {
@@ -29,7 +29,7 @@ export default () => {
   })
 
   const middlewares = [
-    thunk.withExtraArgument({ logger, api: new Api(logger) }),
+    thunk.withExtraArgument({ logger, api: createApi(logger) }),
   ]
   if (process.env.NODE_ENV) {
     middlewares.push(loggerMiddleware)

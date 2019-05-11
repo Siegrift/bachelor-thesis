@@ -5,6 +5,7 @@ import {
   Datagrid,
   DisabledInput,
   Edit,
+  Filter,
   List,
   ReferenceArrayField,
   ReferenceArrayInput,
@@ -16,8 +17,14 @@ import {
 } from 'react-admin'
 import { requiredField } from './validation'
 
+const UserFilter = (props: {}) => (
+  <Filter {...props}>
+    <TextInput label="Search by name" source="name" alwaysOn={true} />
+  </Filter>
+)
+
 export const UserList = (props: {}) => (
-  <List {...props}>
+  <List filters={<UserFilter />} {...props}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="id" />

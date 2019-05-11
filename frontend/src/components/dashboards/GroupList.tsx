@@ -4,17 +4,22 @@ import {
   Datagrid,
   DisabledInput,
   Edit,
+  Filter,
   List,
   SimpleForm,
   TextField,
   TextInput
 } from 'react-admin'
-import { requiredField } from './validation'
+import { groupNameUniqueValidation, requiredField } from './validation'
 
-type Props = {}
+const GroupFilter = (props: {}) => (
+  <Filter {...props}>
+    <TextInput label="Search by name" source="name" alwaysOn={true} />
+  </Filter>
+)
 
-export const GroupList = (props: Props) => (
-  <List {...props}>
+export const GroupList = (props: {}) => (
+  <List filters={<GroupFilter />} {...props}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="id" />
@@ -24,7 +29,7 @@ export const GroupList = (props: Props) => (
 
 export const EditGroup = (props: {}) => (
   <Edit {...props}>
-    <SimpleForm>
+    <SimpleForm asyncValidate={groupNameUniqueValidation}>
       <DisabledInput source="id" />
       <TextInput source="name" validate={requiredField} />
     </SimpleForm>
@@ -33,7 +38,7 @@ export const EditGroup = (props: {}) => (
 
 export const CreateGroup = (props: {}) => (
   <Create {...props}>
-    <SimpleForm>
+    <SimpleForm asyncValidate={groupNameUniqueValidation}>
       <TextInput source="name" validate={requiredField} />
     </SimpleForm>
   </Create>

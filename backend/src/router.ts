@@ -1,31 +1,37 @@
 import { Router } from 'express'
+import { runSavedCode, submit } from './handlers/runCodeHandlers'
+import multer from 'multer'
 import {
-  addUserGroup,
+  getUser,
+  getUsers,
+  loginUser,
+  registerUser,
+  removeUser,
+  updateUser
+} from './handlers/userHandlers'
+import {
   createGroup,
   getGroup,
   getGroups,
-  getMockedFile,
-  getUploadedFile,
-  getUser,
+  removeGroup,
+  updateGroup
+} from './handlers/groupHandlers'
+import {
+  addUserGroup,
   getUserGroups,
-  getUsers,
-  listMockedFiles,
+  removeUserGroup
+} from './handlers/userGroupHandlers'
+import { getMockedFile, listMockedFiles } from './handlers/problemHandlers'
+import {
+  getUploadedFile,
   listUploadedFiles,
   listUploads,
-  loginUser,
-  registerUser,
-  removeGroup,
-  removeUser,
-  removeUserGroup,
-  runSavedCode,
-  saveFiles,
-  submit,
+  saveFiles
+} from './handlers/saveHandlers'
+import {
   testBackendConnection,
-  testDbConnection,
-  updateGroup,
-  updateUser
-} from './routerHandlers'
-import multer from 'multer'
+  testDbConnection
+} from './handlers/testHandlers'
 
 const upload = multer({})
 const router = Router()
@@ -38,12 +44,13 @@ const router = Router()
 // CREATE	POST - needed only for create
 // UPDATE	PUT - needed only for edit
 // DELETE	DELETE - neeeded only for edit
-// GET_MANY	GET - TODO: when is it needed?
-// GET_MANY_REFERENCE	GET - TODO: when is it needed?
 router.get('/users', getUsers)
 router.get('/users/:userId', getUser)
 router.put('/users/:userId', updateUser)
 router.delete('/users/:userId', removeUser)
+// TODO: refactor names
+router.post('/register', registerUser)
+router.post('/login', loginUser)
 
 router.get('/groups', getGroups)
 router.get('/groups/:groupId', getGroup)
@@ -55,21 +62,21 @@ router.get('/userGroups', getUserGroups)
 router.post('/userGroups', addUserGroup)
 router.delete('/userGroups/:userGroupId', removeUserGroup)
 
-router.get('/', testBackendConnection)
-router.get('/db', testDbConnection)
 router.get('/mockedFiles', listMockedFiles)
 router.get('/mockedFiles/:file', getMockedFile)
 router.get('/uploads', listUploads)
 router.get('/uploads/:upload', listUploadedFiles)
 router.get('/uploads/:upload/:file', getUploadedFile)
 
-router.post('/register', registerUser)
-router.post('/login', loginUser)
 // upload.none() will prevent uploading any files, because we will handle that ourselves
 // the functions itself is a middleware, which will check if the request is multipart
 // and if not, it will leave the processing of the request to next middleware.
 router.post('/saveFiles', upload.none(), saveFiles)
 router.post('/runSavedCode/:folder', runSavedCode)
 router.post('/submit/:folder', submit)
+
+// NOTE: these endpoints only serve for testing purposes
+router.get('/', testBackendConnection)
+router.get('/db', testDbConnection)
 
 export default router

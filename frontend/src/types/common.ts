@@ -82,3 +82,7 @@ export interface SubmitResponse {
   result: string
   input: number
 }
+
+export interface Group {
+  name: string
+}
