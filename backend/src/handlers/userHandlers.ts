@@ -1,7 +1,7 @@
 import { basicRequest } from './requestWrapper'
 import {
   countUsers,
-  createUser,
+  createUser as createUserFromDb,
   getUser as getUserFromDb,
   getUsers as getUsersFromDb,
   removeUser as removeUserFromDb,
@@ -9,14 +9,14 @@ import {
 } from '../db/queries/userQueries'
 import { BAD_REQUEST, FORBIDDEN, OK } from '../constants'
 import {
+  isCreateUserRequest,
   isLoginUserRequest,
-  isRegisterUserRequest,
   isUpdateUserRequest
 } from '../types/userRequestTypes'
 
-export const registerUser = basicRequest(async ({ request, response }) => {
+export const createUser = basicRequest(async ({ request, response }) => {
   const body = request.body
-  if (!isRegisterUserRequest(body)) {
+  if (!isCreateUserRequest(body)) {
     response.status(BAD_REQUEST).send(`Frontend poslal nesprávne dáta!`)
     return
   }
@@ -27,7 +27,7 @@ export const registerUser = basicRequest(async ({ request, response }) => {
   } else if (users.length > 0) {
     response.status(FORBIDDEN).send(`Používateľ ${body.name} už existuje!`)
   } else {
-    const createdUser = await createUser(body)
+    const createdUser = await createUserFromDb(body)
     response.json(createdUser)
   }
 })

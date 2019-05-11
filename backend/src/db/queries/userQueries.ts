@@ -2,7 +2,7 @@ import knex from '../knex'
 import uuid from 'uuid/v4'
 import { pick } from 'lodash'
 import {
-  LoginUserRequest,
+  CreateUserRequest,
   UpdateUserRequest
 } from '../../types/userRequestTypes'
 import { GetUsersQueryParams } from '../../types/dbTypes'
@@ -14,7 +14,7 @@ import {
 import { Transaction } from 'knex'
 import { createUserGroup } from './userGroupQueries'
 
-export const createUser = (user: LoginUserRequest) => {
+export const createUser = (user: CreateUserRequest) => {
   return knex('user')
     .insert({
       ...pick(user, ['name', 'password']),

@@ -1,14 +1,14 @@
-export interface LoginUserRequest {
+export interface CreateUserRequest {
   name: string
   password: string
   repeatPassword: string
 }
-export function isLoginUserRequest(arg: any): arg is LoginUserRequest {
+export function isCreateUserRequest(arg: any): arg is CreateUserRequest {
   return arg.name && arg.password
 }
 
-export type RegisterUserRequest = LoginUserRequest
-export function isRegisterUserRequest(arg: any): arg is RegisterUserRequest {
+export type LoginUserRequest = CreateUserRequest
+export function isLoginUserRequest(arg: any): arg is LoginUserRequest {
   return arg.name && arg.password
 }
 

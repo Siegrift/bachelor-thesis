@@ -84,5 +84,6 @@ export interface SubmitResponse {
 }
 
 export interface Group {
+  id: string
   name: string
 }

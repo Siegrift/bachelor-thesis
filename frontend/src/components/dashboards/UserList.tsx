@@ -2,6 +2,7 @@ import React from 'react'
 import {
   BooleanField,
   ChipField,
+  Create,
   Datagrid,
   DisabledInput,
   Edit,
@@ -15,7 +16,11 @@ import {
   TextField,
   TextInput
 } from 'react-admin'
-import { requiredField } from './validation'
+import {
+  createUserValidation,
+  editUserValidation,
+  requiredField
+} from './validation'
 
 const UserFilter = (props: {}) => (
   <Filter {...props}>
@@ -40,13 +45,23 @@ export const UserList = (props: {}) => (
 
 export const EditUser = (props: {}) => (
   <Edit {...props}>
-    <SimpleForm>
+    <SimpleForm asyncValidate={editUserValidation}>
       <DisabledInput source="id" />
       <TextInput source="name" validate={requiredField} />
-      <TextInput source="password" type="password" />
+      <TextInput label="New password" source="password" type="password" />
       <ReferenceArrayInput label="Groups" reference="groups" source="groups">
         <SelectArrayInput optionText="name" />
       </ReferenceArrayInput>
     </SimpleForm>
   </Edit>
+)
+
+export const CreateUser = (props: {}) => (
+  <Create {...props}>
+    <SimpleForm asyncValidate={createUserValidation}>
+      <TextInput source="name" validate={requiredField} />
+      <TextInput source="password" type="password" />
+      <TextInput source="repeatPassword" type="password" />
+    </SimpleForm>
+  </Create>
 )

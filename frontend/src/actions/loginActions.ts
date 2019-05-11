@@ -35,7 +35,7 @@ export const loginUser = (): Thunk => async (
   }
 }
 
-export const registerUser = (): Thunk => async (
+export const createUser = (): Thunk => async (
   dispatch,
   getState,
   { logger, api },
@@ -43,7 +43,7 @@ export const registerUser = (): Thunk => async (
   const state = getState().login
 
   try {
-    const user = await api.registerUser({
+    const user = await api.createUser({
       name: state.name,
       password: state.password,
       repeatPassword: state.repeatPassword,

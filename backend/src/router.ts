@@ -2,10 +2,10 @@ import { Router } from 'express'
 import { runSavedCode, submit } from './handlers/runCodeHandlers'
 import multer from 'multer'
 import {
+  createUser,
   getUser,
   getUsers,
   loginUser,
-  registerUser,
   removeUser,
   updateUser
 } from './handlers/userHandlers'
@@ -17,9 +17,11 @@ import {
   updateGroup
 } from './handlers/groupHandlers'
 import {
-  addUserGroup,
+  createUserGroup,
+  getUserGroup,
   getUserGroups,
-  removeUserGroup
+  removeUserGroup,
+  updateUserGroup
 } from './handlers/userGroupHandlers'
 import { getMockedFile, listMockedFiles } from './handlers/problemHandlers'
 import {
@@ -48,10 +50,9 @@ const router = Router()
 //                      (e.g. when visualizing user as he has multiple groups)
 router.get('/users', getUsers)
 router.get('/users/:userId', getUser)
+router.post('/users', createUser)
 router.put('/users/:userId', updateUser)
 router.delete('/users/:userId', removeUser)
-// TODO: refactor names
-router.post('/register', registerUser)
 router.post('/login', loginUser)
 
 router.get('/groups', getGroups)
@@ -61,7 +62,10 @@ router.put('/groups/:groupId', updateGroup)
 router.delete('/groups/:groupId', removeGroup)
 
 router.get('/userGroups', getUserGroups)
-router.post('/userGroups', addUserGroup)
+router.get('/userGroups/:userGroupId', getUserGroup)
+router.post('/userGroups', createUserGroup)
+// NOTE: this request is only needed for react-admin. We do not support updating user group.
+router.put('/userGroups/:userGroupId', updateUserGroup)
 router.delete('/userGroups/:userGroupId', removeUserGroup)
 
 router.get('/mockedFiles', listMockedFiles)

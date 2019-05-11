@@ -5,23 +5,31 @@ import {
   Logger,
   ObjectOf,
   SandboxResponse,
-  SubmitResponse
+  SubmitResponse,
+  User
 } from './types/common'
 import { BASE_URL, DEFAULT_REQUEST_TIMEOUT } from './constants'
-import { merge } from 'lodash'
 
-interface LoginUserRequest {
+export interface LoginUserRequest {
   name: string
   password: string
 }
 
-interface RegisterUserRequest extends LoginUserRequest {
+export interface CreateUserRequest extends LoginUserRequest {
   repeatPassword: string
 }
 
-interface GetGroupsRequest {
+export interface GetGroupsRequest {
   name: string
   exact: boolean
+}
+
+export type GetUsersRequest = GetGroupsRequest
+
+export interface GetUserGroupsRequest {
+  groupId: string
+  userId: string
+  conjunction: boolean
 }
 
 interface RequestOptions {
@@ -51,8 +59,8 @@ export class Api {
     })
   }
 
-  registerUser(user: RegisterUserRequest) {
-    return this.request(`/register`, 'POST', {
+  createUser(user: CreateUserRequest) {
+    return this.request(`/users`, 'POST', {
       body: user,
       headers: { 'Content-Type': 'application/json' },
     })
@@ -110,6 +118,18 @@ export class Api {
 
   getGroups(params: GetGroupsRequest): Promise<Group[]> {
     return this.request(`/groups`, 'GET', {
+      queryParams: params,
+    })
+  }
+
+  getUsers(params: GetUsersRequest): Promise<User[]> {
+    return this.request(`/users`, 'GET', {
+      queryParams: params,
+    })
+  }
+
+  getUserGroups(params: GetUserGroupsRequest): Promise<any> {
+    return this.request(`/userGroups`, 'GET', {
       queryParams: params,
     })
   }

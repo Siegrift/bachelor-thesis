@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Admin, Resource } from 'react-admin'
+import { Admin, fetchUtils, Resource } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 import { BASE_URL } from '../../constants'
-import { EditUser, UserList } from './UserList'
-import UserGroupList from './UserGroupList'
+import { CreateUser, EditUser, UserList } from './UserList'
+import { CreateUserGroup, EditUserGroup, UserGroupList } from './UserGroupList'
 import { CreateGroup, EditGroup, GroupList } from './GroupList'
 import UsersIcon from '@material-ui/icons/AccountCircle'
 import GroupsIcon from '@material-ui/icons/Group'
@@ -19,6 +19,7 @@ export class AdminDashboard extends Component {
           name="users"
           list={UserList}
           edit={EditUser}
+          create={CreateUser}
           icon={UsersIcon}
         />
         <Resource
@@ -29,10 +30,12 @@ export class AdminDashboard extends Component {
           icon={GroupsIcon}
         />
         <Resource
-          options={{ label: 'Connections' }}
           name="userGroups"
           list={UserGroupList}
+          edit={EditUserGroup}
+          create={CreateUserGroup}
           icon={UserGroupsIcon}
+          options={{ label: 'Connections' }}
         />
       </Admin>
     )
