@@ -9,12 +9,12 @@ podkapitoly \textit{klient} a \textit{server}.
 % TODO: obrazok popisujuci entity
 
 \section{Klient}
-Klient je v našej práci webová aplikácia cez ktorú komunikuje so serverom. 
-V návrhu klienta sa snažíme hlavne vytvoriť jednoduchý UX/UI, ktorý je intuitívny na
-použitie. Kedže aplikácia má byť používaná ako editor, je nutné aby sa jednotlivé časti pohodlne 
-čítali a písmo bolo dostatočne veľké. Naopak, nepredpokladáme použitie editora na mobilných
-zariadeniach. Preto je dizajn klienta tvorený pre použitie na počítačoch a na veľkých obrazovkách.
-Klientská aplikácia obsahuje:
+Klient je v bakalárskej práci webová aplikácia cez ktorú komunikuje so serverom. V návrhu klienta sa
+snažíme hlavne vytvoriť jednoduché používateľské prostredie, ktoré je intuitívne na použitie. Kedže
+aplikácia má byť používaná ako editor, je nutné aby sa jednotlivé časti pohodlne čítali a písmo bolo
+dostatočne veľké. Naopak, nepredpokladáme použitie editora na mobilných zariadeniach. Preto je
+dizajn klienta tvorený pre použitie na počítačoch a na veľkých obrazovkách. Klientská aplikácia
+obsahuje:
 \begin{itemize}
 \item prihlasovanie a registrácia
 % TODO: chceme rozhranie pre bezneho pozuivatela kde si vyberie skupinu a atd..
@@ -25,11 +25,11 @@ Klientská aplikácia obsahuje:
 \end{itemize}
 
 \subsection{Prihlasovanie a registrácia}
-Prihlasovanie sa slúži na jednoduché kategorizovanie používateľova na prístup ke editoru. 
-Používateľov rozdeľujeme na bežných používateľov a administrátorov. Bežný používatelia predstavujú
-zovšeobecnený pojem pre študentov, ktorý vedia byť časťou skupín (kurzov) v ktorých majú prístup
-iba k úlohám prístupným pre danú skupinu. O tom do akej skupiny aký bežný používateľ patrí, 
-rozhoduje administrátor. Prihlasovanie by však malo byť pre obe typy používateľov rovnaké.
+Prihlasovanie sa slúži na jednoduché kategorizovanie používateľa na prístup ku editoru. 
+Používateľov rozdeľujeme na bežných používateľov a administrátorov. Bežní používatelia predstavujú
+zovšeobecnený pojem pre študentov, ktorí vedia byť časťou skupín (kurzov) v ktorých majú prístup
+iba k úlohám prístupným pre danú skupinu. O tom do akej skupiny, ktorý bežný používateľ patrí, 
+rozhoduje administrátor. Prihlasovanie by však malo byť pre oba typy používateľov rovnaké.
 
 Registrácia umožňuje vytvoriť nového používateľa. Zaujímavá otázka je, či umožniť vytváranie
 administrátorov priamo pri regsitrácii, alebo nejakým iným spôsobom. Rozhodol som sa, že je lepšie
@@ -37,7 +37,7 @@ ak používateľ nemusí pri registrácii riešiť koncept administrátorov, a t
 bežných používateľov. V aplikácii však umožňujem povýšenie bežného používateľa na administrátora.
 
 \subsection{Panel so súbormi}
-Úlohy sa môžu skladať z viacero súborov. Napríklad môže existovať súbor, ktorý
+Úlohy sa môžu skladať z viacerých súborov. Napríklad môže existovať súbor, ktorý
 obsahuje zadanie a súbor (prípadne viac súborov) na zdrojový kód. Panel so súbormi dovoľuje
 používateľovi pohodlne preklikávať a zvoliť aktívny súbor, ktorý sa zobrazuje v editore.
 
@@ -56,7 +56,7 @@ používateľa. Adminstrátorské rozhranie umožňuje:
 \subsection{Zdieľateľný editor}
 Najzaujímavejšou častou práce je kolaboratívny editor umožnujúci bežným používateľom naraz
 upravovať kód. V editore musí byť jasné, ktorý súbor sa práve upravuje a bolo by
-tiež fajn vedieť nejaké informácie o vzdialených používaťeloch ako napríklad prihlasovacie meno, 
+tiež dobré vedieť nejaké informácie o vzdialených používaťeloch ako napríklad prihlasovacie meno, 
 pozícia kurzora...
 
 \subsection{Ovládací panel}
@@ -80,49 +80,49 @@ Server má viacero funkcií:
 \subsection{Synchronozácia replík klientov}
 Najdôležitejšou funckiou servera je synchronizácia replík klientov ak nastane nejaká zmena
 dokumentu. Server na toto nepotrebuje veľkú logiku, ale potrebuje korektne preposielať informácie
-medzi klientami a reagovať na prípadne komunikačné chyby (odoslať správu znovu).
+medzi klientami a reagovať na prípadné komunikačné chyby (odoslať správu znovu).
 
 \subsection{Uchovávať informácie o používateľoch a zadaniach}
-Po registrácii sa musí na serveri uložiť používateľ aby sa následne mohol opätovne prihlasovať.
-Okrem toho klient môže ukladať a načítavať zadania, ktoré tiež musia byť nejakým spôsobom na
-serveri uložené.
+Po registrácii sa musia na serveri uložiť informácie o používateľovi, aby sa následne mohol opätovne
+prihlasovať. Okrem toho klient môže ukladať a načítavať zadania, ktoré tiež musia byť nejakým
+spôsobom na serveri uložené.
 
 \subsection{Poskytovať API pre klienta}
 Hlavnou funckiou servera je poskytovať API rozhranie, ktoré môže klient zavolať a vykonať nejakú
-akciu na serveri. Časť rozhrania služi na získanie informácii zo servera a čast vytvára
+akciu na serveri. Časť rozhrania služi na získanie informácií zo servera a čast vytvára
 na serveri nové položky (používatelia, zadania).
 
 \subsection{Zbiehanie kódu, poskytovanie odpovede klientom}
-Kód, ktorí klienti napíšu sa má dať spustiť v izolovanom prostredí servera. Aplikácia by mala
-poskytnúť dve možnosti ako testovať klientský kód:
+Kód, ktorý sa napíše na klientoch sa má dať spustiť v izolovanom prostredí servera. Aplikácia by
+mala poskytnúť dve možnosti ako testovať klientský kód:
 \begin{itemize}
 \item na vlastnom vstupe
 \item na skrytých vstupoch
 \end{itemize}
 
-Pri testovaní na vlastnom vstupe by klient mal mať možnosť zadať vstup a potom odoslať požiadavku
-na testovanie na server. Po otestovaní by sa mal klientovi zobraziť výsledok testovania. Testovanie
-na vlastných vstupoch nemusí byť ukladané na serveri, stačí ak server na požiadavku odpovie.
-Ak by výsledok testovania skončil chybou pri kompilácii, prípadne chybou počas behu programu,
-daná chybová hláška sa má zobraziť ako výstup programu.
+Pri testovaní na vlastnom vstupe by používateľ na klientovi mal mať možnosť zadať vstup a potom
+odoslať požiadavku na testovanie serveru. Po otestovaní by sa mal klientovi zobraziť výsledok
+testovania. Testovanie na vlastných vstupoch nemusí byť ukladané na serveri, stačí ak server na
+požiadavku odpovie. Ak by výsledok testovania skončil chybou pri kompilácii, prípadne chybou počas
+behu programu, daná chybová hláška sa má zobraziť ako výstup programu.
 
-Okrem testovania na vlastných vstupoch si vie klient otestovať kód aj na skrytých vstupoch a
+Okrem testovania na vlastných vstupoch si vie používateľ otestovať kód aj na skrytých vstupoch a
 výstupoch zadania. Takéto skryté vstupy vie pridať iba administrátor a nikdy by nemali byť zobrazené
 bežnému používateľovi. Každé testovanie na skrytých vstupoch musí byť uložené na serveri, aby si ho
 administrátor vedel pozrieť keď bude ohodnocovať dané zadanie bežného používateľa. Po odoslaní
-požiadavky na server na otestovanie na skrytých vstupoch by sa mali zobraziť výsledky testovania.
+požiadavky serveru na otestovanie na skrytých vstupoch by sa mali zobraziť výsledky testovania.
 Skrytých vstupov môže byť viac, ale testuje sa na vstupoch zaradom a keď sa nájde vstup, na ktorom
-program dáva nesprávny výstup tak sa v testovaní ďalej nepokračuje.
+program dáva nesprávny výstup, tak sa v testovaní ďalej nepokračuje.
 Výsledok testovania jedného vstupu môže byť:
 \begin{itemize}
 \item OK - Kompilácia a aj beh programu prebehli v poriadku a výsledok programu na danom vstupe
 je totožný so správnym výstupom
 \item WA - Kompilácia prebehla v poriadku a program úspešne skončil, ale výstup sa nezhoduje so
 správnym výstupom
-\item TLE - Kompilácia prebehla v poriadku ale program prekročil časový limit, ktorý je dostupný 
+\item TLE - Kompilácia prebehla v poriadku, ale program prekročil časový limit, ktorý je dostupný 
 pre dané zadanie.
 \item RTE - Kompilácia prebehla v poriadku, ale program počas behu programu spadol.
 \item CE - Kompilácia programu sa nepodarila.
 \end{itemize}
 \textit{(V prípade, že jazyk, v ktorom je kód napísaný je interpretovaný, sa kompilácia preskakuje.
-Stále však môžu nastať všetky výsledky testovania okrem CE)}
+Stále však môžu nastať všetky výsledky testovania s výnimkou CE)}

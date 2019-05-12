@@ -4,23 +4,24 @@
 
 \section{Využiteľnost v praxi}
 Myšlienka kolaboratívnych editorov a všeobecne kolaboratívnych prostredí sa dá v praxi využiť vo 
-viacerých oblastiach. Už v roku 2012, bola veľkosť latencie veľmi blízko teoretickému limitu,
+viacerých oblastiach. Už v roku 2012 bola veľkosť latencie veľmi blízko teoretickému limitu,
 ktorý vieme dosiahnuť \cite{latency_bottleneck}. Stále sa však zlepšuje prístupnosť internetu
 ľuďom. V súčasnej dobe je bežné, že ľudia pracujúci za počítačom robia veci z pohodlia domova.
-Kolaboratívne programy umožnujú prepojenie týchto vzdialených používateľov a umožnuje im zdieľanie
+Kolaboratívne programy umožnujú prepojenie týchto vzdialených používateľov a umožnujú im zdieľanie
 a upravovanie dokumentov.
 
-Kolaboratívne editory sú populárne na účel vzdialených pohovorov, kde pohovorujúci komunikuje s
+%TODO pohovorujuci a pohovorovany - synonyma
+Kolaboratívne editory sú populárne za účelom vzdialených pohovorov, kde pohovorujúci komunikuje s
 pohovorovaným cez internet alebo telefón a ten môže programovať do editora, pričom pohovorujúci 
-vidí zmeny okamžite. Veľkou výhodou je, že pohovorovaný nemusí cestovať do kancelárii firmy, u
+vidí zmeny okamžite. Veľkou výhodou je, že pohovorovaný nemusí cestovať do kancelárie firmy, u
 ktorej vykonáva pohovor.
 
 Ďalším využitím je párové programovanie. Striktná definícia párového programovania umožnuje
 písať naraz iba jednému, zatiaľ čo druhý je len pozorovateľ. Častokrát je však výhodné mať možnosť
 zasiahnuť do kódu aj ako pozorovateľ, prípadne programovať naraz.
 
-Ďalším veľkým využitím, sú spoločné projekty ako také. \textit{Pod pojmom "projekt" máme na mysli
-ľubovolnú prácu alebo zadanie, ktoré vykonáva viacero ľudí}. Môže ísť o projekt vo firme, školské
+Ďalším veľkým využitím, sú spoločné projekty ako také. \textit{(Pod pojmom "projekt" máme na mysli
+ľubovolnú prácu alebo zadanie, ktoré vykonáva viacero ľudí)}. Môže ísť o projekt vo firme, školské
 zadanie... Častokrát sa tieto projekty dajú rozdeliť na zmysluplné časti, ktoré vedia byť spravené 
 nezávisle od seba.
 
@@ -32,41 +33,41 @@ vedeli riešiť, pričom by mali možnosť pracovať na zadaní súčasne.
 Ako sme už spomenuli v kapitole \ref{kap:zdialtelnost}, existuje viacero programov, ktoré podporujú
 kolaboratívne upravovanie, pričom stále vznikajú nové. Sústreďujme sa ale iba na porovnanie s
 programami, ktoré podporujú kolaboratívne úpravy \textbf{textového} dokumentu. Tieto programy sa
-dajú rozdeliť do viacerých kategorii, ktoré vyjadrujú odlišnosť oproti návrhu tejto bakalárskej
+dajú rozdeliť do viacerých kategorií, ktoré vyjadrujú odlišnosť oproti návrhu tejto bakalárskej
 práce. Programy, ktoré tu budú spomenuté sa odlišujú buď v použitých technológiách alebo tým, že nie
-sú zamerané na progoramovanie zdrojových kódov (a teda nepodporujú ani spúštanie a testovanie)
+sú zamerané na progoramovanie zdrojových kódov(a teda nepodporujú ani spúštanie a testovanie),
 prípadne podporujú iba nejaké jazyky.
 
-\subsection{Využívajúce technológie dostupné iba na niektorých platformách}
+\subsection{Editory využívajúce technológie dostupné iba na niektorých platformách}
 Do tejto kategórie patria programy vytvorené pre operačné prostredie \textit{macOs}.
 Príkladom takéhoto programu je \textit{SubEthaEdit}, ktorý začal revolúciu kolaboratívneho 
 programovania. V súčastnosti je editor dostupný zadarmo a je open source. Ďalším rozdielom oproti
 návrhu v bakalárskej práci je nemožnosť daný kód zbiehať.
 
-\subsection{Používajúce inú technológiu konkurentých úprav}
+\subsection{Editory používajúce inú technológiu konkurentých úprav}
 Na spracovávanie konkurentých úprav poznáme dve dobre preskúmané technológie (\textit{OT} alebo
 \textit{CRDT}). Vačšina produktov používa \textit{CRDT}, lebo je to výrazne ľahšie na implementáciu
 a udržiavanie. Medzi programy využívajúce OT patria editory \textit{SubEthaEdit, ACE, Gobby,
-MoonEdit}... Mnohé z nich prestali byť ďalej vyvíjané, alebo sa o ne stará open source komunita.
+MoonEdit}... Mnohé z nich prestali byť ďalej vyvíjané alebo sa o ne stará open source komunita.
 
 \subsection{Online dostupné textové editory}
-Ďalšou kategóriou sú online editory, teda webové stránky. Niektoré su veľmi populárne
+Ďalšou kategóriou sú online editory, teda webové aplikácie. Niektoré su veľmi populárne
 ale poskytujú iba čiastočnú funkcionalitu. Napríklad \textit{Ideone} je editor, v ktorom
 sa dá zadarmo spúštať kód vo viac ako 50 jazykoch. Neumožňuje však kolaboratívne editovanie
 a testovanie na skrytých vstupoch.
 Jedným z najpoužívanejších voľne dostupných editorov je \textit{CodeShare}, ktorý umožnuje
 kolaboratívne písanie, podporuje zvýrazňovanie syntaxe mnohých jazykov a obsahuje ďalšie 
-dopľnujúce prvky ako napríklad videokamera pre vytvorenie editora spolu s videom.
+dopľnujúce prvky, ako videokamera pre vytvorenie editora spolu s videom.
 
-Ako posledný si predstavme \textit{CodeSandbox}, ktorý podporuje iba písanie JavaScriptu, je 
+Ako posledný si predstavme \textit{CodeSandbox}, ktorý podporuje iba písanie v jazyku JavaScript, je 
 však zaujímavý tým, že je open source a používa veľmi pokročilý editor VSCode, čo je ďalší open
 source produkt. \textit{CodeSandbox} umožnuje aj kolaboratívne upravovanie. Je však zameraný iba
 na JavaScript a je používaný hlavne na rýchle skúšanie webových frameworkov alebo krátkych
 útržkov javascriptových kódov. Výhodou je, že používateľ nemusí nič inštalovať, lebo 
 \textit{CodeSandbox} má všetko potrebné nainštalované na serveri. Okrem krátkych skúšaní projektov,
-umožnuje aj pohodlnú integráciu s gitom, pridávanie ďalších knižníc, live reload...
+umožnuje aj pohodlnú integráciu s gitom, pridávanie ďalších knižníc...
 
 \subsection{Platené programy}
-Poslednou veľkou skupinou sú platené programy, ktoré poskytujú viac funkcionality ale ich použitie
-je platené. Príkladmy týchto editorov sú \textit{CodeBunk} a \textit{CoderPad}. Mnohé z nich
+Poslednou veľkou skupinou sú platené programy, ktoré poskytujú viac funkcionalít, ale ich použitie
+je platené. Príkladmi týchto editorov sú \textit{CodeBunk} a \textit{CoderPad}. Mnohé z nich
 poskytujú aj spúštanie kódu, prípadne videokameru.

@@ -3,19 +3,15 @@
 \label{kap:cdrt} % id kapitoly pre prikaz ref
 
 \section{Úvod}
-V nasledovnom texte budeme používať termíny, ktoré nám zjednušia opisovanie myšlienky
-bezkonfliktných replikovateľných dátovych typov. Uvádzame tieto pojmy v úvode tejto
-kapitoly.
 
-Súbežné úpravy dokumentu bez koordinácie medzi jednotlivými používateľskými
-počítačmi môže viesť k nekonzistentostiam, ktoré vo všeobecnosti nie je možné
-vyriešiť. Na zabezpečenie konzistentnosti sa v takýchto prípadoch vyžaduje vrátenie (rollback)
-niektorch operácii.
+Súbežné úpravy dokumentu bez koordinácie medzi jednotlivými používateľskými počítačmi môže viesť k
+nekonzistentnostiam, ktoré vo všeobecnosti nie je možné vyriešiť. Na zabezpečenie konzistentnosti sa
+v takýchto prípadoch vyžaduje vrátenie \textit{(angl. rollback)} niektorých operácií.
 
 V distribuovanom výpočte je bezkonfliktný replikovaný dátový typ (CRDT) dátová štruktúra,
-ktorá môže byť replikovaná vo viacerých počítačoch v sieti, pričom jednotlivé inštancie je možné
-aktualizovať nezávisle a súbežne bez koordinácie medzi ostanými inštanciami a kde je vždy
-matematicky možné vyriešiť nezrovnalosti, ktoré by mohli nastať. Z toho vyplýva, že použitím
+ktorá môže byť replikovaná vo viacerých počítačoch v sieti. Jednotlivé inštancie je možné
+aktualizovať nezávisle a súbežne bez koordinácie medzi ostanými inštanciami, pričom je vždy
+matematicky možné vyriešiť nezrovnalosti, ktoré by mohli nastať. Z toho vyplýva, že použitím typu
 CRDT nemôže nastať situácia, kedy by sme museli nejakú operáciu vrátiť. 
 
 Koncept CRDT bol formálne definovaný v roku 2011 osobami
@@ -31,12 +27,12 @@ V súčastnosti sú preskúmané 2 typy CRDT:
 
 \subsection{CRDT založené na operáciách}
 CRDT založené na operáciách sú označované ako komutatívne replikované dátové typy alebo 
-\textit{CmRDT}. CmRDT menia dokument vysielaním iba operácie, ktoré sa potom aplikujú lokálne
-u všetkých, ktoré dokument zdieľajú. Operácie musia byť komutatívne, avšak nemusia 
+\textit{CmRDT}. CmRDT menia dokument vysielaním iba operácií, ktoré sa potom aplikujú lokálne
+u všetkých používatelia, ktorí dokument zdieľajú. Operácie musia byť komutatívne, avšak nemusia 
 byť idempotentné. Je preto nutné zaručiť idempotenciu pomocou vhodnej implementácie
 komunikácie (správa musí byť vyslaná práve raz). 
 CmRDT je vhodné použiť napríklad na aktualizovanie počtu zdieľaní
-príspevkov na sociálnych sieťach, kde server zaručiť idempotentnosť. 
+príspevkov na sociálnych sieťach, kde server zaručuje idempotentnosť. 
 
 \subsection{CRDT založené na stavoch}
 CRDT založené na stavoch sa nazývajú konvergentné replikované dátové typy alebo \textit{CvRDT}.
@@ -64,9 +60,9 @@ Tým sa zvyšuje spotreba pamäte aplikácie.
 Zaujímavým aspektom CRDT, ktorý ho odlišuje od OT, sú relatívne pozície znakov. Tieto pozície majú
 nasledovné vlastnosti:
 \begin{enumerate}
-  \item žiadne 2 CRDT objekty nemajú rovnakú pozíciu
+  \item žiadne dva CRDT objekty nemajú rovnakú pozíciu
   \item pozícia nejakého objektu sa nidky nezmení
-  \item ak 2 CRDT objekty A a B operujú na tej istej pozícii v dokumente a objekt A
+  \item ak dva CRDT objekty A a B operujú na tej istej pozícii v dokumente a objekt A
   nastane skôr než B, tak relatívna pozícia A musí byť menšia ako B.
 \end{enumerate}
 Vytvorenie takýchto pozícií je celkom jednduché.
@@ -90,10 +86,7 @@ vrcholov. Napríklad:
 
 \begin{flushleft}\textbf {Komutativita a idempotentnosť CRDT}\end{flushleft}
 Ak predpokladáme, že pozície spĺňajú podmienky z \ref{def_pozicie}, tak CRDT objekty sú
-komutatívne a idempotentné. 
-
-Keďže všetky relatívne pozície sú unikátne, tak nezáleží na poradí, v ktorom vykonávame dané operácie,
-teda CRDT sú naozaj komutatívne.
+komutatívne a idempotentné.
 
 Idempotencia je daná tým, že ak chceme do dokumentu pridať znak s najekou relatívnou pozíciou, a tá
 sa tam už nachádza, tak opätovné pridanie už nič neurobí. Ak sa naopak snažíme vymazať niečo na
@@ -106,7 +99,7 @@ Aplikácie CRDT sa dajú nájsť nielen v oblasti kolaboratívnych editorov, ale
 miestach ako napríklad databáza \textit{Redis}, platforma na zdieľanie hudby \textit{SoundClound}
 alebo NoSQL 
 %TODO: definuj NoSQL 
-dátové úložisko \textit{Riak}, ktoré sa používa na vnútorný chatovací systém v hre 
+dátové úložisko \textit{Riak}, ktoré sa používa na vnútorný četovací systém v hre 
 \textit{League of Legends}.
 \cite{crdt_wiki}
 

@@ -1,16 +1,15 @@
 \chapter{Implementácia}
-Pri návrhu sme dbali dôraz nato aby sa jednotlivé časti klienskej aplikácie dali použiť jednoducho
-a aby sme vyvolali dojem na používateľa. V implementácii sme zvolili kombináciu oďtieňov sivej na
-pozadia a farby editoru a oďtiene bielej na písmo. Nvýraznili akcii, ktoré vie používateľ na stránke
-robiť, používame špecifický odtieň modrej farby. Poslednou používanou farbou je červená, ktorou
-singalizujeme chyby.
+Pri návrhu sme dbali dôraz nato, aby sa jednotlivé časti klienskej aplikácie dali použiť jednoducho.
+V implementácii sme zvolili kombináciu oďtieňov sivej na pozadia a farby editoru a bielu farbu na
+písmo. Na výraznenie akcií, ktoré vie používateľ na stránke robiť, používame špecifický odtieň
+modrej farby. Poslednou používanou farbou je červená, ktorou singalizujeme chyby.
 
 \subsection{Klient}
 Klient je implementovaný ako jednostránková webová aplikácia. Celý klient je napísaný v knižnici
-\textit{React} a jazyku \textit{Typescript}. Typescript je nadmnožina JavaScriptu, ktorá do tohto
-dynamického a netypovaného jazyka pridáva statické typy. Vďaka tomu je kód menej náchylný na chyby
-a výhodou je tiež automatický navrhovanie kódu, ktorý editor poskytuje, pretože vie, čo je akého
-typu. 
+\textit{React} a jazyku \textit{Typescript}. Typescript je nadmnožinou jazyka JavaScript, ktorá do
+tohto dynamického a netypovaného jazyka pridáva statické typy. Vďaka tomu je kód menej náchylný na
+chyby a výhodou je tiež automatické navrhovanie kódu, ktoré editor poskytuje, pretože vie, čo je
+akého typu. 
 
 Pri načítaní stránky sa používateľovi zobrazí prihlasovacie okno, cez ktoré sa má do aplikácie
 prihlásiť. Ak používateľ ešte účet nemá, vie sa prekliknúť na registráciu.
@@ -32,7 +31,7 @@ prihlásiť. Ak používateľ ešte účet nemá, vie sa prekliknúť na registr
 \end{figure}
 
 Prihlasovací formulár validuje, či je používateľ zaregistrovaný a či zadal správne heslo. Podobne
-registrovací formulár kontroluje, či je používateľské meno voľne a či sa heslá zhodujú. Prípadné
+registrovací formulár kontroluje, či je používateľské meno voľné a či sa heslá zhodujú. Prípadné
 chyby zobrazuje pod formulárom.
 \begin{figure}[H]
 \centering
@@ -52,12 +51,12 @@ chyby zobrazuje pod formulárom.
 \end{figure}
 
 Po prihlásení používateľa sa zobrazí hlavná časť programu. Odlišuje sa však výrazne podľa toho, či
-je prihlásený používateľ administrátor alebo bežný používateľ.
+je prihlásený administrátor alebo bežný používateľ.
 
 \subsection{Rozhranie pre bežného používateľa}
 Po prihlásení sa zobrazí bežnému používateľovi rozhranie, v ktorom vidí všetky vytvorené skupiny.
-Nevidí však ani ich obsah ani prihlásených pouźívateľov patriacich do daných skupín. Do skupín
-ho vie pridať iba administrátor. Ďalej śu v rozhraní zobrazené skupiny, do ktorých používateľ patrí
+Nevidí však ani ich obsah, ani prihlásených pouźívateľov patriacich do daných skupín. Do skupín
+ho vie pridať iba administrátor. Ďalej sú v rozhraní zobrazené skupiny, do ktorých používateľ patrí
 a v nich vidí aj ostatných pouźívateľov spolu so zadaniami pre danú skupinu.
 % TODO: obrazok ked (ak) to bude implementovane
 
@@ -74,9 +73,9 @@ zprehľadňujú prácu s editorom.
 \paragraph{Panel so zoznamom súborov}\leavevmode\\
 Komponent, ktorý obsahuje hierarchickú schému priečinkov a súborov dostupných v zadaní. Priečinky sa
 dajú otvárať podobne ako pri otváraní súboru na počítači. Súbor alebo priečinok, na ktorý ukazuje
-kurzor sa zvýrazňuje a kurzor sa zmení na ukazateľ aby užívateľ vedel, že môže na danú vec kliknúť.
-Ikonky jasne odlišujú súbor a priečinok. Priečinok môže byť v schovanom alebo zobrazenom stave. 
-Tieto stavy sú rozlíšené typom ikonky.
+kurzor sa zvýrazňuje a kurzor sa zmení na ukazateľ, aby používateľ vedel, že môže na daný súbor
+alebo priečinok kliknúť. Ikonky jasne odlišujú súbor od priečinku. Priečinok môže byť v schovanom
+alebo zobrazenom stave. Tieto stavy sú rozlíšené typom ikonky.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -102,7 +101,7 @@ napísané v návhu. Pri kliknutí na ľubovolnú akciu sa zobrazí dialóg, v k
 ďalšie údaje a potvrdí akciu, ktorá sa následne vykoná na serveri.
 
 Pri ukladaní zadania je nutné zvoliť identifikátor, pod ktorým sa má zadanie uložiť. Identifikátor
-môže obsahovať iba písmená anglickej abecedy, čísla a pomlčku. Ak užívaťel zadá neplatný 
+môže obsahovať iba písmená anglickej abecedy, čísla a pomlčku. Ak používaťel zadá neplatný 
 identifikátor, klient mu súbor uložiť nedovolí.
 \begin{figure}[H]
 \centering
@@ -121,8 +120,8 @@ identifikátor, klient mu súbor uložiť nedovolí.
 \caption{Uloženie zadania}
 \end{figure}
 
-Pri načítavaní uloženého zadania sa užívateľovi zobrazia všetky jemu dostupné uložené zadania v 
-zozname. Používateľ si vie vybrať ktorý záznam chce načítať poďla identifikátora, ktorý zadával
+Pri načítavaní uloženého zadania sa používateľovi zobrazia všetky jemu dostupné uložené zadania v 
+zozname. Používateľ si vie vybrať, ktorý záznam chce načítať poďla identifikátora, ktorý zadával
 pri ukladaní a časovej pečiatky, kedy záznam uložil. Okrem iného, aplikácia niekedy robí ukladanie
 sama od seba. Používateľ si vie povedať, či chce takéto záznamy vidieť v možnostiach.
 \begin{figure}[H]
@@ -194,17 +193,17 @@ na serveri uloží a automaticky začne testovať.
 \paragraph{Editor kódu}\leavevmode\\
 Najdôležitejším komponentom je samotný editor, v ktorom sa dá písať kód. Dôležité je, aby používateľ
 vedel, ktorý súbor práve upravuje. Nato slúži horný panel editora, kde sú zobrazené práve otvorené
-súbory. Aktívny súbor, je podčiarknutý modrou farbou aby bolo zvýraznené, ktorý súbor sa práve
-upravuje. Súbory sa v hornom paneli dajú zavrieť klikom v pravej časti karty klikom na krížik. Pri
-posune kurzora na priestor krížika, sa krížik zvačší, čím upozorní používateľa, že kliknutie zavrie
+súbory. Aktívny súbor, je podčiarknutý modrou farbou, aby bolo zvýraznené, ktorý súbor sa práve
+upravuje. Súbory sa v hornom paneli dajú zavrieť v pravej časti karty klikom na krížik. Pri
+posune kurzora na priestor krížika, sa krížik zväčší, čím upozorní používateľa, že kliknutie zavrie
 danú kartu. Používateľ môže medzi kartami prepínať, čím sa mení obsah editora.
 % TODO: rozpznavanie suboru podla koncovky (tabulka)
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Schované panely}\leavevmode\\
 Oba panely zaberajú značný horizontálny priestor a nie vždy sú pre používateľa nutné. Má teda
-možnosť panly schovať. Priestor, ktorý vznikne schovaním panelov vyplní editor. Používateľ môže
-kedykoľvek panel zobraziť naspať kliknutím na šípku, ktorá panel vyroluje a editor sa zmenší. 
+možnosť panely schovať. Priestor, ktorý vznikne schovaním panelov vyplní editor. Používateľ môže
+kedykoľvek panel zobraziť naspäť kliknutím na šípku, ktorá panel vyroluje a editor sa zmenší. 
 \begin{figure}[H]
 \centerline{\includegraphics[width=1\textwidth]{images/zcucnute_panely}}
 \caption[Editor zadania so schovanými panelmi]{Editor zadania so schovanými panelmi}
