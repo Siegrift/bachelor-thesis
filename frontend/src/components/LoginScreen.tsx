@@ -7,14 +7,12 @@ import RegisterForm from './RegisterForm'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { State } from '../redux/types'
+import DarkPaper from './lib/DarkPaper'
 
 const styles = (theme: Theme) =>
   createStyles({
     loginPanel: {
       width: '400px',
-      backgroundColor: theme.colors.background.editor,
-      borderRadius: 10,
-      border: `solid 3px ${theme.palette.common.black}`,
     },
     errorMessage: {
       color: theme.palette.error.dark,
@@ -31,7 +29,7 @@ class LoginScreen extends Component<Props> {
   render() {
     const { classes, screenType, errorMessage } = this.props
     return (
-      <div className={classes.loginPanel}>
+      <DarkPaper className={classes.loginPanel} elevation={10}>
         {screenType === 'login' ? <LoginForm /> : <RegisterForm />}
 
         {errorMessage && (
@@ -39,7 +37,7 @@ class LoginScreen extends Component<Props> {
             {errorMessage}
           </Typography>
         )}
-      </div>
+      </DarkPaper>
     )
   }
 }

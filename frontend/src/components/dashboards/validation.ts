@@ -62,7 +62,21 @@ export const uniqueUserGroupValidation = async (
   if (size(errors) > 0) return Promise.reject(errors)
 }
 
-// TODO: implement
-export const uniqueProblemNameValidation = async (values: any) => {
-  return Promise.resolve()
+export const problemValidation = async (values: any) => {
+  const { name, files } = values
+  const errors = {} as any
+
+  console.log(values)
+
+  const problems = await getApi().getProblems({ name, exact: true })
+  if (!name) errors.name = requiredField(name)
+  else if (problems.length !== 0) {
+    errors.name = `Problem with name ${name} already exist!`
+  }
+
+  if (files.length === 0) {
+    errors.files = 'There must be at least one file in a problem!'
+  }
+
+  if (size(errors) > 0) return Promise.reject(errors)
 }

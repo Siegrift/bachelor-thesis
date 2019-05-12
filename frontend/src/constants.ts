@@ -1,7 +1,5 @@
 export const BASE_URL = 'http://localhost:3000'
 export const DEFAULT_REQUEST_TIMEOUT = 5000
-// set this property to true to bypass signin in
-export const PROCEED_WITHOUT_SIGNIN = true
 
 // main screen style constants
 export const TREE_VIEW_WIDTH = 300

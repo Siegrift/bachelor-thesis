@@ -4,11 +4,15 @@ import {
   Group,
   Logger,
   ObjectOf,
+  PartialProblem,
+  Problem,
   SandboxResponse,
   SubmitResponse,
-  User
+  User,
+  UserGroup
 } from './types/common'
 import { BASE_URL, DEFAULT_REQUEST_TIMEOUT } from './constants'
+import { convertToCamelCase } from './utils'
 
 export interface LoginUserRequest {
   name: string
@@ -20,16 +24,24 @@ export interface CreateUserRequest extends LoginUserRequest {
 }
 
 export interface GetGroupsRequest {
-  name: string
-  exact: boolean
+  name?: string
+  exact?: boolean
+  userId?: string
 }
 
 export type GetUsersRequest = GetGroupsRequest
 
 export interface GetUserGroupsRequest {
-  groupId: string
-  userId: string
-  conjunction: boolean
+  groupId?: string
+  userId?: string
+  conjunction?: boolean
+  exact?: boolean
+}
+
+export interface GetProblemsRequest {
+  name?: string
+  exact?: boolean
+  groupId?: string
 }
 
 interface RequestOptions {
@@ -66,14 +78,8 @@ export class Api {
     })
   }
 
-  downloadTaskFiles(): Promise<string[]> {
-    return this.request('/mockedFiles', 'GET')
-  }
-
-  getFile(file: string): Promise<string> {
-    return this.request(`/mockedFiles/${encodeURIComponent(file)}`, 'GET', {
-      responseAsText: true,
-    })
+  getProblem(problemId: string): Promise<Problem> {
+    return this.request(`/problems/${problemId}`, 'GET')
   }
 
   saveFiles(files: FormData) {
@@ -128,10 +134,20 @@ export class Api {
     })
   }
 
-  getUserGroups(params: GetUserGroupsRequest): Promise<any> {
+  getUserGroups(params: GetUserGroupsRequest): Promise<UserGroup[]> {
     return this.request(`/userGroups`, 'GET', {
       queryParams: params,
     })
+  }
+
+  getProblems(params: GetProblemsRequest): Promise<PartialProblem[]> {
+    return this.request('/problems', 'GET', {
+      queryParams: params,
+    })
+  }
+
+  getGroup(groupId: string): Promise<Group> {
+    return this.request(`/groups/${groupId}`, 'GET')
   }
 
   private createRequestBody({ body, convertToJson = true }: RequestOptions) {
@@ -171,7 +187,9 @@ export class Api {
         })
 
         if (response.status >= 200 && response.status < 300) {
-          return responseAsText ? response.text() : response.json()
+          return responseAsText
+            ? response.text()
+            : convertToCamelCase(await response.json())
         } else {
           throw new ApiError(await response.text(), response)
         }

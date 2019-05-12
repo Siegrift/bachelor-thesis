@@ -13,14 +13,11 @@ import { updateValue as _updateValue } from '../actions/sharedActions'
 import {
   createUser as _registerUser,
   toggleFormType as _toggleFormType
-} from '../actions/loginActions'
+} from '../actions/userActions'
 
 const styles = (theme: Theme) =>
   createStyles({
     form: {
-      margin: theme.spacing.unit * 2,
-    },
-    formContent: {
       display: 'flex',
       flexDirection: 'column',
       '& > *': {
@@ -49,12 +46,12 @@ class RegisterForm extends Component<Props> {
   render() {
     const { classes, login, createUser, toggleFormType } = this.props
     return (
-      <div className={classes.form}>
+      <React.Fragment>
         <Typography variant="h3" gutterBottom={true}>
           Registrácia
         </Typography>
 
-        <div className={classes.formContent}>
+        <div className={classes.form}>
           <TextField
             label="Meno"
             value={login.name}
@@ -82,7 +79,6 @@ class RegisterForm extends Component<Props> {
             onChange={this.changeFieldText('repeatPassword')}
           />
 
-          {/* TODO: check if passwords match */}
           <Button variant="contained" color="primary" onClick={createUser}>
             Registrovať
           </Button>
@@ -94,7 +90,7 @@ class RegisterForm extends Component<Props> {
             </Link>
           </Typography>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }

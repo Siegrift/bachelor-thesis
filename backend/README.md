@@ -30,9 +30,17 @@ to work with the database, follow these steps:
    `psql editor -p PORT -h 127.0.0.1 -d editordb` if you are using different port than `5432`
 6. Write psql login info to `.env` file.
 
-Do not modify the database directly! Use knex cli to generate
+Do not modify the database schemas directly! Use knex cli to generate
 [migrations](https://knexjs.org/#Migrations). _(Useful commands are `knex migrate:make "name"` and
 `knex migrate:latest`)_
+
+### Create admin user
+
+There is no way an user can be promoted to admin. If you want to have an administrator, you have
+to create an admin user in db by yourself. You can use this command:
+
+
+`INSERT INTO "user" (id, name, password, is_admin) VALUES ('69fe285d-6659-401e-96cb-113bbe200c81', 'admin', 'admin123', true);`
 
 ## Running code to test
 

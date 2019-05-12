@@ -13,14 +13,11 @@ import { updateValue as _updateValue } from '../actions/sharedActions'
 import {
   loginUser as _loginUser,
   toggleFormType as _toggleFormType
-} from '../actions/loginActions'
+} from '../actions/userActions'
 
 const styles = (theme: Theme) =>
   createStyles({
     form: {
-      margin: theme.spacing.unit * 2,
-    },
-    formContent: {
       display: 'flex',
       flexDirection: 'column',
       '& > *': {
@@ -49,12 +46,12 @@ class LoginForm extends Component<Props> {
   render() {
     const { classes, login, loginUser, toggleFormType } = this.props
     return (
-      <div className={classes.form}>
+      <React.Fragment>
         <Typography variant="h3" gutterBottom={true}>
           Prihlásenie
         </Typography>
 
-        <div className={classes.formContent}>
+        <div className={classes.form}>
           <TextField
             label="Meno"
             value={login.name}
@@ -84,7 +81,7 @@ class LoginForm extends Component<Props> {
             </Link>
           </Typography>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }

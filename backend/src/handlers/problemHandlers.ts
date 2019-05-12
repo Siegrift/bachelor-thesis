@@ -27,19 +27,6 @@ const storeProblemFiles = (problemId: string, files: ProblemFile[]) => {
   )
 }
 
-export const listMockedFiles = basicRequest(async ({ response }) => {
-  const PUBLIC_FILES_DIR = join(PROBLEMS_PATH, 'mocked-data/public')
-  const files = await recursivelyListFiles(PUBLIC_FILES_DIR)
-  response.json(files.map((file) => file.split('public/').pop()))
-})
-
-export const getMockedFile = basicRequest(async ({ request, response }) => {
-  const file = decodeURIComponent(request.params.file)
-  const filePath = join(PROBLEMS_PATH, 'mocked-data/public', file)
-
-  response.send(await readFile(filePath))
-})
-
 export const getProblems = basicRequest(async ({ response, request }) => {
   const problems = await getProblemsFromDb(request.query)
   response.set('X-Total-Count', problems.length.toString())

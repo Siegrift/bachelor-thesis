@@ -9,12 +9,15 @@ import {
   FormTab,
   List,
   LongTextInput,
+  ReferenceField,
+  ReferenceInput,
+  SelectInput,
   SimpleFormIterator,
   TabbedForm,
   TextField,
   TextInput
 } from 'react-admin'
-import { requiredField, uniqueProblemNameValidation } from './validation'
+import { problemValidation, requiredField } from './validation'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
@@ -31,16 +34,23 @@ export const ProblemList = (props: {}) => (
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="id" />
+      <ReferenceField source="group_id" reference="groups">
+        <TextField source="name" />
+      </ReferenceField>
     </Datagrid>
   </List>
 )
 
-const EditProblemFile = (props: any) => {
+const EditOrCreateProblemFile = (props: any) => {
   const chainSource = (prop: string) => `${props.source}.${prop}`
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <TextInput source={chainSource('name')} label="Name" />
+        <TextInput
+          source={chainSource('name')}
+          label="Name"
+          validate={requiredField}
+        />
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <LongTextInput source={chainSource('content')} label="Content" />
@@ -51,16 +61,24 @@ const EditProblemFile = (props: any) => {
 
 export const EditProblem = (props: {}) => (
   <Edit {...props}>
-    <TabbedForm asyncValidate={uniqueProblemNameValidation}>
+    <TabbedForm asyncValidate={problemValidation}>
       <FormTab label="General info">
-        <TextInput source="name" validate={requiredField} />
+        <TextInput source="name" />
         <DisabledInput source="id" />
+        <ReferenceInput
+          label="Group"
+          reference="groups"
+          source="groupId"
+          validate={requiredField}
+        >
+          <SelectInput optionText="name" />
+        </ReferenceInput>
       </FormTab>
 
       <FormTab label="Files">
         <ArrayInput source="files">
           <SimpleFormIterator>
-            <EditProblemFile />
+            <EditOrCreateProblemFile />
           </SimpleFormIterator>
         </ArrayInput>
       </FormTab>
@@ -70,15 +88,23 @@ export const EditProblem = (props: {}) => (
 
 export const CreateProblem = (props: {}) => (
   <Create {...props}>
-    <TabbedForm asyncValidate={uniqueProblemNameValidation}>
+    <TabbedForm asyncValidate={problemValidation}>
       <FormTab label="General info">
-        <TextInput source="name" validate={requiredField} />
+        <TextInput source="name" />
+        <ReferenceInput
+          label="Group"
+          reference="groups"
+          source="groupId"
+          validate={requiredField}
+        >
+          <SelectInput optionText="name" />
+        </ReferenceInput>
       </FormTab>
 
       <FormTab label="Files">
-        <ArrayInput source="files">
+        <ArrayInput source="files" defaultValue={[]}>
           <SimpleFormIterator>
-            <EditProblemFile />
+            <EditOrCreateProblemFile />
           </SimpleFormIterator>
         </ArrayInput>
       </FormTab>

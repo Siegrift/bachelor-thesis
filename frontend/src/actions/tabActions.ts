@@ -30,12 +30,12 @@ const addTabToContainer = (
   }
 }
 
-export const createEditorTabs = (taskFilesPaths: string[]): Action<any> => ({
+export const createEditorTabs = (problemFilesPaths: string[]): Action<any> => ({
   type: 'Create editor tabs from response',
-  payload: taskFilesPaths,
+  payload: problemFilesPaths,
   reducer: (state) => {
     const tabs: Tab[] = []
-    taskFilesPaths.forEach((path) =>
+    problemFilesPaths.forEach((path) =>
       addTabToContainer(tabs, path, path.split('/')),
     )
     return { ...state, tabs }

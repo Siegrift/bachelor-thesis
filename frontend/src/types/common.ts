@@ -26,7 +26,6 @@ export interface LoginState {
 
 export interface User {
   name: string
-  password: string
   id: string
   isAdmin: boolean
 }
@@ -54,7 +53,7 @@ export interface TabLeaf {
   active: boolean
 }
 
-export interface TaskFile {
+export interface ProblemFile {
   name: string
   content: string
   forceLocalInitialization?: boolean
@@ -86,4 +85,19 @@ export interface SubmitResponse {
 export interface Group {
   id: string
   name: string
+}
+
+export interface PartialProblem {
+  id: string
+  name: string
+  groupId: string
+}
+export interface Problem extends PartialProblem {
+  files: ProblemFile[]
+}
+
+export interface UserGroup {
+  id: string
+  groupId: string
+  userId: string
 }

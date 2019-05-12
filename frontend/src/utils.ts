@@ -1,3 +1,5 @@
+import { camelCase, forEach, isArray, isPlainObject } from 'lodash'
+
 export const printFormData = (formData: FormData) => {
   for (const pair of formData.entries() as any) {
     console.log(pair[0] + ', ' + pair[1])
@@ -43,4 +45,16 @@ extensionToLanguage.set('yaml', 'yaml')
 export const parseLanguageFromFileName = (filename: string): string => {
   const ext = filename.split('.').pop()!
   return extensionToLanguage.get(ext) || ''
+}
+
+// https://stackoverflow.com/questions/12931828/convert-returned-json-object-properties-to-lower-first-camelcase
+export const convertToCamelCase = (snakeCaseObject: any) => {
+  const camelCaseObject = isArray(snakeCaseObject) ? [] : ({} as any)
+  forEach(snakeCaseObject, (value, key) => {
+    if (isPlainObject(value) || isArray(value)) {
+      value = convertToCamelCase(value)
+    }
+    camelCaseObject[camelCase(key)] = value
+  })
+  return camelCaseObject
 }

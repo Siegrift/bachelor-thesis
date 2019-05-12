@@ -41,6 +41,7 @@ export const getUsers = async (params: GetUsersQueryParams) => {
       'user.name',
       'user.id',
       'user.is_admin',
+      'user.password',
       // https://stackoverflow.com/questions/31108946/postgres-returns-null-instead-of-for-array-agg-of-join-table
       knex.raw('array_remove(array_agg(user_group.group_id), null) as groups'),
     ])

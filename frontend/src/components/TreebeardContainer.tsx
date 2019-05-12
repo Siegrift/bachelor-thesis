@@ -45,11 +45,7 @@ class TreebeardContainer extends React.Component<Props> {
     const { style, decorators, terminal, onClick, node } = this.props
 
     return (
-      <div
-        onClick={onClick}
-        // TODO: this break the application style={{ ...style.container }}
-        ref={this.clickableRef}
-      >
+      <div onClick={onClick} ref={this.clickableRef}>
         {!terminal ? this.renderToggle() : this.renderTerminal()}
 
         <decorators.Header node={node} style={style.header} />

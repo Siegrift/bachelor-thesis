@@ -1,26 +1,25 @@
-import React from 'react'
 import {
   createStyles,
   withStyles,
   WithStyles,
   withTheme
 } from '@material-ui/core'
+import { State } from './redux/types'
 import { compose } from 'redux'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { CaptureKeysHOC } from './components/CaptureKeysHOC'
 import LoginScreen from './components/LoginScreen'
 import { connect } from 'react-redux'
-import { State } from './redux/types'
+import React from 'react'
 import { User } from './types/common'
-import MainScreen from './components/MainScreen'
-import { PROCEED_WITHOUT_SIGNIN } from './constants'
 import Dialog from './components/dialogs/DialogContainer'
 import AdminDashboard from './components/dashboards/AdminDashboard'
 import classNames from 'classnames'
+import OrdinaryDashboard from './components/dashboards/OrdinaryDashboard'
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
-    app: {
+    fixedAppWindow: {
       width: '100%',
       height: '100%',
       display: 'flex',
@@ -35,18 +34,40 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class App extends React.Component<Props> {
+  shouldRenderAdminDashboard = () => {
+    const { user } = this.props
+
+    if (user && user.isAdmin) return true
+    else return false
+  }
+
+  shouldRenderOrdinaryDashboard = () => {
+    const { user } = this.props
+
+    if (user && !user.isAdmin) return true
+    else return false
+  }
+
+  renderChild = () => {
+    if (this.shouldRenderAdminDashboard()) return <AdminDashboard />
+    else if (this.shouldRenderOrdinaryDashboard()) return <OrdinaryDashboard />
+    else return <LoginScreen />
+  }
+
   render() {
     const { classes, user, theme } = this.props
     return (
       <div
-        className={classNames(user && !user.isAdmin && classes.app)}
+        className={classNames(
+          !this.shouldRenderAdminDashboard() && classes.fixedAppWindow,
+        )}
         style={{
-          backgroundColor:
-            // TODO: instead of !user, there should be user
-            !user || user.isAdmin ? '#fafafa' : theme.colors.background.default,
+          backgroundColor: this.shouldRenderAdminDashboard()
+            ? '#fafafa'
+            : theme.colors.background.default,
         }}
       >
-        {user || PROCEED_WITHOUT_SIGNIN ? <AdminDashboard /> : <LoginScreen />}
+        {this.renderChild()}
         <Dialog />
       </div>
     )

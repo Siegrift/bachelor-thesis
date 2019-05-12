@@ -8,6 +8,12 @@ exports.up = function(knex) {
       .string("name")
       .notNullable()
       .unique();
+    table
+      .uuid("group_id")
+      .references("id")
+      .inTable("group")
+      .notNullable()
+      .onDelete("cascade");
   });
 };
 

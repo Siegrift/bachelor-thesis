@@ -27,10 +27,10 @@ export const UserGroupList = (props: {}) => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <ReferenceField source="user_id" reference="users">
-        <TextField source="id" />
+        <TextField source="name" />
       </ReferenceField>
       <ReferenceField source="group_id" reference="groups">
-        <TextField source="id" />
+        <TextField source="name" />
       </ReferenceField>
     </Datagrid>
   </List>

@@ -2,9 +2,9 @@ import { Action, State, Thunk } from '../redux/types'
 import {
   DialogType,
   EditorState,
+  ProblemFile,
   SandboxResponse,
   SubmitResponse,
-  TaskFile,
   UploadState
 } from '../types/common'
 import { forEach } from 'lodash'
@@ -83,8 +83,8 @@ export const listUploads = (): Thunk => async (
   dispatch(setUploadState({ entries: newUploads, fetching: false }))
 }
 
-const removeAllTaskFiles = (): Action => ({
-  type: 'Remove all task files',
+const removeAllProblemFiles = (): Action => ({
+  type: 'Remove all problem files',
   reducer: (state: State) => ({
     ...state,
     files: {},
@@ -103,17 +103,19 @@ export const loadFiles = (entryName: string): Thunk => async (
 
   // start doing request at once and wait for all of them
   const requests = uploadFiles.map(
-    async (file, i): Promise<TaskFile> => {
+    async (file, i): Promise<ProblemFile> => {
       const content = await api.downloadUploadFile(entryName, file)
       return { name: uploadFiles[i], content }
     },
   )
 
   const results = await Promise.all(requests)
-  dispatch(removeAllTaskFiles())
+  dispatch(removeAllProblemFiles())
   dispatch(createEditorTabs(uploadFiles))
   dispatch(
-    addTaskFiles(results.map((r) => ({ ...r, forceLocalInitialization: true }))),
+    addProblemFiles(
+      results.map((r) => ({ ...r, forceLocalInitialization: true })),
+    ),
   )
 }
 
@@ -122,16 +124,18 @@ export const loadFiles = (entryName: string): Thunk => async (
  * which will be later populated in EditorScreen component. We use the filename as
  * key, because we have guaranteed that it will be unique.
  */
-const addTaskFiles = (taskFiles: TaskFile[]): Action<TaskFile[]> => ({
-  type: 'Add task files to state',
-  payload: taskFiles,
+const addProblemFiles = (
+  problemFiles: ProblemFile[],
+): Action<ProblemFile[]> => ({
+  type: 'Add problem files to state',
+  payload: problemFiles,
   reducer: (state: State) => {
     let newState = state
-    taskFiles.forEach((taskFile) => {
+    problemFiles.forEach((problemFile) => {
       newState = {
         ...newState,
-        files: { ...newState.files, [taskFile.name]: taskFile },
-        editors: { ...newState.editors, [taskFile.name]: undefined },
+        files: { ...newState.files, [problemFile.name]: problemFile },
+        editors: { ...newState.editors, [problemFile.name]: undefined },
       }
     })
 
@@ -139,30 +143,18 @@ const addTaskFiles = (taskFiles: TaskFile[]): Action<TaskFile[]> => ({
   },
 })
 
-export const downloadTaskFiles = (): Thunk => async (
+export const downloadProblemFiles = (): Thunk => async (
   dispatch,
   getState,
   { api },
 ) => {
-  try {
-    const taskFiles = await api.downloadTaskFiles()
-    dispatch(createEditorTabs(taskFiles))
+  const state = getState()
+  const problem = await api.getProblem(state.selectedProblemId!)
 
-    // we want to do this asynchronously so that we are not blocking the editor
-    taskFiles.forEach(async (file, i) => {
-      const content = await api.getFile(file)
-      dispatch(
-        addTaskFiles([
-          {
-            name: taskFiles[i],
-            content,
-          },
-        ]),
-      )
-    })
-  } catch (err) {
-    console.error('Error fetching task files', err)
-  }
+  dispatch(createEditorTabs(problem.files.map((p) => p.name)))
+  problem.files.forEach((file) => {
+    dispatch(addProblemFiles([file]))
+  })
 }
 
 export const submitCode = (): Thunk<SubmitResponse> => async (

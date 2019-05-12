@@ -1,4 +1,4 @@
-import { Action, Thunk } from '../redux/types'
+import { Action, State, Thunk } from '../redux/types'
 import { updateValue } from './sharedActions'
 import { ApiError } from '../types/common'
 
@@ -56,3 +56,45 @@ export const createUser = (): Thunk => async (
     }
   }
 }
+
+export const getUserGroupsAndProblems = (): Thunk => async (
+  dispatch,
+  getState,
+  { logger, api },
+) => {
+  const user = getState().user
+  if (!user) throw new Error('User should exist in state!')
+
+  const userGroups = await api.getUserGroups({ userId: user.id })
+  const groups = await Promise.all(
+    userGroups.map((userGroup) => api.getGroup(userGroup.groupId)),
+  )
+  dispatch(
+    updateValue(
+      ['groups'],
+      groups.reduce((acc, g) => ({ ...acc, [g.id]: g }), {}),
+    ),
+  )
+
+  const problemsInGroups = await Promise.all(
+    groups.map(async (group) => ({
+      groupId: group.id,
+      problems: await api.getProblems({ groupId: group.id }),
+    })),
+  )
+  dispatch(
+    updateValue(
+      ['problems'],
+      problemsInGroups.reduce(
+        (acc, p) => ({ ...acc, [p.groupId]: p.problems }),
+        {},
+      ),
+    ),
+  )
+}
+
+export const setSelectedProblemId = (problemId: string): Action<string> => ({
+  type: 'Set selected problem id',
+  payload: problemId,
+  reducer: (state: State) => ({ ...state, selectedProblemId: problemId }),
+})

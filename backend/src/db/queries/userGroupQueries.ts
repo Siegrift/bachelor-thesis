@@ -39,6 +39,7 @@ export const getUserGroups = async (params: GetUserGroupsQueryParams) => {
     _order,
     _start,
     conjunction,
+    exact,
   } = applyDefaultFilterQueryParams(params)
   return knex('user_group')
     .modify((query: any) => {
@@ -46,7 +47,7 @@ export const getUserGroups = async (params: GetUserGroupsQueryParams) => {
         query.where(
           knex.raw('group_id::text'),
           'like',
-          formatFilterToSqlTarget(groupId),
+          formatFilterToSqlTarget(groupId, exact),
         )
       }
       if (userId) {
@@ -54,13 +55,13 @@ export const getUserGroups = async (params: GetUserGroupsQueryParams) => {
           query.andWhere(
             knex.raw('user_id::text'),
             'like',
-            formatFilterToSqlTarget(userId),
+            formatFilterToSqlTarget(userId, exact),
           )
         } else {
           query.orWhere(
             knex.raw('user_id::text'),
             'like',
-            formatFilterToSqlTarget(userId),
+            formatFilterToSqlTarget(userId, exact),
           )
         }
       }

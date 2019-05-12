@@ -19,6 +19,9 @@ const state: State = {
   },
   leftPanelExpanded: true,
   rightPanelExpanded: true,
+  groups: {},
+  problems: {},
+  selectedProblemId: undefined,
 }
 
 export default () => state

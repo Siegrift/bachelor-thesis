@@ -4,7 +4,7 @@ set -e
 to=$1
 shift
 
-# TODO: original cont=$(docker run --rm -d "$@")
+# NOTE: originalally cont=$(docker run --rm -d "$@")
 cont=$(docker run -d "$@")
 code=$(timeout "$to" docker wait "$cont" || true)
 docker kill $cont &> /dev/null

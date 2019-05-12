@@ -29,7 +29,7 @@
 //   'C/C++',
 //   '',
 // ])
-// // TODO: enable java
+// TODO: enable java
 // // ['javac', 'file.java', "'./usercode/javaRunner.sh'", 'Java', ''],
 // codeRunners.set('vbnc', [
 //   "'vbnc -nologo -quiet'",
