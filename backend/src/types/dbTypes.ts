@@ -7,15 +7,14 @@ export const isEntityByIdQuery = (
   return (query as EntityByIdQueryParams).id !== undefined
 }
 
-export interface GetUsersQueryParams {
+export interface GetByNameQueryParams {
   name?: string
   exact?: boolean
 }
 
-export interface GetGroupsQueryParams {
-  name?: string
-  exact?: boolean
-}
+export type GetUsersQueryParams = GetByNameQueryParams
+
+export type GetGroupsQueryParams = GetByNameQueryParams
 
 export interface GetUserGroupsQueryParams {
   userId?: string
@@ -24,8 +23,8 @@ export interface GetUserGroupsQueryParams {
   conjunction?: boolean
 }
 
-export interface GetTasksQueryParams {
-  name?: string
-  exact?: boolean
+export interface GetTasksQueryParams extends GetByNameQueryParams {
   groupId?: string
 }
+
+export type GetSubmitsQueryParams = GetByNameQueryParams

@@ -164,7 +164,12 @@ export const submitCode = (): Thunk<SubmitResponse> => async (
 ): Promise<SubmitResponse> => {
   logger.log('Submit code')
   const savedEntryName = formatSaveFolderName('Autosave')
+  const state = getState()
 
   await dispatch(saveFiles(savedEntryName))
-  return api.submitCode({ savedEntryName, taskId: getState().selectedTaskId! })
+  return api.submitCode({
+    savedEntryName,
+    taskId: state.selectedTaskId!,
+    userId: state.user!.id,
+  })
 }

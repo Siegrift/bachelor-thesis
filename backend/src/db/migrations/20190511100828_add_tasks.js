@@ -12,8 +12,7 @@ exports.up = function(knex) {
       .uuid("group_id")
       .references("id")
       .inTable("group")
-      .notNullable()
-      .onDelete("cascade");
+      .notNullable();
   });
 };
 

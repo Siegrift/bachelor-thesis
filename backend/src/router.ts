@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { runSavedCode, submit } from './handlers/runCodeHandlers'
+import { runSavedCode } from './handlers/runCodeHandlers'
 import multer from 'multer'
 import {
   createUser,
@@ -41,6 +41,7 @@ import {
   testBackendConnection,
   testDbConnection
 } from './handlers/testHandlers'
+import { createSubmit, getSubmits } from './handlers/submitHandlers'
 
 const upload = multer({})
 const router = Router()
@@ -71,7 +72,7 @@ router.delete('/groups/:groupId', removeGroup)
 router.get('/userGroups', getUserGroups)
 router.get('/userGroups/:userGroupId', getUserGroup)
 router.post('/userGroups', createUserGroup)
-// NOTE: this request is only needed for react-admin. We do not support updating user group.
+// NOTE: this request is only needed for react-admin. We do not support updating user group
 router.put('/userGroups/:userGroupId', updateUserGroup)
 router.delete('/userGroups/:userGroupId', removeUserGroup)
 
@@ -86,13 +87,15 @@ router.get('/tasks/:taskId/public', getTaskPublic)
 router.get('/uploads', listUploads)
 router.get('/uploads/:upload', listUploadedFiles)
 router.get('/uploads/:upload/:file', getUploadedFile)
+// NOTE: only get submits is necessary for react-admin, because nor create nor edit is supported
+router.get('/submits', getSubmits)
 // upload.none() will prevent uploading any files, because we will handle that ourselves
 // the functions itself is a middleware, which will check if the request is multipart
 // and if not, it will leave the processing of the request to next middleware.
 // TODO: use json for uploading
 router.post('/saveFiles', upload.none(), saveFiles)
 router.post('/runSavedCode', runSavedCode)
-router.post('/submit', submit)
+router.post('/submit', createSubmit)
 
 // NOTE: these endpoints only serve for testing purposes
 router.get('/', testBackendConnection)

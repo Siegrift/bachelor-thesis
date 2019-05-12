@@ -11,9 +11,11 @@ import React, { Component } from 'react'
 import { CreateGroup, EditGroup, GroupList } from './GroupResource'
 import UsersIcon from '@material-ui/icons/AccountCircle'
 import GroupsIcon from '@material-ui/icons/Group'
+import SubmitsIcon from '@material-ui/icons/Computer'
 import UserGroupsIcon from '@material-ui/icons/SettingsEthernet'
 import TasksIcon from '@material-ui/icons/Assignment'
 import { CreateTask, EditTask, TaskList } from './TaskResource'
+import { SubmitList } from './SubmitResource'
 
 const dataProvider = jsonServerProvider(BASE_URL)
 
@@ -58,6 +60,7 @@ export class AdminDashboard extends Component {
           create={CreateTask}
           icon={TasksIcon}
         />
+        <Resource name="submits" list={SubmitList} icon={SubmitsIcon} />
       </Admin>
     )
   }

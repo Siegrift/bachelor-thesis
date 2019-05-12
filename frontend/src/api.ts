@@ -60,6 +60,7 @@ interface RunSavedCodeRequestBody {
 }
 
 interface SubmitRequestBody {
+  userId: string
   savedEntryName: string
   taskId: string
 }
