@@ -21,8 +21,8 @@ const GroupFilter = (props: {}) => (
 export const GroupList = (props: {}) => (
   <List filters={<GroupFilter />} {...props}>
     <Datagrid rowClick="edit">
-      <TextField source="name" />
       <TextField source="id" />
+      <TextField source="name" />
     </Datagrid>
   </List>
 )

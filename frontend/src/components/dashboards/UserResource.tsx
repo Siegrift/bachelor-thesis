@@ -31,8 +31,8 @@ const UserFilter = (props: {}) => (
 export const UserList = (props: {}) => (
   <List filters={<UserFilter />} {...props}>
     <Datagrid rowClick="edit">
-      <TextField source="name" />
       <TextField source="id" />
+      <TextField source="name" />
       <BooleanField source="is_admin" />
       <ReferenceArrayField label="Groups" reference="groups" source="groups">
         <SingleFieldList>

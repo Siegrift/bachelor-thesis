@@ -59,6 +59,7 @@ class LoginForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('name')}
+            onKeyPress={loginUser}
           />
 
           <TextField
@@ -68,6 +69,7 @@ class LoginForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('password')}
+            onKeyPress={loginUser}
           />
 
           <Button variant="contained" color="primary" onClick={loginUser}>

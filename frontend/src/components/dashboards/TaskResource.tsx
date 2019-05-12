@@ -32,8 +32,8 @@ const TaskFilter = (props: {}) => (
 export const TaskList = (props: {}) => (
   <List filters={<TaskFilter />} {...props}>
     <Datagrid rowClick="edit">
-      <TextField source="name" />
       <TextField source="id" />
+      <TextField source="name" />
       <ReferenceField source="group_id" reference="groups">
         <TextField source="name" />
       </ReferenceField>
@@ -63,8 +63,8 @@ export const EditTask = (props: {}) => (
   <Edit {...props}>
     <TabbedForm asyncValidate={taskValidation}>
       <FormTab label="General info">
-        <TextInput source="name" />
         <DisabledInput source="id" />
+        <TextInput source="name" />
         <ReferenceInput
           label="Group"
           reference="groups"
