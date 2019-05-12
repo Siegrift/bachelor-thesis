@@ -2,16 +2,15 @@ import { join } from 'path'
 import { basicRequest } from './requestWrapper'
 import { readFile } from 'fs-extra'
 import recursivelyListFiles from 'recursive-readdir'
-import { BAD_REQUEST, OK, PROBLEMS_PATH } from '../constants'
+import { BAD_REQUEST, OK, TASKS_PATH } from '../constants'
 import { runInSandBox } from '../sandbox/sandbox'
 
 export const runSavedCode = basicRequest(async ({ request, response }) => {
-  const folder = decodeURIComponent(request.params.folder)
-  const customInput = request.body
-  // TODO: this only works for one task folder
+  // TODO: why is it not json at this point???
+  const { input, savedEntryName, taskId } = JSON.parse(request.body)
   const compileScriptPath = join(
-    PROBLEMS_PATH,
-    'mocked-data/hidden/run_script.json',
+    TASKS_PATH,
+    `${taskId}/hidden/run_script.json`,
   )
 
   try {
@@ -19,9 +18,9 @@ export const runSavedCode = basicRequest(async ({ request, response }) => {
       (await readFile(compileScriptPath)).toString(),
     )
 
-    const sandboxOutput = await runInSandBox(folder, {
+    const sandboxOutput = await runInSandBox(savedEntryName, taskId, {
       ...compileScript,
-      customInput,
+      customInput: input,
     })
 
     response.status(OK).send(sandboxOutput)
@@ -38,22 +37,16 @@ const filenameSort = (f1: string, f2: string) => {
 }
 
 export const submit = basicRequest(async ({ request, response }) => {
-  const folder = decodeURIComponent(request.params.folder)
-  // TODO: this only works for one task folder
-  const compileScriptPath = join(
-    PROBLEMS_PATH,
-    'mocked-data/hidden/run_script.json',
-  )
+  const { savedEntryName, taskId } = JSON.parse(request.body)
+  const compileScriptPath = join(TASKS_PATH, taskId, '/hidden/run_script.json')
   const inputFiles = (await recursivelyListFiles(
-    // TODO: this only works for one task folder
-    join(PROBLEMS_PATH, 'mocked-data/hidden'),
+    join(TASKS_PATH, taskId, 'hidden'),
   ))
     .filter((file) => file.endsWith('.in'))
-    .map((file) => file.split('mocked-data/').pop() as string)
+    .map((file) => file.split(`${taskId}/`).pop() as string)
     .sort(filenameSort)
   const outputFiles = (await recursivelyListFiles(
-    // TODO: this only works for one task folder
-    join(PROBLEMS_PATH, 'mocked-data/hidden'),
+    join(TASKS_PATH, taskId, 'hidden'),
   ))
     .filter((file) => file.endsWith('.out'))
     .sort(filenameSort)
@@ -64,7 +57,7 @@ export const submit = basicRequest(async ({ request, response }) => {
     )
 
     for (let i = 0; i < inputFiles.length; i++) {
-      const sandboxOutput = await runInSandBox(folder, {
+      const sandboxOutput = await runInSandBox(savedEntryName, taskId, {
         ...compileScript,
         inputFile: inputFiles[i],
       })

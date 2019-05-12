@@ -13,11 +13,12 @@ export interface CompileScript {
 }
 
 export const runInSandBox = (
-  folder: string,
+  savedEntryName: string,
+  taskId: string,
   compileScript: CompileScript,
 ): Promise<SandboxResponse> => {
   return new Promise(async (resolve) => {
-    const sandbox = new DockerSandbox(folder, compileScript)
+    const sandbox = new DockerSandbox(savedEntryName, taskId, compileScript)
     const response = await sandbox.run()
 
     resolve(response)

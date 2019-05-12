@@ -2,7 +2,7 @@ import { join } from 'path'
 import { basicRequest } from './requestWrapper'
 import { ensureFile, readFile, remove, writeFile } from 'fs-extra'
 import recursivelyListFiles from 'recursive-readdir'
-import { BAD_REQUEST, FORBIDDEN, PROBLEMS_PATH } from '../constants'
+import { BAD_REQUEST, FORBIDDEN, TASKS_PATH } from '../constants'
 import {
   createTask as createTaskInDb,
   getTask as getTaskFromDb,
@@ -17,7 +17,7 @@ import {
 } from '../types/taskRequestTypes'
 
 const storeTaskFiles = (taskId: string, files: TaskFile[]) => {
-  const pathPrefix = join(PROBLEMS_PATH, taskId)
+  const pathPrefix = join(TASKS_PATH, taskId)
   return Promise.all(
     files.map(async (file) => {
       const filename = join(pathPrefix, file.name)
@@ -37,7 +37,7 @@ export const getTask = basicRequest(async ({ request, response }) => {
   const { taskId } = request.params
 
   const task = await getTaskFromDb(taskId)
-  const rawFiles = await recursivelyListFiles(join(PROBLEMS_PATH, taskId))
+  const rawFiles = await recursivelyListFiles(join(TASKS_PATH, taskId))
   const files = await Promise.all(
     rawFiles.map(async (file) => ({
       name: file.split(`${taskId}/`).pop(),
@@ -64,7 +64,7 @@ export const updateTask = basicRequest(async ({ response, request }) => {
   }
 
   // remove all files and recreate them because file name could be modified
-  await remove(join(PROBLEMS_PATH, taskId))
+  await remove(join(TASKS_PATH, taskId))
   await updateTaskInDb(taskId, body)
   await storeTaskFiles(taskId, body.files)
 
@@ -97,6 +97,23 @@ export const removeTask = basicRequest(async ({ request, response }) => {
   const { taskId } = request.params
 
   const task = await removeTaskFromDb(taskId)
-  await remove(join(PROBLEMS_PATH, taskId))
+  await remove(join(TASKS_PATH, taskId))
   response.json(task)
+})
+
+export const getTaskPublic = basicRequest(async ({ request, response }) => {
+  const { taskId } = request.params
+
+  const task = await getTaskFromDb(taskId)
+  const rawFiles = await recursivelyListFiles(
+    join(TASKS_PATH, taskId, 'public'),
+  )
+  const files = await Promise.all(
+    rawFiles.map(async (file) => ({
+      name: file.split(`public/`).pop(),
+      content: (await readFile(file)).toString(),
+    })),
+  )
+
+  response.json({ ...task, files })
 })

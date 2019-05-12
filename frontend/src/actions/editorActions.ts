@@ -51,7 +51,11 @@ export const runCode = (customInput: string): Thunk<SandboxResponse> => async (
   const folder = formatSaveFolderName('Autosave')
 
   await dispatch(saveFiles(folder))
-  return api.runSavedCode(folder, customInput)
+  return api.runSavedCode({
+    input: customInput,
+    savedEntryName: folder,
+    taskId: getState().selectedTaskId!,
+  })
 }
 
 export const setDialogValue = (value: DialogType): Action<string> => ({
@@ -159,8 +163,8 @@ export const submitCode = (): Thunk<SubmitResponse> => async (
   { api, logger },
 ): Promise<SubmitResponse> => {
   logger.log('Submit code')
-  const folder = formatSaveFolderName('Autosave')
+  const savedEntryName = formatSaveFolderName('Autosave')
 
-  await dispatch(saveFiles(folder))
-  return api.submitCode(folder)
+  await dispatch(saveFiles(savedEntryName))
+  return api.submitCode({ savedEntryName, taskId: getState().selectedTaskId! })
 }

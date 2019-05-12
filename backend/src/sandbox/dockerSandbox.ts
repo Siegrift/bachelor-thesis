@@ -3,8 +3,8 @@ import { ensureDir, readFile, writeFile } from 'fs-extra'
 import { join } from 'path'
 import {
   DEFAULT_TIMEOUT,
-  PROBLEMS_PATH,
   SANDBOX_TESTING_PATH,
+  TASKS_PATH,
   UPLOADS_PATH
 } from '../constants'
 import { execute } from '../utils'
@@ -18,7 +18,11 @@ export interface SandboxResponse {
 class DockerSandbox {
   timeout: number
 
-  constructor(private folder: string, private compileScript: CompileScript) {
+  constructor(
+    private folder: string,
+    private taskId: string,
+    private compileScript: CompileScript,
+  ) {
     this.timeout = compileScript.timeout || DEFAULT_TIMEOUT
   }
 
@@ -37,9 +41,8 @@ class DockerSandbox {
     await execute(
       `cp -r ${join(UPLOADS_PATH, this.folder, '*')} ${join(dest, 'public')}`,
     )
-    // TODO: this only works for one task
     await execute(
-      `cp -r ${join(PROBLEMS_PATH, 'mocked-data/hidden')} ${join(dest)}`,
+      `cp -r ${join(TASKS_PATH, `${this.taskId}/hidden`)} ${join(dest)}`,
     )
     await execute(`chmod 777 ${dest}`)
 

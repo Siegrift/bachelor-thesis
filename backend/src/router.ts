@@ -26,6 +26,7 @@ import {
 import {
   createTask,
   getTask,
+  getTaskPublic,
   getTasks,
   removeTask,
   updateTask
@@ -74,22 +75,24 @@ router.post('/userGroups', createUserGroup)
 router.put('/userGroups/:userGroupId', updateUserGroup)
 router.delete('/userGroups/:userGroupId', removeUserGroup)
 
+// NOTE: /tasks is mainly for admin dashboard
 router.get('/tasks', getTasks)
 router.get('/tasks/:taskId', getTask)
 router.post('/tasks', createTask)
 router.put('/tasks/:taskId', updateTask)
 router.delete('/tasks/:taskId', removeTask)
+router.get('/tasks/:taskId/public', getTaskPublic)
 
 router.get('/uploads', listUploads)
 router.get('/uploads/:upload', listUploadedFiles)
 router.get('/uploads/:upload/:file', getUploadedFile)
-
 // upload.none() will prevent uploading any files, because we will handle that ourselves
 // the functions itself is a middleware, which will check if the request is multipart
 // and if not, it will leave the processing of the request to next middleware.
+// TODO: use json for uploading
 router.post('/saveFiles', upload.none(), saveFiles)
-router.post('/runSavedCode/:folder', runSavedCode)
-router.post('/submit/:folder', submit)
+router.post('/runSavedCode', runSavedCode)
+router.post('/submit', submit)
 
 // NOTE: these endpoints only serve for testing purposes
 router.get('/', testBackendConnection)

@@ -53,6 +53,17 @@ interface RequestOptions {
   queryParams?: any
 }
 
+interface RunSavedCodeRequestBody {
+  input: string
+  savedEntryName: string
+  taskId: string
+}
+
+interface SubmitRequestBody {
+  savedEntryName: string
+  taskId: string
+}
+
 // NOTE: personal advice is to create instance of this class from redux store. Use the exported
 // helpers to get the api outside of redux.
 export class Api {
@@ -79,7 +90,7 @@ export class Api {
   }
 
   getTask(taskId: string): Promise<Task> {
-    return this.request(`/tasks/${taskId}`, 'GET')
+    return this.request(`/tasks/${taskId}/public`, 'GET')
   }
 
   saveFiles(files: FormData) {
@@ -90,11 +101,10 @@ export class Api {
     })
   }
 
-  runSavedCode(folder: string, customInput: string): Promise<SandboxResponse> {
-    return this.request(`/runSavedCode/${folder}`, 'POST', {
+  runSavedCode(body: RunSavedCodeRequestBody): Promise<SandboxResponse> {
+    return this.request(`/runSavedCode`, 'POST', {
       timeout: 10000,
-      body: customInput,
-      convertToJson: false,
+      body,
     })
   }
 
@@ -106,9 +116,10 @@ export class Api {
     return this.request(`/uploads/${upload}`, 'GET')
   }
 
-  submitCode(folder: string): Promise<SubmitResponse> {
-    return this.request(`/submit/${folder}`, 'POST', {
+  submitCode(body: SubmitRequestBody): Promise<SubmitResponse> {
+    return this.request(`/submit`, 'POST', {
       timeout: 10000,
+      body,
     })
   }
 
