@@ -17,8 +17,8 @@ import { uniqueUserGroupValidation } from './validation'
 
 const UserGroupFilter = (props: {}) => (
   <Filter {...props}>
-    <TextInput label="User id" source="user_id" />
-    <TextInput label="Group id" source="group_id" />
+    <TextInput label="User id" source="userId" />
+    <TextInput label="Group id" source="groupId" />
   </Filter>
 )
 

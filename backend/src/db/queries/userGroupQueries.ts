@@ -41,6 +41,7 @@ export const getUserGroups = async (params: GetUserGroupsQueryParams) => {
     conjunction,
     exact,
   } = applyDefaultFilterQueryParams(params)
+
   return knex('user_group')
     .modify((query: any) => {
       if (groupId) {
