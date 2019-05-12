@@ -57,7 +57,7 @@ export const createUser = (): Thunk => async (
   }
 }
 
-export const getUserGroupsAndProblems = (): Thunk => async (
+export const getUserGroupsAndTasks = (): Thunk => async (
   dispatch,
   getState,
   { logger, api },
@@ -76,25 +76,22 @@ export const getUserGroupsAndProblems = (): Thunk => async (
     ),
   )
 
-  const problemsInGroups = await Promise.all(
+  const tasksInGroups = await Promise.all(
     groups.map(async (group) => ({
       groupId: group.id,
-      problems: await api.getProblems({ groupId: group.id }),
+      tasks: await api.getTasks({ groupId: group.id }),
     })),
   )
   dispatch(
     updateValue(
-      ['problems'],
-      problemsInGroups.reduce(
-        (acc, p) => ({ ...acc, [p.groupId]: p.problems }),
-        {},
-      ),
+      ['tasks'],
+      tasksInGroups.reduce((acc, p) => ({ ...acc, [p.groupId]: p.tasks }), {}),
     ),
   )
 }
 
-export const setSelectedProblemId = (problemId: string): Action<string> => ({
-  type: 'Set selected problem id',
-  payload: problemId,
-  reducer: (state: State) => ({ ...state, selectedProblemId: problemId }),
+export const setSelectedTaskId = (taskId: string): Action<string> => ({
+  type: 'Set selected task id',
+  payload: taskId,
+  reducer: (state: State) => ({ ...state, selectedTaskId: taskId }),
 })

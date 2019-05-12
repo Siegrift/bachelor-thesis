@@ -10,36 +10,36 @@ import MainScreen from '../MainScreen'
 import { compose } from 'redux'
 import { State } from '../../redux/types'
 import {
-  getUserGroupsAndProblems as _getGroupsAndProblems,
-  setSelectedProblemId as _setSelectedProblemId
+  getUserGroupsAndTasks as _getGroupsAndTasks,
+  setSelectedTaskId as _setSelectedTaskId
 } from '../../actions/userActions'
-import { Group, ObjectOf, PartialProblem, Problem } from '../../types/common'
+import { Group, ObjectOf, PartialTask, Task } from '../../types/common'
 import { map } from 'lodash'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 
 interface Props {
-  getUserGroupsAndProblems: typeof _getGroupsAndProblems
+  getUserGroupsAndTasks: typeof _getGroupsAndTasks
   groups: ObjectOf<Group>
-  problems: ObjectOf<PartialProblem[]>
-  setSelectedProblemId: typeof _setSelectedProblemId
-  selectedProblemId?: string
+  tasks: ObjectOf<PartialTask[]>
+  setSelectedTaskId: typeof _setSelectedTaskId
+  selectedTaskId?: string
 }
 
 export class OrdinaryDashboard extends Component<Props> {
   onListItemClick = (id: string) => () => {
-    this.props.setSelectedProblemId(id)
+    this.props.setSelectedTaskId(id)
   }
 
   componentDidMount() {
-    this.props.getUserGroupsAndProblems()
+    this.props.getUserGroupsAndTasks()
   }
 
   render() {
-    const { problems, groups, selectedProblemId } = this.props
+    const { tasks, groups, selectedTaskId } = this.props
 
-    if (selectedProblemId) return <MainScreen />
+    if (selectedTaskId) return <MainScreen />
     else {
       return (
         <DarkPaper>
@@ -54,13 +54,13 @@ export class OrdinaryDashboard extends Component<Props> {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <List dense={false} style={{ width: '100%' }}>
-                  {map(problems[group.id], (problem) => (
+                  {map(tasks[group.id], (task) => (
                     <ListItem
-                      key={problem.id}
+                      key={task.id}
                       button={true}
-                      onClick={this.onListItemClick(problem.id)}
+                      onClick={this.onListItemClick(task.id)}
                     >
-                      <ListItemText primary={problem.name} />
+                      <ListItemText primary={task.name} />
                     </ListItem>
                   ))}
                 </List>
@@ -77,12 +77,12 @@ export default compose(
   connect(
     (state: State) => ({
       groups: state.groups,
-      problems: state.problems,
-      selectedProblemId: state.selectedProblemId,
+      tasks: state.tasks,
+      selectedTaskId: state.selectedTaskId,
     }),
     {
-      getUserGroupsAndProblems: _getGroupsAndProblems,
-      setSelectedProblemId: _setSelectedProblemId,
+      getUserGroupsAndTasks: _getGroupsAndTasks,
+      setSelectedTaskId: _setSelectedTaskId,
     },
   ),
   // TODO: short term fix

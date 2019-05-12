@@ -24,7 +24,7 @@ export interface GetUserGroupsQueryParams {
   conjunction?: boolean
 }
 
-export interface GetProblemsQueryParams {
+export interface GetTasksQueryParams {
   name?: string
   exact?: boolean
   groupId?: string

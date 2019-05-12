@@ -8,7 +8,7 @@ import { runInSandBox } from '../sandbox/sandbox'
 export const runSavedCode = basicRequest(async ({ request, response }) => {
   const folder = decodeURIComponent(request.params.folder)
   const customInput = request.body
-  // TODO: this only works for one problem folder
+  // TODO: this only works for one task folder
   const compileScriptPath = join(
     PROBLEMS_PATH,
     'mocked-data/hidden/run_script.json',
@@ -39,20 +39,20 @@ const filenameSort = (f1: string, f2: string) => {
 
 export const submit = basicRequest(async ({ request, response }) => {
   const folder = decodeURIComponent(request.params.folder)
-  // TODO: this only works for one problem folder
+  // TODO: this only works for one task folder
   const compileScriptPath = join(
     PROBLEMS_PATH,
     'mocked-data/hidden/run_script.json',
   )
   const inputFiles = (await recursivelyListFiles(
-    // TODO: this only works for one problem folder
+    // TODO: this only works for one task folder
     join(PROBLEMS_PATH, 'mocked-data/hidden'),
   ))
     .filter((file) => file.endsWith('.in'))
     .map((file) => file.split('mocked-data/').pop() as string)
     .sort(filenameSort)
   const outputFiles = (await recursivelyListFiles(
-    // TODO: this only works for one problem folder
+    // TODO: this only works for one task folder
     join(PROBLEMS_PATH, 'mocked-data/hidden'),
   ))
     .filter((file) => file.endsWith('.out'))
@@ -68,7 +68,7 @@ export const submit = basicRequest(async ({ request, response }) => {
         ...compileScript,
         inputFile: inputFiles[i],
       })
-      const problemOutput = (await readFile(outputFiles[i])).toString()
+      const taskOutput = (await readFile(outputFiles[i])).toString()
 
       if (sandboxOutput.executionTime === -1) {
         response.status(OK).send({ input: i, result: 'TLE' })
@@ -76,7 +76,7 @@ export const submit = basicRequest(async ({ request, response }) => {
       } else if (sandboxOutput.error) {
         response.status(OK).send({ input: i, result: 'RTE' })
         return
-      } else if (sandboxOutput.data !== problemOutput) {
+      } else if (sandboxOutput.data !== taskOutput) {
         response.status(OK).send({ input: i, result: 'WA' })
         return
       }

@@ -5,10 +5,10 @@ import {
   Logger,
   LoginState,
   ObjectOf,
-  PartialProblem,
-  Problem,
-  ProblemFile,
+  PartialTask,
   Tab,
+  Task,
+  TaskFile,
   UploadState,
   User
 } from '../types/common'
@@ -18,7 +18,7 @@ export interface State {
   readonly login: LoginState
   readonly user?: User
   readonly tabs: Tab[]
-  readonly files: ObjectOf<ProblemFile>
+  readonly files: ObjectOf<TaskFile>
   /** Properties of this object are populated lazily */
   readonly editors: ObjectOf<EditorState | undefined>
   readonly dialog: DialogType
@@ -26,8 +26,8 @@ export interface State {
   readonly leftPanelExpanded: boolean
   readonly rightPanelExpanded: boolean
   readonly groups: ObjectOf<Group>
-  readonly problems: ObjectOf<PartialProblem[]>
-  readonly selectedProblemId?: string
+  readonly tasks: ObjectOf<PartialTask[]>
+  readonly selectedTaskId?: string
 }
 
 export type Path = string[]

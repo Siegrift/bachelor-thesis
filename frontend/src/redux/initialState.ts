@@ -20,8 +20,8 @@ const state: State = {
   leftPanelExpanded: true,
   rightPanelExpanded: true,
   groups: {},
-  problems: {},
-  selectedProblemId: undefined,
+  tasks: {},
+  selectedTaskId: undefined,
 }
 
 export default () => state

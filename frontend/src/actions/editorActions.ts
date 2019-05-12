@@ -2,9 +2,9 @@ import { Action, State, Thunk } from '../redux/types'
 import {
   DialogType,
   EditorState,
-  ProblemFile,
   SandboxResponse,
   SubmitResponse,
+  TaskFile,
   UploadState
 } from '../types/common'
 import { forEach } from 'lodash'
@@ -83,8 +83,8 @@ export const listUploads = (): Thunk => async (
   dispatch(setUploadState({ entries: newUploads, fetching: false }))
 }
 
-const removeAllProblemFiles = (): Action => ({
-  type: 'Remove all problem files',
+const removeAllTaskFiles = (): Action => ({
+  type: 'Remove all task files',
   reducer: (state: State) => ({
     ...state,
     files: {},
@@ -103,19 +103,17 @@ export const loadFiles = (entryName: string): Thunk => async (
 
   // start doing request at once and wait for all of them
   const requests = uploadFiles.map(
-    async (file, i): Promise<ProblemFile> => {
+    async (file, i): Promise<TaskFile> => {
       const content = await api.downloadUploadFile(entryName, file)
       return { name: uploadFiles[i], content }
     },
   )
 
   const results = await Promise.all(requests)
-  dispatch(removeAllProblemFiles())
+  dispatch(removeAllTaskFiles())
   dispatch(createEditorTabs(uploadFiles))
   dispatch(
-    addProblemFiles(
-      results.map((r) => ({ ...r, forceLocalInitialization: true })),
-    ),
+    addTaskFiles(results.map((r) => ({ ...r, forceLocalInitialization: true }))),
   )
 }
 
@@ -124,18 +122,16 @@ export const loadFiles = (entryName: string): Thunk => async (
  * which will be later populated in EditorScreen component. We use the filename as
  * key, because we have guaranteed that it will be unique.
  */
-const addProblemFiles = (
-  problemFiles: ProblemFile[],
-): Action<ProblemFile[]> => ({
-  type: 'Add problem files to state',
-  payload: problemFiles,
+const addTaskFiles = (taskFiles: TaskFile[]): Action<TaskFile[]> => ({
+  type: 'Add task files to state',
+  payload: taskFiles,
   reducer: (state: State) => {
     let newState = state
-    problemFiles.forEach((problemFile) => {
+    taskFiles.forEach((taskFile) => {
       newState = {
         ...newState,
-        files: { ...newState.files, [problemFile.name]: problemFile },
-        editors: { ...newState.editors, [problemFile.name]: undefined },
+        files: { ...newState.files, [taskFile.name]: taskFile },
+        editors: { ...newState.editors, [taskFile.name]: undefined },
       }
     })
 
@@ -143,17 +139,17 @@ const addProblemFiles = (
   },
 })
 
-export const downloadProblemFiles = (): Thunk => async (
+export const downloadTaskFiles = (): Thunk => async (
   dispatch,
   getState,
   { api },
 ) => {
   const state = getState()
-  const problem = await api.getProblem(state.selectedProblemId!)
+  const task = await api.getTask(state.selectedTaskId!)
 
-  dispatch(createEditorTabs(problem.files.map((p) => p.name)))
-  problem.files.forEach((file) => {
-    dispatch(addProblemFiles([file]))
+  dispatch(createEditorTabs(task.files.map((p) => p.name)))
+  task.files.forEach((file) => {
+    dispatch(addTaskFiles([file]))
   })
 }
 

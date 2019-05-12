@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable("problem", table => {
+  return knex.schema.createTable("task", table => {
     table
       .uuid("id")
       .notNullable()
@@ -18,5 +18,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable("problem");
+  return knex.schema.dropTable("task");
 };

@@ -17,20 +17,20 @@ import {
   TextField,
   TextInput
 } from 'react-admin'
-import { problemValidation, requiredField } from './validation'
+import { requiredField, taskValidation } from './validation'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-const ProblemFilter = (props: {}) => (
+const TaskFilter = (props: {}) => (
   <Filter {...props}>
     <TextInput label="Search by name" source="name" alwaysOn={true} />
   </Filter>
 )
 
-export const ProblemList = (props: {}) => (
-  <List filters={<ProblemFilter />} {...props}>
+export const TaskList = (props: {}) => (
+  <List filters={<TaskFilter />} {...props}>
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="id" />
@@ -41,7 +41,7 @@ export const ProblemList = (props: {}) => (
   </List>
 )
 
-const EditOrCreateProblemFile = (props: any) => {
+const EditOrCreateTaskFile = (props: any) => {
   const chainSource = (prop: string) => `${props.source}.${prop}`
   return (
     <ExpansionPanel>
@@ -59,9 +59,9 @@ const EditOrCreateProblemFile = (props: any) => {
   )
 }
 
-export const EditProblem = (props: {}) => (
+export const EditTask = (props: {}) => (
   <Edit {...props}>
-    <TabbedForm asyncValidate={problemValidation}>
+    <TabbedForm asyncValidate={taskValidation}>
       <FormTab label="General info">
         <TextInput source="name" />
         <DisabledInput source="id" />
@@ -78,7 +78,7 @@ export const EditProblem = (props: {}) => (
       <FormTab label="Files">
         <ArrayInput source="files">
           <SimpleFormIterator>
-            <EditOrCreateProblemFile />
+            <EditOrCreateTaskFile />
           </SimpleFormIterator>
         </ArrayInput>
       </FormTab>
@@ -86,9 +86,9 @@ export const EditProblem = (props: {}) => (
   </Edit>
 )
 
-export const CreateProblem = (props: {}) => (
+export const CreateTask = (props: {}) => (
   <Create {...props}>
-    <TabbedForm asyncValidate={problemValidation}>
+    <TabbedForm asyncValidate={taskValidation}>
       <FormTab label="General info">
         <TextInput source="name" />
         <ReferenceInput
@@ -104,7 +104,7 @@ export const CreateProblem = (props: {}) => (
       <FormTab label="Files">
         <ArrayInput source="files" defaultValue={[]}>
           <SimpleFormIterator>
-            <EditOrCreateProblemFile />
+            <EditOrCreateTaskFile />
           </SimpleFormIterator>
         </ArrayInput>
       </FormTab>

@@ -53,7 +53,7 @@ export interface TabLeaf {
   active: boolean
 }
 
-export interface ProblemFile {
+export interface TaskFile {
   name: string
   content: string
   forceLocalInitialization?: boolean
@@ -87,13 +87,13 @@ export interface Group {
   name: string
 }
 
-export interface PartialProblem {
+export interface PartialTask {
   id: string
   name: string
   groupId: string
 }
-export interface Problem extends PartialProblem {
-  files: ProblemFile[]
+export interface Task extends PartialTask {
+  files: TaskFile[]
 }
 
 export interface UserGroup {

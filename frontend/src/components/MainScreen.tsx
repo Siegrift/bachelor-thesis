@@ -28,7 +28,7 @@ import {
   setActiveTab as _setActiveTab,
   toggleTabExpand as _toggleTabExpand
 } from '../actions/tabActions'
-import { downloadProblemFiles as _downloadProblemFiles } from '../actions/editorActions'
+import { downloadTaskFiles as _downloadTaskFiles } from '../actions/editorActions'
 import { State } from '../redux/types'
 import { Tab as TabType } from '../types/common'
 import { activeTabSelector } from '../selectors/tabSelectors'
@@ -181,7 +181,7 @@ const CustomTabComponent = ({
 interface Props extends WithStyles<typeof styles> {
   theme: Theme
   tabs: TabType[]
-  downloadProblemFiles: typeof _downloadProblemFiles
+  downloadTaskFiles: typeof _downloadTaskFiles
   selectTab: typeof _selectTab
   setActiveTab: typeof _setActiveTab
   closeTab: typeof _closeTab
@@ -194,7 +194,7 @@ interface Props extends WithStyles<typeof styles> {
 
 class MainScren extends Component<Props, {}> {
   componentDidMount() {
-    this.props.downloadProblemFiles()
+    this.props.downloadTaskFiles()
   }
 
   onToggle = (tab: TabType) => {
@@ -375,7 +375,7 @@ export default compose(
       rightPanelExpanded: state.rightPanelExpanded,
     }),
     {
-      downloadProblemFiles: _downloadProblemFiles,
+      downloadTaskFiles: _downloadTaskFiles,
       selectTab: _selectTab,
       setActiveTab: _setActiveTab,
       closeTab: _closeTab,

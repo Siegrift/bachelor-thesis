@@ -37,7 +37,7 @@ class DockerSandbox {
     await execute(
       `cp -r ${join(UPLOADS_PATH, this.folder, '*')} ${join(dest, 'public')}`,
     )
-    // TODO: this only works for one problem
+    // TODO: this only works for one task
     await execute(
       `cp -r ${join(PROBLEMS_PATH, 'mocked-data/hidden')} ${join(dest)}`,
     )

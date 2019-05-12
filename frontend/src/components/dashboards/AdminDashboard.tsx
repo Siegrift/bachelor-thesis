@@ -12,8 +12,8 @@ import { CreateGroup, EditGroup, GroupList } from './GroupResource'
 import UsersIcon from '@material-ui/icons/AccountCircle'
 import GroupsIcon from '@material-ui/icons/Group'
 import UserGroupsIcon from '@material-ui/icons/SettingsEthernet'
-import ProblemsIcon from '@material-ui/icons/Assignment'
-import { CreateProblem, EditProblem, ProblemList } from './ProblemResource'
+import TasksIcon from '@material-ui/icons/Assignment'
+import { CreateTask, EditTask, TaskList } from './TaskResource'
 
 const dataProvider = jsonServerProvider(BASE_URL)
 
@@ -52,11 +52,11 @@ export class AdminDashboard extends Component {
           options={{ label: 'Connections' }}
         />
         <Resource
-          name="problems"
-          list={ProblemList}
-          edit={EditProblem}
-          create={CreateProblem}
-          icon={ProblemsIcon}
+          name="tasks"
+          list={TaskList}
+          edit={EditTask}
+          create={CreateTask}
+          icon={TasksIcon}
         />
       </Admin>
     )

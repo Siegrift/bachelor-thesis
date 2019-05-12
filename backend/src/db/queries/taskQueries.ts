@@ -1,18 +1,18 @@
 import knex from '../knex'
 import uuid from 'uuid/v4'
-import { GetProblemsQueryParams } from '../../types/dbTypes'
+import { GetTasksQueryParams } from '../../types/dbTypes'
 import {
   applyDefaultFilterQueryParams,
   countDbRows,
   formatFilterToSqlTarget
 } from './queryUtils'
 import {
-  CreateProblemRequest,
-  UpdateProblemRequest
-} from '../../types/problemRequestTypes'
+  CreateTaskRequest,
+  UpdateTaskRequest
+} from '../../types/taskRequestTypes'
 
-export const countProblems = () => countDbRows('problem')
-export const getProblems = async (params: GetProblemsQueryParams) => {
+export const countTasks = () => countDbRows('task')
+export const getTasks = async (params: GetTasksQueryParams) => {
   const {
     name,
     _sort,
@@ -23,7 +23,7 @@ export const getProblems = async (params: GetProblemsQueryParams) => {
     groupId,
   } = applyDefaultFilterQueryParams(params)
 
-  return knex('problem')
+  return knex('task')
     .groupBy('id')
     .modify((query: any) => {
       if (name) {
@@ -42,37 +42,37 @@ export const getProblems = async (params: GetProblemsQueryParams) => {
     .offset(_start)
 }
 
-export const getProblem = (userGroupId: string) => {
-  return knex('problem')
+export const getTask = (userGroupId: string) => {
+  return knex('task')
     .where({ id: userGroupId })
     .first()
 }
 
-export const updateProblem = (
-  problemId: string,
-  updateProblemRequest: UpdateProblemRequest,
+export const updateTask = (
+  taskId: string,
+  updateTaskRequest: UpdateTaskRequest,
 ) => {
-  return knex('problem')
-    .where({ id: problemId })
-    .update({ name: updateProblemRequest.name })
+  return knex('task')
+    .where({ id: taskId })
+    .update({ name: updateTaskRequest.name })
     .returning('*')
     .spread((row) => row)
 }
 
-export const createProblem = (createProblemRequest: CreateProblemRequest) => {
-  return knex('problem')
+export const createTask = (createTaskRequest: CreateTaskRequest) => {
+  return knex('task')
     .insert({
       id: uuid(),
-      name: createProblemRequest.name,
-      group_id: createProblemRequest.groupId,
+      name: createTaskRequest.name,
+      group_id: createTaskRequest.groupId,
     })
     .returning('*')
     .spread((row) => row)
 }
 
-export const removeProblem = (problemId: string) => {
-  return knex('problem')
-    .where({ id: problemId })
+export const removeTask = (taskId: string) => {
+  return knex('task')
+    .where({ id: taskId })
     .delete()
     .returning('*')
     .spread((row) => row)

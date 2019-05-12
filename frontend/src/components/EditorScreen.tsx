@@ -1,12 +1,12 @@
+import { State } from '../redux/types'
 import MonacoEditor, { EditorDidMount } from 'react-monaco-editor'
-import { compose } from 'redux'
 import { withStyles, WithStyles } from '@material-ui/core'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
 import { getSynchronizer } from '../codeSynchronizer'
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { State } from '../redux/types'
-import { EditorState, ObjectOf, ProblemFile, Tab } from '../types/common'
+import { compose } from 'redux'
+import { EditorState, ObjectOf, Tab, TaskFile } from '../types/common'
 import classNames from 'classnames'
 import { activeTabSelector } from '../selectors/tabSelectors'
 import { addEditorInstance as _addEditorInstance } from '../actions/editorActions'
@@ -26,7 +26,7 @@ const styles = (theme: Theme) => ({
 })
 
 interface Props extends WithStyles<typeof styles> {
-  files: ObjectOf<ProblemFile>
+  files: ObjectOf<TaskFile>
   editors: ObjectOf<EditorState | undefined>
   activeTab?: Tab
   addEditorInstance: typeof _addEditorInstance

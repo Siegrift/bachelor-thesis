@@ -24,12 +24,12 @@ import {
   updateUserGroup
 } from './handlers/userGroupHandlers'
 import {
-  createProblem,
-  getProblem,
-  getProblems,
-  removeProblem,
-  updateProblem
-} from './handlers/problemHandlers'
+  createTask,
+  getTask,
+  getTasks,
+  removeTask,
+  updateTask
+} from './handlers/taskHandlers'
 import {
   getUploadedFile,
   listUploadedFiles,
@@ -74,11 +74,11 @@ router.post('/userGroups', createUserGroup)
 router.put('/userGroups/:userGroupId', updateUserGroup)
 router.delete('/userGroups/:userGroupId', removeUserGroup)
 
-router.get('/problems', getProblems)
-router.get('/problems/:problemId', getProblem)
-router.post('/problems', createProblem)
-router.put('/problems/:problemId', updateProblem)
-router.delete('/problems/:problemId', removeProblem)
+router.get('/tasks', getTasks)
+router.get('/tasks/:taskId', getTask)
+router.post('/tasks', createTask)
+router.put('/tasks/:taskId', updateTask)
+router.delete('/tasks/:taskId', removeTask)
 
 router.get('/uploads', listUploads)
 router.get('/uploads/:upload', listUploadedFiles)

@@ -1,16 +1,16 @@
 import { every } from 'lodash'
 
-export interface ProblemFile {
+export interface TaskFile {
   name: string
   content?: string
 }
-export interface UpdateProblemRequest {
+export interface UpdateTaskRequest {
   id: string
   name: string
   groupId: string
-  files: ProblemFile[]
+  files: TaskFile[]
 }
-export function isUpdateProblemRequest(arg: any): arg is UpdateProblemRequest {
+export function isUpdateTaskRequest(arg: any): arg is UpdateTaskRequest {
   return (
     arg.id &&
     arg.name &&
@@ -20,12 +20,12 @@ export function isUpdateProblemRequest(arg: any): arg is UpdateProblemRequest {
   )
 }
 
-export interface CreateProblemRequest {
+export interface CreateTaskRequest {
   name: string
   groupId: string
-  files: ProblemFile[]
+  files: TaskFile[]
 }
-export function isCreateProblemRequest(arg: any): arg is CreateProblemRequest {
+export function isCreateTaskRequest(arg: any): arg is CreateTaskRequest {
   return (
     arg.name &&
     arg.groupId &&

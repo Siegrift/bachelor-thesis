@@ -4,10 +4,10 @@ import {
   Group,
   Logger,
   ObjectOf,
-  PartialProblem,
-  Problem,
+  PartialTask,
   SandboxResponse,
   SubmitResponse,
+  Task,
   User,
   UserGroup
 } from './types/common'
@@ -38,7 +38,7 @@ export interface GetUserGroupsRequest {
   exact?: boolean
 }
 
-export interface GetProblemsRequest {
+export interface GetTasksRequest {
   name?: string
   exact?: boolean
   groupId?: string
@@ -78,8 +78,8 @@ export class Api {
     })
   }
 
-  getProblem(problemId: string): Promise<Problem> {
-    return this.request(`/problems/${problemId}`, 'GET')
+  getTask(taskId: string): Promise<Task> {
+    return this.request(`/tasks/${taskId}`, 'GET')
   }
 
   saveFiles(files: FormData) {
@@ -140,8 +140,8 @@ export class Api {
     })
   }
 
-  getProblems(params: GetProblemsRequest): Promise<PartialProblem[]> {
-    return this.request('/problems', 'GET', {
+  getTasks(params: GetTasksRequest): Promise<PartialTask[]> {
+    return this.request('/tasks', 'GET', {
       queryParams: params,
     })
   }
