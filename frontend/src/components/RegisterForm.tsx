@@ -43,6 +43,12 @@ class RegisterForm extends Component<Props> {
     this.props.updateValue(['login', stateName], e.target.value)
   }
 
+  createUserOnEnter = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      this.props.createUser()
+    }
+  }
+
   render() {
     const { classes, login, createUser, toggleFormType } = this.props
     return (
@@ -59,6 +65,7 @@ class RegisterForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('name')}
+            onKeyPress={this.createUserOnEnter}
           />
 
           <TextField
@@ -68,7 +75,7 @@ class RegisterForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('password')}
-            onKeyPress={createUser}
+            onKeyPress={this.createUserOnEnter}
           />
 
           <TextField
@@ -78,7 +85,7 @@ class RegisterForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('repeatPassword')}
-            onKeyPress={createUser}
+            onKeyPress={this.createUserOnEnter}
           />
 
           <Button variant="contained" color="primary" onClick={createUser}>

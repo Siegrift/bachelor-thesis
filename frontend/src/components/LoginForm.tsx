@@ -43,6 +43,12 @@ class LoginForm extends Component<Props> {
     this.props.updateValue(['login', stateName], e.target.value)
   }
 
+  loginOnEnter = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      this.props.loginUser()
+    }
+  }
+
   render() {
     const { classes, login, loginUser, toggleFormType } = this.props
     return (
@@ -59,7 +65,7 @@ class LoginForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('name')}
-            onKeyPress={loginUser}
+            onKeyPress={this.loginOnEnter}
           />
 
           <TextField
@@ -69,7 +75,7 @@ class LoginForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('password')}
-            onKeyPress={loginUser}
+            onKeyPress={this.loginOnEnter}
           />
 
           <Button variant="contained" color="primary" onClick={loginUser}>
