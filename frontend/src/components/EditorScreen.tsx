@@ -30,6 +30,7 @@ interface Props extends WithStyles<typeof styles> {
   editors: ObjectOf<EditorState | undefined>
   activeTab?: Tab
   addEditorInstance: typeof _addEditorInstance
+  userId: string
 }
 
 class EditorScreen extends Component<Props> {
@@ -41,9 +42,11 @@ class EditorScreen extends Component<Props> {
     editorRef,
     monacoRef,
   ) => {
-    const { files, addEditorInstance } = this.props
+    const { files, addEditorInstance, userId } = this.props
+    const synchronizerId = userId + id
 
-    const synchronizer = await getSynchronizer(id)
+    console.log('Creating synchronizer with id: ', synchronizerId)
+    const synchronizer = await getSynchronizer(synchronizerId)
     await synchronizer!.share.textarea.bindMonaco(
       editorRef,
       () => editorRef.setValue(files[id].content),
@@ -126,6 +129,7 @@ export default compose(
       // TODO: these are needed to rerender the component and do re-layout of the editors
       leftPanelExpanded: state.leftPanelExpanded,
       rightPanelExpanded: state.rightPanelExpanded,
+      userId: state.user!.id,
     }),
     {
       addEditorInstance: _addEditorInstance,

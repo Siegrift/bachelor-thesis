@@ -8,8 +8,6 @@ import {
   TextField
 } from 'react-admin'
 
-// TODO: link to upload
-
 export const SubmitList = (props: {}) => (
   <List {...props}>
     <Datagrid rowClick="show">
@@ -20,7 +18,7 @@ export const SubmitList = (props: {}) => (
       <ReferenceField source="task_id" reference="tasks">
         <TextField source="name" />
       </ReferenceField>
-      <ReferenceField source="upload_id" reference="uploads">
+      <ReferenceField source="upload_id" reference="uploads" linkType="show">
         <TextField source="id" />
       </ReferenceField>
       <TextField source="result" />

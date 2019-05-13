@@ -5,8 +5,6 @@ import DialogContent from '@material-ui/core/DialogContent'
 import React from 'react'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-const SAVE_AS_REGEX = /^[A-Za-z0-9/-]+$/
-
 interface Props {
   closeDialog: () => void
   createUpload: (saveAs: string, isAutosave: boolean) => void
@@ -18,14 +16,14 @@ class SaveDialog extends React.Component<Props> {
   onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
 
-    this.setState({ saveAs: value, error: !SAVE_AS_REGEX.test(value) })
+    this.setState({ saveAs: value, error: !value })
   }
 
   onSaveFiles = () => {
     const { closeDialog } = this.props
     const { saveAs } = this.state
 
-    if (!SAVE_AS_REGEX.test(saveAs)) {
+    if (!saveAs) {
       this.setState({ error: true })
     } else {
       this.props.createUpload(this.state.saveAs, false)
@@ -69,7 +67,7 @@ class SaveDialog extends React.Component<Props> {
           onClick={this.onSaveFiles}
           color="primary"
           variant="contained"
-          disabled={!SAVE_AS_REGEX.test(saveAs)}
+          disabled={!saveAs}
         >
           Uložiť
         </Button>
