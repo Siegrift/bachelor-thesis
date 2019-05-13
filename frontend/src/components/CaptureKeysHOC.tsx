@@ -8,6 +8,7 @@ const preventDefaultFn = (event?: KeyboardEvent) => {
 
 const captures = {
   save: 'ctrl+s',
+  print: 'ctrl+p',
 }
 const handlers = mapObjIndexed(() => preventDefaultFn, captures)
 

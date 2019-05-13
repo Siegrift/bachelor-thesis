@@ -2,10 +2,10 @@
 
 \label{kap:zdialtelnost} % id kapitoly pre prikaz ref
 
-Myšlienka kolaboratývneho editora bola prvýkrát zaznamenaná už v roku 1968 Douglasom Engelbartom. 
-Avšak do popularity sa dostala až nedávno, približne 20 rokov od prvého záznamu.
-Kolaboratívny editor umožnuje viacerým používateľom naraz upravovať jeden dokument.
-Tieto editory sa rozdeľujú na dve kategórie podľa typu aplikovania úprav
+Myšlienka kolaboratívneho editora bola prvýkrát zaznamenaná už v roku 1968 Douglasom Engelbartom. 
+Do popularity sa však dostala až nedávno, približne 20 rokov od prvého záznamu.
+Kolaboratívny editor umožňuje viacerým používateľom naraz upravovať jeden dokument.
+Tieto editory sa rozdeľujú na dve kategórie podľa typu aplikovania úprav:
 \begin{itemize}
   \item v reálnom čase - zmeny dokumentu sa okamžite zobrazia všetkým používateľom
   \item s oneskorením - zmeny dokumentu sa nedejú okamžite (podobne ako pri ver --- zionovacích
@@ -23,12 +23,12 @@ podkapitol
 
 \section{Technické výzvy}
 Technické výzvy pramenia z asynchrónnej komunikácie po sieti. Teoreticky, keby táto 
-komunikácia bola okamžitá, tak vytvorenie takéhoto editora, by nebolo veľmi odlišné od
+komunikácia bola okamžitá, vytvorenie takéhoto editora by nebolo veľmi odlišné od
 editora pre jedného používateľa. Algoritmus\label{algo:nesubezne_editovanie}, 
-rišiaci takýto problém, by mohol fungovať na základe 
+riešiaci takýto problém by mohol fungovať na základe 
 \textit{upravovacieho zámku}. Fungoval by celkom jednoducho:
 \begin{enumerate}
-  \item Požiadanie servera o \textit{upravovacý zámok}
+  \item Požiadanie servera o \textit{upravovací zámok}
   \item Počkanie na schválenie zo servera, že sme na rade s úpravou
   \item Úprava dokumentu
   \item Vzdanie sa \textit{upravovacieho zámku}
@@ -47,13 +47,13 @@ pretože treba vytvorť mechanizmus, ktorý zabezpečuje, že dokument upravuje 
 používateľ. Taktiež to vytvára zbytočné obmedzenia pre používateľov, pretože nemôžu naraz
 upravovať daný dokument (musia sa striedať).
 
-Ďalšou, pre používateľa príjemnejšou, voľbou je optmistická
+Ďalšou, pre používateľa príjemnejšou, voľbou je optimistická
 replikácia, kde sa zmeny v dokumente uplatňujú postupne a prípadné chyby a nekonzistentnosti sa
 riešia neskôr. Neskôr v texte ukážeme, že existuje spôsob akým docieliť konkurentné úpravy 
 dokumentu zaručene bez konfliktov. Takýto algoritmus je popísaný v kapitole \ref{kap:cdrt}.
 
-Obmedzme sa teraz iba na textový editor. Aj keď algoritmus, ktorý neskôr v texte ukážeme je
-všeobecnejší a fungoval by aj pre iné typy editorov, podporujúce zdieľanie iných entít, napríklad
+Obmedzíme sa teraz iba na textový editor. Aj keď algoritmus, ktorý neskôr v texte ukážeme, je
+všeobecnejší a fungoval by aj pre iné typy editorov podporujúce zdieľanie iných entít, napríklad
 obrázkov, rôznych variantov textu... 
 
 \medskip
@@ -77,16 +77,16 @@ Ilustrujme tieto problémy na príklade:
 \end{figure}
 
 % TODO: prepis ma
-Výzvou v spolupráci v reálnom čase je teda presne zistiť, ako možno aplikovať úpravy od vzdialených
+Výzvou v spolupráci v reálnom čase je nájsť spôsob, akým možno aplikovať úpravy od vzdialených
 používateľov, ktoré boli pôvodne vytvorené vo verziách dokumentu, nikdy lokálne neexistovali a môžu
 byť v rozpore s vlastnými miestnymi úpravami používateľa. 
 
 Najsofistikovanejšie riešenia vyriešia tento problém spôsobom, ktorý nevyžaduje server, nepoužíva
 uzamknutie (všetci používatelia môžu voľne upravovať všetky časti dokumentu súčasne) a podporuje
 ľubovoľný počet používateľov (obmedzený iba zdrojmi počítačov). Tento prístup využíva napríklad
-\textit{SubEthaEdit}. Tento program je však dostupný iba pre operačné systémy macOS a využívajú
+\textit{SubEthaEdit}, ktorý je však dostupný iba pre operačné systémy macOS a využíva
 technológie ako \cite{bonjour}, ktoré sú špecifické pre tento operačný systém. Viac sa o
-existujúcich programoch podporujúcich kolaboratívne úpravy dozviete v kapitole
+existujúcich programoch podporujúcich kolaboratívne úpravy dozvieme v kapitole
 \ref{kap:usability_and_similar}.
 
 Pri klient-server riešení je pri otvorení dokumentu priradená jednej z inštancií editora
@@ -95,7 +95,7 @@ dokumentu inými používateľmi server obdrží upozornenia na vykonané zmeny,
 sa tieto zmeny aplikovali aj u ostatných používateľov. 
 V niektorých modeloch sa zmeny na klientovi neodzrkadľujú dovtedy,
 kým sa zo servera nevráti odpoveď, že dané zmeny boli aplikované u všetkých používateľov.
-Príkladom takéhoto editora je editor \textit{Gobby}. Tieto riešenia, sú 
+Príkladom takéhoto editora je editor \textit{Gobby}. Tieto riešenia sú 
 jednoduchšie na implementáciu, ale používateľov výrazne obmedzujú. Ak je latencia siete
 príliš vysoká, používateľ musí dlho čakať.
 
@@ -104,13 +104,13 @@ je zodpovedný výhradne server. Podobný prístup používa napríklad spoločn
 niektorých ich produktoch.
 
 \section{Algoritmy riešiace konkurentné modifikácie}
-Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algoritmov.
+Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algoritmov:
 \begin{enumerate}
   \item OT - Prevádzková transformácia \textit{(angl. Operational transformation)}
   \item CRDT - Bezkonfliktné replikovateľné dátové typy 
   \textit{(angl. Conflict-free replicated data type)}
 \end{enumerate}
 
-V bakalárskej práci použijeme typ CRDT, pretože typ OT je teoreticky model, ktorý predchádza typu CRDT a v praxi
+V bakalárskej práci použijeme typ CRDT, pretože typ OT je teoretický model, ktorý predchádza typu CRDT a v praxi
 je jeho implementácia veľmi náročná a často nefunguje tak dobre, ako je spomínané v teórii.
 Taktiež použitie typu OT je vo väčších projektoch neškálovateľné \cite{ot_nonscalable}. 

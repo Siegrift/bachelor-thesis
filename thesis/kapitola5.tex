@@ -1,15 +1,16 @@
 \chapter{Implementácia}
-Pri návrhu sme dbali dôraz nato, aby sa jednotlivé časti klienskej aplikácie dali použiť jednoducho.
-V implementácii sme zvolili kombináciu oďtieňov sivej na pozadia a farby editoru a bielu farbu na
-písmo. Na výraznenie akcií, ktoré vie používateľ na stránke robiť, používame špecifický odtieň
-modrej farby. Poslednou používanou farbou je červená, ktorou singalizujeme chyby.
+V predošlej kapitole sme popísali návrh aplikácie, ale nevenovali sme sa implementáčným detailom.
+Implementácia klienta a servera je odlišná. Na klientovi riešime implementačné detaily vzhľadu
+stránky, zatiaľ co na serveri štruktúru entít a ich ukladanie v databáze.
 
 \subsection{Klient}
 Klient je implementovaný ako jednostránková webová aplikácia. Celý klient je napísaný v knižnici
 \textit{React} a jazyku \textit{Typescript}. Typescript je nadmnožinou jazyka JavaScript, ktorá do
 tohto dynamického a netypovaného jazyka pridáva statické typy. Vďaka tomu je kód menej náchylný na
 chyby a výhodou je tiež automatické navrhovanie kódu, ktoré editor poskytuje, pretože vie, čo je
-akého typu. 
+akého typu. V implementácii sme zvolili rôzne farby pre rozhranie pre bežného používateľa a pre
+administrátora. Komponenty zobrazované na klientovi využívajú knižnicu \textit{Material-UI}, ktorá
+obsahuje jednoduché komponenty, ktoré sú naštýlované poďla Google dizajnov.
 
 Pri načítaní stránky sa používateľovi zobrazí prihlasovacie okno, cez ktoré sa má do aplikácie
 prihlásiť. Ak používateľ ešte účet nemá, vie sa prekliknúť na registráciu.
@@ -54,11 +55,20 @@ Po prihlásení používateľa sa zobrazí hlavná časť programu. Odlišuje sa
 je prihlásený administrátor alebo bežný používateľ.
 
 \subsection{Rozhranie pre bežného používateľa}
+Pri implementácii rozhrania pre bežného používateľa sme použili kombináciu oďtieňov sivej na pozadia
+a farby editoru a bielu farbu na písmo. Na výraznenie akcií, ktoré vie používateľ na stránke robiť,
+používame špecifický odtieň modrej farby. Poslednou používanou farbou je červená, ktorou
+singalizujeme chyby.
+
 Po prihlásení sa zobrazí bežnému používateľovi rozhranie, v ktorom vidí všetky vytvorené skupiny.
 Nevidí však ani ich obsah, ani prihlásených pouźívateľov patriacich do daných skupín. Do skupín
 ho vie pridať iba administrátor. Ďalej sú v rozhraní zobrazené skupiny, do ktorých používateľ patrí
 a v nich vidí aj ostatných pouźívateľov spolu so zadaniami pre danú skupinu.
-% TODO: obrazok ked (ak) to bude implementovane
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.7\textwidth]{images/vyber_zadania}}
+\caption[Výber zadania]{Výber zadania}
+\label{obr:vyber_zadania}
+\end{figure}
 
 Ak si používateľ vybral zadanie, otvorí sa mu editor, v ktorom vie upravovať všetky súbory dostupné
 pre dané zadanie. Súčasťou editora sú viaceré komponenty, ktoré používateľovi uľahčujú a
@@ -101,7 +111,7 @@ napísané v návhu. Pri kliknutí na ľubovolnú akciu sa zobrazí dialóg, v k
 ďalšie údaje a potvrdí akciu, ktorá sa následne vykoná na serveri.
 
 Pri ukladaní zadania je nutné zvoliť identifikátor, pod ktorým sa má zadanie uložiť. Identifikátor
-môže obsahovať iba písmená anglickej abecedy, čísla a pomlčku. Ak používaťel zadá neplatný 
+môže obsahovať ľubovolné znaky, no nesmie byť prázdny. Ak používaťel zadá neplatný 
 identifikátor, klient mu súbor uložiť nedovolí.
 \begin{figure}[H]
 \centering
@@ -190,14 +200,67 @@ na serveri uloží a automaticky začne testovať.
 \end{figure}
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Panel s otvorenými súbormi}\leavevmode\\
+Dôležité je, aby používateľ vedel efektívne preklikávať medzi otvorenými súbormi a vedel, ktorý
+súbor práve upravuje. Nato slúži horný panel editora, v ktorom sú zobrazené karty s práve otvorenými
+súbormi. Aktívny súbor je podčiarknutý modrou farbou, aby bolo zvýraznené, ktorý súbor sa práve
+upravuje. Súbory sa v hornom paneli dajú zavrieť v pravej časti karty klikom na krížik. Pri posune
+kurzora nad oblasť krížika sa krížik zväčší, čím upozorní používateľa, že kliknutím zavrie danú
+kartu. Používateľ môže medzi kartami prepínať, čím sa mení obsah editora.
+
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Editor kódu}\leavevmode\\
-Najdôležitejším komponentom je samotný editor, v ktorom sa dá písať kód. Dôležité je, aby používateľ
-vedel, ktorý súbor práve upravuje. Nato slúži horný panel editora, kde sú zobrazené práve otvorené
-súbory. Aktívny súbor, je podčiarknutý modrou farbou, aby bolo zvýraznené, ktorý súbor sa práve
-upravuje. Súbory sa v hornom paneli dajú zavrieť v pravej časti karty klikom na krížik. Pri
-posune kurzora na priestor krížika, sa krížik zväčší, čím upozorní používateľa, že kliknutie zavrie
-danú kartu. Používateľ môže medzi kartami prepínať, čím sa mení obsah editora.
-% TODO: rozpznavanie suboru podla koncovky (tabulka)
+Najdôležitejším komponentom je samotný editor, v ktorom sa dá písať zdrojový kód. Editor použitý v
+práci sa nazýva \textit{Monaco}, ktorý je použitý aj v populárnom editore \textit{VS Code}. 
+
+Monaco automaticky zvýrazňuje syntax zdrojového kódu v práve otvorenom súbore. To, v ktorom jazyku
+je zdrojový kód písaný, editor rozpozná podľa koncovky súboru. Monaco vie zobraziť syntax pre všetky
+bežné programovacie jazyky, pričom sa dajú pridať ďalšie. V prípade, že sa editoru nepodarí
+rozpoznať jazyk, v ktorom je obsah súboru napísaný, bude obsah zobrazený bez špeciálneho zvýraznenia
+syntaxe.
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/jazyk_js}
+  \label{obr:jazyk_js}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/jazyk_ziaden}
+  \label{obr:jazyk_ziaden}
+\end{subfigure}
+\caption{Zvýrazňovanie syntaxe jazyka}
+\end{figure}
+
+Okrem zvýrazňovania syntaxe editor poskytuje základné operácie ako krok spať a krok dopredu. Pre
+jednoduchšie navigáciu v texte je v pravej časti editoru "minimapka". Avšak najužitočnejšou a
+najviac používanou funkcionalitou editora je nepochybne automatický návrh. Ak používateľ napíše pár
+znakov, editor mu ponúkne na výber z možností, ktoré by mohol chcieť napísať. Používateľ môže
+zobraziť návrh aj stlačením klávesovej skratky \textit{Ctrl + medzera}. Do návrhu sa postupne
+pridávajú slová, ktoré používateľ do editoru napíše. V zozname navrhovaných možností sa používateľ
+pohybuje šípkami a možnosť zvolí stlačením klávesy \textit{Enter}.
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.7\textwidth]{images/automaticky_navrh}}
+\caption[Automatický návrh]{Automatický návrh}
+\label{obr:automaticky_navrh}
+\end{figure}
+
+Pri programovaní je dôležité vedieť v kóde nájsť nejaký reťazec, prípadne zmeniť nájdené výsledky na
+nejaký iný reťazec. Monaco túto funkcionalitu podporuje po stlačení skratky \textit{Ctrl + F} pre
+hľadanie a \textit{Ctrl + H} pre hľadanie spolu s nahradzovaním. Obe možnosti podporujú rôzne typy
+vyhľadávania, ako napríklad hľadanie pomocou regulárnych výrazov. Na postupné označovanie nejakého
+reťazca sa dá použiť aj multikurzor funkcionalita. Stačí, ak používateľ označí text a stlačí
+\textit{Ctrl + D}. Tento príkaz nájde a označí ďalší výskyt s rovnakým textom aký používateľ
+označil. 
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.7\textwidth]{images/hladanie_nahradzovanie}}
+\caption[Hĺadanie a nahradzovanie]{Hĺadanie a nahradzovanie}
+\label{obr:hladanie_nahradzovanie}
+\end{figure}
+
+Monaco obsahuje aj mnoho ďalších funkcii. Kompletný zoznam sa dá zobraziť stlačením klávesy
+\textit{F1}. 
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Schované panely}\leavevmode\\
@@ -211,12 +274,96 @@ kedykoľvek panel zobraziť naspäť kliknutím na šípku, ktorá panel vyroluj
 \end{figure}
 
 \subsection{Rozhranie pre administrátora}
-% TODO:
+V návrhu aplikácie sme povolili registráciu iba pre bežného používateľa. Zároveň sme v aplikácii,
+neumožnili žiaden spôsob ako spraviť z bežného používateľa administrátora. Vytvorenie administrátora
+preto v klientskej aplikácii nie je možná. Administrátor sa dá vytvoriť iba pridaním
+administrátorského účtu priamo do databázy na serveri. Keď sa adminsitrátor prihlási na klienta, 
+zobrazí sa mu automaticky administrátorské rozhranie.
+
+Farby použíté na rozhranie pre adminsitrátora sú úplne iné oproti farbám zvoleným na reozhranie pre
+bežného používateĺa. Administrátorské rozhranie používa na pozadie bielu farbu a text používa farby
+odtieňov sivej. Tieto farby sú predvolenými farbami knižnice \textit{React admin}, ktorá je použitá
+na vytvorenie rozhrania. Jazyk použítý v rozhraní je anglický, pretože knižnica používa anglický
+jazyk a preklad do slovenčiny by bol náročný a zdĺhavý.
+
+React admin dovoľuje deklaratívne popísať administrátorské rozhranie a jediná požiadavka knižnice je
+webová cestu, na ktorej je dostupný server. Aplikácia potom volá rozhranie servera a výsledné dáta
+zobrazuje. Knižnica je veľmi užitočná, lebo sa dá použíť s ľubovolným typom servera, tiež používa
+\textit{Material-UI} a využíva optimistické zobrazovanie. Veľkým bonusom je aj detailná dokumentácia
+a aktívna komunita podporujúca túto knižnicu.
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=1\textwidth]{images/administratorske_rozhranie}}
+\caption[Administrátorské rozhranie]{Administrátorské rozhranie}
+\label{obr:administratorske_rozhranie}
+\end{figure}
+
+Administrátorské rozhranie obsahuje navigačný panel, ktorý rozhoduje o tom, ktoré entity sú
+zobrazované v hlavnej časti administrátorského rozhrania. Každý prvok v navigačnom paneli má vlasnú
+ikonku a predstavuje rozdielnu časť rozhrania na serveri.
+
+Hlavnú časť administrátorského rozhrania nazývame \textit{panel}. Panel má všeobecnú štruktúru,
+ktorú rozdeľujeme na:
+\begin{itemize}
+  \item akcie
+  \item tabuľka entít
+  \item stránkovanie
+\end{itemize}
+
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Akcie}\leavevmode\\
+Akcie sa nachaazjú v hornej časti panela a štandardne je v knižnici React admin implemntovaná iba
+akcia \textit{exportovať}, ktorá vytvorí CSV súbor so všetkými entitami zobrazenými v tabuľke.
+Ďalšie akcie sa však dajú pridať a vačšina panelov má implementovanú aspoň akciu \textit{vytvor},
+ktorá ponúkne jednoduchý formulár na vyplnenie údajov entity, ktorý sa následne odošle na server,
+kde sa uloží do databázy. Okrem toho poskytuje knižnica možnosť vytvoriť si filtre. Filtre len
+pridávajú parametre, ktoré sa posielajú spolu s požiadavkou na rozhranie servera. Samotné
+filtrovanie sa vykonáva až na serveri. 
+
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Tabuľka entít}\leavevmode\\
+Tabuľka entít zobrazuje dáta, ktoré vráti rozhranie servera. Názvy stĺpcov tabuľky śu klikateľné a
+služia na triedenie zobrazovaných výsledkov. Podobne ako pri filtrovaní, knižnica iba posiela 
+parametre na server, ktorý zodpovedá za to aby vrátené výsledky boli správne utriedené.
+Po kliknutí na riadok tabuľky sa zobrazí detailný popis danej entity. Knižnica umožňuje aj meniť 
+údaje entít, záleží na tom, či chceme aby sa daná entita, prípadne nejaká jej časť dala zmeniť.
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/zmena_zadania}
+  \caption[Zmena zadania]{Zmena zadania}
+  \label{obr:zmena_zadania}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/detail_nahratia}
+  \caption[Detail nahratia zadania]{Detail nahratia zadania}
+  \label{obr:detail_nahratia}
+\end{subfigure}
+\caption{Detail entít}
+\end{figure}
+
+Tabuľka entít vie aj previazať vzťahy medzi entitami. Napríklad v prípade entity používateľov, 
+zobrazené skupiny predstavú klikateľný link na detail danej skupiny. Tiež si treba uvedomiť, že
+entita používateľa zo servera nedostane názov skupín ale iba identifikátory skupín. Knižnica 
+však dokáže pre každý identifikátor stiahnuť dáta o skupine a potom zobraziť meno danej skupiny.
+\begin{figure}[H]
+\centerline{\includegraphics[width=1\textwidth]{images/zadania}}
+\caption[Tabuľka zadaní]{Tabuľka zadaní}
+\label{obr:zadania}
+\end{figure}
+
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Stránkovanie}\leavevmode\\
+V spodnej časti panela sa nachádza stránkovanie, ktoré sa využíva na to, aby v tabuľke nebolo naraz
+príliš veľa výsledkov. Stránkovanie je tiež užitočné kôli šetreniu siete a rýchlosti odpovedania na
+požiadavky, pretože v odpovedi na požiadavku stačí posielať menej výsledkov. Počet entít v stránke
+je tiež meniteľný.
 
 \section{Server}
-% TODO:
+TODO:
 
 \section{Izolované spúštanie kódu na serveri}
-\label{kap:isolated_env} % id kapitoly pre prikaz ref
-
 Kód spustený na serveri, nesmie narušiť ostatné programy, prípadne inak narušiť prostredie servera.
+TODO:

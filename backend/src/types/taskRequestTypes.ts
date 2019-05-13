@@ -7,14 +7,14 @@ export interface TaskFile {
 export interface UpdateTaskRequest {
   id: string
   name: string
-  groupId: string
+  group_id: string
   files: TaskFile[]
 }
 export function isUpdateTaskRequest(arg: any): arg is UpdateTaskRequest {
   return (
     arg.id &&
     arg.name &&
-    arg.groupId &&
+    arg.group_id &&
     Array.isArray(arg.files) &&
     every(arg.files, (f: any) => f.name !== undefined)
   )

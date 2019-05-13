@@ -2,64 +2,87 @@
 
 \label{kap:design} % id kapitoly pre prikaz ref
 
+V návrhu bakalárskej práce vystupujú rôzne entity medzi ktorými sú rôzne vzťahy. 
+\begin{figure}[H]
+\centerline{\includegraphics[width=1\textwidth]{images/entity}}
+\caption[Entity v návrhu]{Entity v návrhu}
+\label{obr:entity}
+\end{figure}
+
+\begin{description}
+\item [Používateľ] - Entita, pomenúvajúca používateľa aplikácie. Používateľov rozdeľujeme na 
+bežných používateľov a administrátorov.
+\item [Bežný používateľ] - Bežní používatelia predstavujú zovšeobecnený pojem pre študentov. Každý
+bežný používateľ patrí do niekoľkých skupín, v ktorých má prístup iba k úlohám prístupným pre danú
+skupinu.
+\item [Administrátor] - Administrátor má plný prístup ku všetkým informáciám na serveri. Okrem
+toho pridáva bežných používateľov do skupín, pridáva zadania, vidí odovzdané zadania bežných
+používateľov...
+\item [Skupina] - Skupina je enita, ktorá sa skladá bežných používateľov. Každé zadanie musí
+patriť do práve jednej skupiny. Toto zadanie je prístupné iba pre používateľov, ktorý patria do
+danej skupiny. 
+\item [Zadanie] - Administrátor vie vytvoriť zadanie pre nejakú skupinu, ktoré môžu bežní
+používatelia riešiť.  
+\end{description}
+
 Program sa skladá z viacerých častí, ktorých návrhy popíšeme v tejto kapitole.
 Návrh je založený na klient-server architektúre. Program sa preto dá rozdeliť na 
 podkapitoly \textit{klient} a \textit{server}.
 
-% TODO: obrazok popisujuci entity
-
 \section{Klient}
-Klient je v bakalárskej práci webová aplikácia cez ktorú komunikuje so serverom. V návrhu klienta sa
-snažíme hlavne vytvoriť jednoduché používateľské prostredie, ktoré je intuitívne na použitie. Kedže
-aplikácia má byť používaná ako editor, je nutné aby sa jednotlivé časti pohodlne čítali a písmo bolo
-dostatočne veľké. Naopak, nepredpokladáme použitie editora na mobilných zariadeniach. Preto je
-dizajn klienta tvorený pre použitie na počítačoch a na veľkých obrazovkách. Klientská aplikácia
-obsahuje:
+Klient je v bakalárskej práci webová aplikácia cez ktorú používateľ komunikuje so serverom. V návrhu
+klienta sa snažíme hlavne vytvoriť jednoduché používateľské prostredie, ktoré je intuitívne na
+použitie. Kedže aplikácia má byť používaná ako editor, je nutné aby sa jednotlivé časti pohodlne
+čítali a písmo bolo dostatočne veľké. Naopak, nepredpokladáme použitie editora na mobilných
+zariadeniach. Preto je dizajn klienta tvorený pre použitie na počítačoch a na veľkých obrazovkách.
+Klientská aplikácia obsahuje:
 \begin{itemize}
-\item prihlasovanie a registrácia
-% TODO: chceme rozhranie pre bezneho pozuivatela kde si vyberie skupinu a atd..
-\item panel so súbormi
+\item rozhranie pre prihlasovanie a registráciu
 \item administrátorské rozhranie
-\item zdieľateľný editor
-\item ovládací panel
+\item rozhranie pre bežného používateľa
 \end{itemize}
 
 \subsection{Prihlasovanie a registrácia}
-Prihlasovanie sa slúži na jednoduché kategorizovanie používateľa na prístup ku editoru. 
-Používateľov rozdeľujeme na bežných používateľov a administrátorov. Bežní používatelia predstavujú
-zovšeobecnený pojem pre študentov, ktorí vedia byť časťou skupín (kurzov) v ktorých majú prístup
-iba k úlohám prístupným pre danú skupinu. O tom do akej skupiny, ktorý bežný používateľ patrí, 
-rozhoduje administrátor. Prihlasovanie by však malo byť pre oba typy používateľov rovnaké.
+Prihlasovanie slúži na jednoduché kategorizovanie používateľa a na prístup k editoru. Každý
+používateľ má svoje prihlasovacie meno a heslo, pod ktorým sa zaregistroval. Prihlasovanie a
+registrácia sú pre oba typy používateľov rovnaké.
 
 Registrácia umožňuje vytvoriť nového používateľa. Zaujímavá otázka je, či umožniť vytváranie
 administrátorov priamo pri regsitrácii, alebo nejakým iným spôsobom. Rozhodol som sa, že je lepšie
 ak používateľ nemusí pri registrácii riešiť koncept administrátorov, a teda umožniť iba vytváranie
-bežných používateľov. V aplikácii však umožňujem povýšenie bežného používateľa na administrátora.
+bežných používateľov. 
 
-\subsection{Panel so súbormi}
+\subsection{Administrátorské rozhranie}
+Po prihlásení sa administrátorovi automaticky zobrazí administrátorské rozhranie, ktoré je rozdielne
+od rozhrania pre bežného používateľa. Adminstrátorské rozhranie umožňuje:
+\begin{itemize}
+\item zobraziť, upraviť a odstrániť používateľa
+\item zobraziť všetky uložené zadania
+\item zobraziť všetky odovzdané zadania
+\item vytvoriť, upraviť a odstrániť zadanie
+\item pridať, upraviť a odstrániť skupiny
+\end{itemize}
+
+\subsection{Rozhranie pre bežného používateľa}
+Rozhranie pre bežného používateľa slúži iba nato aby si používateľ mohol vybrať skupinu a zadanie,
+na ktorom chce pracovať. Po zvolení zadania sa zobrazí editor, v ktorom môže používateľ zadanie
+riešiť.
+
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Panel so súbormi}\leavevmode\\
 Úlohy sa môžu skladať z viacerých súborov. Napríklad môže existovať súbor, ktorý
 obsahuje zadanie a súbor (prípadne viac súborov) na zdrojový kód. Panel so súbormi dovoľuje
 používateľovi pohodlne preklikávať a zvoliť aktívny súbor, ktorý sa zobrazuje v editore.
 
-\subsection{Administrátorské rozhranie}
-Administrátor má plný prístup ku všetkým informáciám na serveri. Po prihlásení sa administrátorovi
-automaticky zobrazí administrátorské rozhranie, ktoré je úplne iné ako rozhranie pre bežného
-používateľa. Adminstrátorské rozhranie umožňuje:
-\begin{itemize}
-\item zobraziť informácie o zaregistrovaných používaťeloch
-\item zobraziť všetky odovzdané zadania
-\item zobraziť všetky uložené zadania
-\item vytvoriť nové zadanie
-\item upraviť skupiny pre jednotlivé zadania a používaťelov
-\end{itemize}
-
-\subsection{Zdieľateľný editor}
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Zdieľateľný editor}\leavevmode\\
 Najzaujímavejšou častou práce je kolaboratívny editor umožnujúci bežným používateľom naraz
 upravovať kód. V editore musí byť jasné, ktorý súbor sa práve upravuje a bolo by
 tiež dobré vedieť nejaké informácie o vzdialených používaťeloch ako napríklad prihlasovacie meno, 
 pozícia kurzora...
 
-\subsection{Ovládací panel}
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Ovládací panel}\leavevmode\\
 Samotná úprava kódu je dôležitá, ale okrem toho je potrebné verzionovanie
 súborov, teda nejaké ukladanie a načítavanie. Okrem toho by používateľ mal mať možnost práve
 upravovaný kód spúštať na vlastnom vstupe alebo na skrytých vstupoch danej úlohy.
