@@ -13,11 +13,6 @@ import {
   isLoginUserRequest,
   isUpdateUserRequest
 } from '../types/userRequestTypes'
-import { pick } from 'lodash'
-
-// TODO: define entities and remove any
-const prepareUserDataToReturn = (user: any) =>
-  pick(user, ['id', 'name', 'is_admin'])
 
 export const createUser = basicRequest(async ({ request, response }) => {
   const body = request.body
@@ -32,8 +27,11 @@ export const createUser = basicRequest(async ({ request, response }) => {
   } else if (users.length > 0) {
     response.status(FORBIDDEN).send(`Používateľ ${body.name} už existuje!`)
   } else {
-    const createdUser = await createUserFromDb(body)
-    response.json(prepareUserDataToReturn(createdUser))
+    // NOTE: create user returns also passwords...
+    // Use getUser in order not to send passwrod to client
+    const createUserWithPassword = (await createUserFromDb(body)) as any
+    const createdUser = await getUserFromDb(createUserWithPassword.id)
+    response.json(createdUser)
   }
 })
 
@@ -44,19 +42,23 @@ export const loginUser = basicRequest(async ({ request, response }) => {
     return
   }
 
-  const users = await getUsersFromDb({ name: body.name, exact: true })
+  const users = await getUsersFromDb({
+    name: body.name,
+    exact: true,
+    withPasswords: true,
+  })
 
   if (users.length === 0 || users[0].password !== body.password) {
     response.status(FORBIDDEN).send(`Nesprávne meno alebo heslo!`)
   } else {
-    response.status(OK).send(prepareUserDataToReturn(users[0]))
+    response.status(OK).send(users[0])
   }
 })
 
 export const getUsers = basicRequest(async ({ response, request }) => {
   const users = await getUsersFromDb(request.query)
   response.set('X-Total-Count', await countUsers())
-  response.json(users.map(prepareUserDataToReturn))
+  response.json(users)
 })
 
 export const updateUser = basicRequest(async ({ response, request }) => {

@@ -11,3 +11,5 @@ export const TAB_TEXT_LEFT_PADDING = TAB_CLOSE_ICON_PADDING
 
 // the same property is used in BE, be sure to keep in sync
 export const SAVE_ENTRY_AS_KEY = '__saveEntryName__'
+
+export const AUTOSAVE_UPLOAD_NAME = 'Autosave'

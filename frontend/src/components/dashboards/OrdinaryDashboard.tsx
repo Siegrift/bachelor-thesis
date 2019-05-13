@@ -53,7 +53,7 @@ export class OrdinaryDashboard extends Component<Props> {
                 <Typography>{group.name}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <List dense={false} style={{ width: '100%' }}>
+                <List dense={true} style={{ width: '100%' }}>
                   {map(tasks[group.id], (task) => (
                     <ListItem
                       key={task.id}

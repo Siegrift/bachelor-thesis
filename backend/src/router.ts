@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { runSavedCode } from './handlers/runCodeHandlers'
-import multer from 'multer'
 import {
   createUser,
   getUser,
@@ -31,19 +30,13 @@ import {
   removeTask,
   updateTask
 } from './handlers/taskHandlers'
-import {
-  getUploadedFile,
-  listUploadedFiles,
-  listUploads,
-  saveFiles
-} from './handlers/saveHandlers'
+import { createUpload, getUpload, getUploads } from './handlers/uploadHandlers'
 import {
   testBackendConnection,
   testDbConnection
 } from './handlers/testHandlers'
-import { createSubmit, getSubmits } from './handlers/submitHandlers'
+import { createSubmit, getSubmit, getSubmits } from './handlers/submitHandlers'
 
-const upload = multer({})
 const router = Router()
 
 // Admin dashboard uses react-admin and it expects a few endpoints exist.
@@ -84,16 +77,14 @@ router.put('/tasks/:taskId', updateTask)
 router.delete('/tasks/:taskId', removeTask)
 router.get('/tasks/:taskId/public', getTaskPublic)
 
-router.get('/uploads', listUploads)
-router.get('/uploads/:upload', listUploadedFiles)
-router.get('/uploads/:upload/:file', getUploadedFile)
-// NOTE: only get submits is necessary for react-admin, because nor create nor edit is supported
+router.get('/uploads', getUploads)
+router.get('/uploads/:uploadId', getUpload)
+router.post('/uploads', createUpload)
+
 router.get('/submits', getSubmits)
-// upload.none() will prevent uploading any files, because we will handle that ourselves
-// the functions itself is a middleware, which will check if the request is multipart
-// and if not, it will leave the processing of the request to next middleware.
-// TODO: use json for uploading
-router.post('/saveFiles', upload.none(), saveFiles)
+router.get('/submits/:submitId', getSubmit)
+
+// NOTE: these are only used in client
 router.post('/runSavedCode', runSavedCode)
 router.post('/submit', createSubmit)
 

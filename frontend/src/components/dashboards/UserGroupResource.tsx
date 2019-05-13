@@ -3,13 +3,14 @@ import {
   Create,
   Datagrid,
   DisabledInput,
-  Edit,
   Filter,
   List,
   ReferenceField,
   ReferenceInput,
   SelectInput,
+  Show,
   SimpleForm,
+  SimpleShowLayout,
   TextField,
   TextInput
 } from 'react-admin'
@@ -24,7 +25,7 @@ const UserGroupFilter = (props: {}) => (
 
 export const UserGroupList = (props: {}) => (
   <List filters={<UserGroupFilter />} {...props}>
-    <Datagrid rowClick="edit">
+    <Datagrid rowClick="show">
       <TextField source="id" />
       <ReferenceField source="user_id" reference="users">
         <TextField source="name" />
@@ -36,14 +37,18 @@ export const UserGroupList = (props: {}) => (
   </List>
 )
 
-export const EditUserGroup = (props: {}) => (
-  <Edit {...props}>
-    <SimpleForm>
-      <DisabledInput source="id" />
-      <DisabledInput label="User id" source="user_id" />
-      <DisabledInput label="Group id" source="group_id" />
-    </SimpleForm>
-  </Edit>
+export const ShowUserGroup = (props: {}) => (
+  <Show {...props}>
+    <SimpleShowLayout>
+      <TextField source="id" />
+      <ReferenceField source="user_id" reference="users">
+        <TextField source="name" />
+      </ReferenceField>
+      <ReferenceField source="group_id" reference="groups">
+        <TextField source="name" />
+      </ReferenceField>
+    </SimpleShowLayout>
+  </Show>
 )
 
 export const CreateUserGroup = (props: {}) => (

@@ -2,6 +2,7 @@ import { basicRequest } from './requestWrapper'
 import {
   countSubmits,
   createSubmit as createSubmitInDb,
+  getSubmit as getSubmitFromDb,
   getSubmits as getSubmitsFromDb
 } from '../db/queries/submitQueries'
 import recursivelyListFiles from 'recursive-readdir'
@@ -24,13 +25,13 @@ export const getSubmits = basicRequest(async ({ response, request }) => {
 })
 
 export const createSubmit = basicRequest(async ({ request, response }) => {
-  const body = JSON.parse(request.body)
+  const body = request.body
   if (!isCreateSubmitRequest(body)) {
     response.status(BAD_REQUEST).send(`Frontend poslal nesprávne dáta!`)
     return
   }
 
-  const { savedEntryName, taskId } = body
+  const { uploadId, taskId } = body
   const compileScriptPath = join(TASKS_PATH, taskId, '/hidden/run_script.json')
   const inputFiles = (await recursivelyListFiles(
     join(TASKS_PATH, taskId, 'hidden'),
@@ -52,7 +53,7 @@ export const createSubmit = basicRequest(async ({ request, response }) => {
     let result = 'OK'
     let totalPasedInputs = 0
     for (let i = 0; i < inputFiles.length; i++) {
-      const sandboxOutput = await runInSandBox(savedEntryName, taskId, {
+      const sandboxOutput = await runInSandBox(uploadId, taskId, {
         ...compileScript,
         inputFile: inputFiles[i],
       })
@@ -79,4 +80,11 @@ export const createSubmit = basicRequest(async ({ request, response }) => {
     response.status(OK).send(err)
     return
   }
+})
+
+export const getSubmit = basicRequest(async ({ request, response }) => {
+  const { submitId } = request.params
+
+  const submit = await getSubmitFromDb(submitId)
+  response.json(submit)
 })

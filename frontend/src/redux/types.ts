@@ -9,7 +9,7 @@ import {
   Tab,
   Task,
   TaskFile,
-  UploadState,
+  UploadsState,
   User
 } from '../types/common'
 import { Api } from '../api'
@@ -22,7 +22,7 @@ export interface State {
   /** Properties of this object are populated lazily */
   readonly editors: ObjectOf<EditorState | undefined>
   readonly dialog: DialogType
-  readonly uploads: UploadState
+  readonly uploadsState: UploadsState
   readonly leftPanelExpanded: boolean
   readonly rightPanelExpanded: boolean
   readonly groups: ObjectOf<Group>

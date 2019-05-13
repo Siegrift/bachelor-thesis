@@ -4,13 +4,12 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import React from 'react'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { formatSaveFolderName } from '../../utils'
 
 const SAVE_AS_REGEX = /^[A-Za-z0-9/-]+$/
 
 interface Props {
   closeDialog: () => void
-  saveFiles: (saveAs: string) => void
+  createUpload: (saveAs: string, isAutosave: boolean) => void
 }
 
 class SaveDialog extends React.Component<Props> {
@@ -29,8 +28,14 @@ class SaveDialog extends React.Component<Props> {
     if (!SAVE_AS_REGEX.test(saveAs)) {
       this.setState({ error: true })
     } else {
-      this.props.saveFiles(formatSaveFolderName(this.state.saveAs))
+      this.props.createUpload(this.state.saveAs, false)
       closeDialog()
+    }
+  }
+
+  saveOnEnter = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      this.onSaveFiles()
     }
   }
 
@@ -53,6 +58,7 @@ class SaveDialog extends React.Component<Props> {
           error={error}
           value={saveAs}
           onChange={this.onChangeText}
+          onKeyDown={this.saveOnEnter}
         />
       </DialogContent>,
       <DialogActions key="actions">

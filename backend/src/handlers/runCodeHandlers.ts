@@ -5,8 +5,7 @@ import { BAD_REQUEST, OK, TASKS_PATH } from '../constants'
 import { runInSandBox } from '../sandbox/sandbox'
 
 export const runSavedCode = basicRequest(async ({ request, response }) => {
-  // TODO: why is it not json at this point???
-  const { input, savedEntryName, taskId } = JSON.parse(request.body)
+  const { input, uploadId, taskId } = request.body
   const compileScriptPath = join(
     TASKS_PATH,
     `${taskId}/hidden/run_script.json`,
@@ -17,7 +16,7 @@ export const runSavedCode = basicRequest(async ({ request, response }) => {
       (await readFile(compileScriptPath)).toString(),
     )
 
-    const sandboxOutput = await runInSandBox(savedEntryName, taskId, {
+    const sandboxOutput = await runInSandBox(uploadId, taskId, {
       ...compileScript,
       customInput: input,
     })

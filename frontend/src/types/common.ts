@@ -67,8 +67,21 @@ export interface EditorState {
 
 export type DialogType = 'save' | 'load' | 'run' | 'submit' | undefined
 
-export interface UploadState extends Refetchable {
-  entries: string[]
+export interface PartialUpload {
+  id: string
+  taskId: string
+  userId: string
+  createdAt: string
+  name: string
+  isAutosave: boolean
+}
+
+export interface Upload extends PartialUpload {
+  files: TaskFile[]
+}
+
+export interface UploadsState extends Refetchable {
+  uploads: PartialUpload[]
 }
 
 export interface SandboxResponse {

@@ -1,3 +1,4 @@
+// TODO: these types should be together with request types + entity types
 export interface EntityByIdQueryParams {
   id: string | string[]
 }
@@ -12,7 +13,9 @@ export interface GetByNameQueryParams {
   exact?: boolean
 }
 
-export type GetUsersQueryParams = GetByNameQueryParams
+export interface GetUsersQueryParams extends GetByNameQueryParams {
+  withPasswords?: boolean
+}
 
 export type GetGroupsQueryParams = GetByNameQueryParams
 
@@ -28,3 +31,9 @@ export interface GetTasksQueryParams extends GetByNameQueryParams {
 }
 
 export type GetSubmitsQueryParams = GetByNameQueryParams
+
+export interface GetUploadsQueryParams extends GetByNameQueryParams {
+  userId?: string
+  // upload can be queried by userId and taskId. Default query is disjnuction .
+  conjunction?: boolean
+}

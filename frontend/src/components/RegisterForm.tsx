@@ -65,7 +65,7 @@ class RegisterForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('name')}
-            onKeyPress={this.createUserOnEnter}
+            onKeyDown={this.createUserOnEnter}
           />
 
           <TextField
@@ -75,7 +75,7 @@ class RegisterForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('password')}
-            onKeyPress={this.createUserOnEnter}
+            onKeyDown={this.createUserOnEnter}
           />
 
           <TextField
@@ -85,7 +85,7 @@ class RegisterForm extends Component<Props> {
             margin="normal"
             autoComplete="new-password"
             onChange={this.changeFieldText('repeatPassword')}
-            onKeyPress={this.createUserOnEnter}
+            onKeyDown={this.createUserOnEnter}
           />
 
           <Button variant="contained" color="primary" onClick={createUser}>

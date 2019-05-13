@@ -34,17 +34,21 @@ export const getUsers = async (params: GetUsersQueryParams) => {
     _order,
     _start,
     exact,
+    withPasswords,
   } = applyDefaultFilterQueryParams(params)
+
+  const fieldsToSelect = [
+    'user.name',
+    'user.id',
+    'user.is_admin',
+    // https://stackoverflow.com/questions/31108946/postgres-returns-null-instead-of-for-array-agg-of-join-table
+    knex.raw('array_remove(array_agg(user_group.group_id), null) as groups'),
+  ]
+  if (withPasswords) fieldsToSelect.push('user.password')
+
   return knex('user')
     .leftJoin('user_group', 'user.id', 'user_group.user_id')
-    .select([
-      'user.name',
-      'user.id',
-      'user.is_admin',
-      'user.password',
-      // https://stackoverflow.com/questions/31108946/postgres-returns-null-instead-of-for-array-agg-of-join-table
-      knex.raw('array_remove(array_agg(user_group.group_id), null) as groups'),
-    ])
+    .select(fieldsToSelect)
     .groupBy('user.id')
     .modify((query: any) => {
       if (name) {

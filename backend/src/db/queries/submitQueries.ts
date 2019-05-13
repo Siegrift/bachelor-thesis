@@ -9,7 +9,8 @@ export const getSubmits = async (params: GetSubmitsQueryParams) => {
   const { _sort, _end, _order, _start } = applyDefaultFilterQueryParams(params)
 
   return knex('submit')
-    .select('*')
+    .leftJoin('upload', 'upload.id', 'submit.upload_id')
+    .select(['submit.*', 'upload.created_at'])
     .orderBy(_sort, _order)
     .limit(_end - _start)
     .offset(_start)
@@ -22,8 +23,17 @@ export const createSubmit = (body: CreateSubmitRequest, result: string) => {
       id: uuid(),
       task_id: body.taskId,
       user_id: body.userId,
+      upload_id: body.uploadId,
       result,
     })
     .returning('*')
     .spread((row) => row)
+}
+
+export const getSubmit = (submitId: string) => {
+  return knex('submit')
+    .leftJoin('upload', 'upload.id', 'submit.upload_id')
+    .select(['submit.*', 'upload.created_at'])
+    .where({ id: submitId })
+    .first()
 }

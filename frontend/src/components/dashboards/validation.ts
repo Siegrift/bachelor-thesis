@@ -4,11 +4,11 @@ import { size } from 'lodash'
 export const requiredField = (value: any) => (value ? undefined : 'Required')
 
 export const groupNameUniqueValidation = async (values: any) => {
-  const { name } = values
+  const { name, id } = values
   const errors = {} as any
 
   const groups = await getApi().getGroups({ name, exact: true })
-  if (groups.length !== 0) {
+  if (groups.length !== 0 && groups[0].id !== id) {
     errors.name = `Group with name ${name} already exist!`
   }
 
@@ -16,11 +16,11 @@ export const groupNameUniqueValidation = async (values: any) => {
 }
 
 export const editUserValidation = async (values: any) => {
-  const { name } = values
+  const { name, id } = values
   const errors = {} as any
 
   const users = await getApi().getUsers({ name, exact: true })
-  if (users.length > 0) {
+  if (users.length > 0 && users[0].id !== id) {
     errors.name = `User with name ${name} already exist!`
   }
 

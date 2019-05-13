@@ -68,7 +68,7 @@ export const EditTask = (props: {}) => (
         <ReferenceInput
           label="Group"
           reference="groups"
-          source="groupId"
+          source="group_id"
           validate={requiredField}
         >
           <SelectInput optionText="name" />

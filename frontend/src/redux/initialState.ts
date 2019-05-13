@@ -13,8 +13,8 @@ const state: State = {
   files: {},
   editors: {},
   dialog: undefined,
-  uploads: {
-    entries: [],
+  uploadsState: {
+    uploads: [],
     fetching: false,
   },
   leftPanelExpanded: true,

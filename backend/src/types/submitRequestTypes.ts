@@ -1,8 +1,8 @@
 export interface CreateSubmitRequest {
-  savedEntryName: string
+  uploadId: string
   taskId: string
   userId: string
 }
 export function isCreateSubmitRequest(arg: any): arg is CreateSubmitRequest {
-  return arg.savedEntryName && arg.taskId
+  return arg.uploadId && arg.taskId && arg.userId
 }

@@ -1,21 +1,21 @@
-import {
-  listUploads as _listUploads,
-  loadFiles as _loadFiles,
-  runCode as _runCode,
-  saveFiles as _saveFiles,
-  setDialogValue as _setDialogValue,
-  submitCode as _submitCode
-} from '../../actions/editorActions'
 import MuiDialog from '@material-ui/core/Dialog'
+import React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { State } from '../../redux/types'
-import React from 'react'
+import {
+  createUpload as _createUpload,
+  getUpload as _getUpload,
+  getUploads as _getUploads,
+  runCode as _runCode,
+  setDialogValue as _setDialogValue,
+  submitCode as _submitCode
+} from '../../actions/editorActions'
 import {
   DialogType,
   SandboxResponse,
   SubmitResponse,
-  UploadState
+  UploadsState
 } from '../../types/common'
 import SaveDialog from './SaveDialog'
 import LoadDialog from './LoadDialog'
@@ -24,12 +24,12 @@ import SubmitDialog from './SubmitDialog'
 
 interface Props {
   dialog: DialogType
-  uploads: UploadState
+  uploadsState: UploadsState
   setDialogValue: typeof _setDialogValue
   runCode: (customInput: string) => Promise<SandboxResponse>
-  saveFiles: typeof _saveFiles
-  listUploads: typeof _listUploads
-  loadFiles: typeof _loadFiles
+  createUpload: typeof _createUpload
+  getUploads: typeof _getUploads
+  getUpload: typeof _getUpload
   submitCode: () => Promise<SubmitResponse>
 }
 
@@ -41,25 +41,28 @@ class DialogContainer extends React.Component<Props> {
   renderDialogContent = () => {
     const {
       dialog,
-      saveFiles,
-      uploads,
-      listUploads,
-      loadFiles,
+      createUpload,
+      uploadsState,
+      getUploads,
+      getUpload,
       runCode,
       submitCode,
     } = this.props
 
     if (dialog === 'save') {
       return (
-        <SaveDialog closeDialog={this.handleClose} saveFiles={saveFiles} />
+        <SaveDialog
+          closeDialog={this.handleClose}
+          createUpload={createUpload}
+        />
       )
     } else if (dialog === 'load') {
       return (
         <LoadDialog
           closeDialog={this.handleClose}
-          loadFiles={loadFiles}
-          uploads={uploads}
-          refetchUploads={listUploads}
+          getUpload={getUpload}
+          uploadsState={uploadsState}
+          refetchUploads={getUploads}
         />
       )
     } else if (dialog === 'run') {
@@ -97,14 +100,14 @@ export default compose(
   connect(
     (state: State) => ({
       dialog: state.dialog,
-      uploads: state.uploads,
+      uploadsState: state.uploadsState,
     }),
     {
-      saveFiles: _saveFiles,
+      createUpload: _createUpload,
       runCode: _runCode,
       setDialogValue: _setDialogValue,
-      listUploads: _listUploads,
-      loadFiles: _loadFiles,
+      getUploads: _getUploads,
+      getUpload: _getUpload,
       submitCode: _submitCode,
     },
   ),

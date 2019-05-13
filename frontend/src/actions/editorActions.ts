@@ -5,11 +5,10 @@ import {
   SandboxResponse,
   SubmitResponse,
   TaskFile,
-  UploadState
+  UploadsState
 } from '../types/common'
-import { forEach } from 'lodash'
-import { SAVE_ENTRY_AS_KEY } from '../constants'
-import { formatSaveFolderName } from '../utils'
+import { reduce } from 'lodash'
+import { AUTOSAVE_UPLOAD_NAME, SAVE_ENTRY_AS_KEY } from '../constants'
 import { createEditorTabs } from './tabActions'
 
 export const addEditorInstance = (
@@ -24,22 +23,30 @@ export const addEditorInstance = (
   }),
 })
 
-export const saveFiles = (saveEntryName: string): Thunk => async (
-  dispatch,
-  getState,
-  { api, logger },
-) => {
-  logger.log('Save files (upload to backend)')
-  const formData = new FormData()
-  const editors = getState().editors
+export const createUpload = (
+  saveEntryName: string,
+  isAutosave: boolean,
+): Thunk => async (dispatch, getState, { api, logger }) => {
+  logger.log('Save files (upload to BE)')
+  const state = getState()
 
-  formData.append(SAVE_ENTRY_AS_KEY, saveEntryName)
-  forEach(editors, (editor, key) => {
-    if (!editor) return
-    formData.append(key, editor.editorRef.getValue())
+  const files = reduce(
+    state.editors,
+    (acc, editor, key) => {
+      if (!editor) return acc
+      else return { ...acc, [key]: editor.editorRef.getValue() }
+    },
+    {},
+  )
+
+  return api.createUpload({
+    [SAVE_ENTRY_AS_KEY]: saveEntryName,
+    files,
+    createdAt: new Date().toISOString(),
+    taskId: state.selectedTaskId!,
+    userId: state.user!.id,
+    isAutosave,
   })
-
-  api.saveFiles(formData)
 }
 
 export const runCode = (customInput: string): Thunk<SandboxResponse> => async (
@@ -48,12 +55,11 @@ export const runCode = (customInput: string): Thunk<SandboxResponse> => async (
   { api, logger },
 ): Promise<SandboxResponse> => {
   logger.log('Upload and run code')
-  const folder = formatSaveFolderName('Autosave')
 
-  await dispatch(saveFiles(folder))
+  const upload = await dispatch(createUpload(AUTOSAVE_UPLOAD_NAME, true))
   return api.runSavedCode({
     input: customInput,
-    savedEntryName: folder,
+    uploadId: upload.id,
     taskId: getState().selectedTaskId!,
   })
 }
@@ -66,25 +72,30 @@ export const setDialogValue = (value: DialogType): Action<string> => ({
   },
 })
 
-const setUploadState = (uploadState: UploadState): Action<UploadState> => ({
+const setUploadsState = (uploadsState: UploadsState): Action<UploadsState> => ({
   type: 'Set upload state',
-  payload: uploadState,
+  payload: uploadsState,
   reducer: (state: State) => {
-    return { ...state, uploads: uploadState }
+    return { ...state, uploadsState }
   },
 })
 
-export const listUploads = (): Thunk => async (
+export const getUploads = (): Thunk => async (
   dispatch,
   getState,
   { api, logger },
 ) => {
-  logger.log('List uploaded files')
-  const uploads = getState().uploads
+  logger.log('Get uploaded files')
+  const state = getState()
 
-  dispatch(setUploadState({ ...uploads, fetching: true }))
-  const newUploads = await api.listUploads()
-  dispatch(setUploadState({ entries: newUploads, fetching: false }))
+  dispatch(setUploadsState({ ...state.uploadsState, fetching: true }))
+  const newUploads = await api.getUploads({
+    userId: state.user!.id,
+    taskId: state.selectedTaskId!,
+    conjunction: true,
+    exact: true,
+  })
+  dispatch(setUploadsState({ uploads: newUploads, fetching: false }))
 }
 
 const removeAllTaskFiles = (): Action => ({
@@ -97,27 +108,20 @@ const removeAllTaskFiles = (): Action => ({
   }),
 })
 
-export const loadFiles = (entryName: string): Thunk => async (
+export const getUpload = (entryName: string): Thunk => async (
   dispatch,
   getState,
   { api, logger },
 ) => {
-  logger.log('Load files from BE')
-  const uploadFiles = await api.listUploadFiles(entryName)
+  logger.log('Get upload from BE')
+  const upload = await api.getUpload(entryName)
 
-  // start doing request at once and wait for all of them
-  const requests = uploadFiles.map(
-    async (file, i): Promise<TaskFile> => {
-      const content = await api.downloadUploadFile(entryName, file)
-      return { name: uploadFiles[i], content }
-    },
-  )
-
-  const results = await Promise.all(requests)
   dispatch(removeAllTaskFiles())
-  dispatch(createEditorTabs(uploadFiles))
+  dispatch(createEditorTabs(upload.files.map((file) => file.name)))
   dispatch(
-    addTaskFiles(results.map((r) => ({ ...r, forceLocalInitialization: true }))),
+    addTaskFiles(
+      upload.files.map((file) => ({ ...file, forceLocalInitialization: true })),
+    ),
   )
 }
 
@@ -143,11 +147,7 @@ const addTaskFiles = (taskFiles: TaskFile[]): Action<TaskFile[]> => ({
   },
 })
 
-export const downloadTaskFiles = (): Thunk => async (
-  dispatch,
-  getState,
-  { api },
-) => {
+export const getTask = (): Thunk => async (dispatch, getState, { api }) => {
   const state = getState()
   const task = await api.getTask(state.selectedTaskId!)
 
@@ -163,12 +163,11 @@ export const submitCode = (): Thunk<SubmitResponse> => async (
   { api, logger },
 ): Promise<SubmitResponse> => {
   logger.log('Submit code')
-  const savedEntryName = formatSaveFolderName('Autosave')
   const state = getState()
 
-  await dispatch(saveFiles(savedEntryName))
+  const upload = await dispatch(createUpload(AUTOSAVE_UPLOAD_NAME, true))
   return api.submitCode({
-    savedEntryName,
+    uploadId: upload.id,
     taskId: state.selectedTaskId!,
     userId: state.user!.id,
   })

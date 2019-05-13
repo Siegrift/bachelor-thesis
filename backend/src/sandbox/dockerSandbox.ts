@@ -19,7 +19,7 @@ class DockerSandbox {
   timeout: number
 
   constructor(
-    private folder: string,
+    private uploadId: string,
     private taskId: string,
     private compileScript: CompileScript,
   ) {
@@ -33,13 +33,13 @@ class DockerSandbox {
 
   async prepare(): Promise<void> {
     await ensureDir(SANDBOX_TESTING_PATH)
-    const dest = join(SANDBOX_TESTING_PATH, this.folder)
+    const dest = join(SANDBOX_TESTING_PATH, this.uploadId)
 
     await execute(`mkdir ${dest}`)
     await execute(`cp ${join(__dirname, 'payload/*')} ${dest}`)
     await execute(`mkdir ${join(dest, 'public')}`)
     await execute(
-      `cp -r ${join(UPLOADS_PATH, this.folder, '*')} ${join(dest, 'public')}`,
+      `cp -r ${join(UPLOADS_PATH, this.uploadId, '*')} ${join(dest, 'public')}`,
     )
     await execute(
       `cp -r ${join(TASKS_PATH, `${this.taskId}/hidden`)} ${join(dest)}`,
@@ -66,7 +66,7 @@ class DockerSandbox {
       } = this.compileScript
       let myC = 0 // variable to enforce the timeout
       const sandbox = this
-      const dest = join(SANDBOX_TESTING_PATH, this.folder)
+      const dest = join(SANDBOX_TESTING_PATH, this.uploadId)
       const commandInputFile = customInput
         ? 'inputFile'
         : inputFile || 'inputFile'
@@ -88,7 +88,7 @@ class DockerSandbox {
         console.log(
           `Checking ${join(
             SANDBOX_TESTING_PATH,
-            sandbox.folder,
+            sandbox.uploadId,
           )} for completion: ${myC}`,
         )
 
@@ -106,7 +106,7 @@ class DockerSandbox {
               console.log('TESTING DONE')
               // check for possible errors
               readFile(
-                __dirname + sandbox.folder + '/errors',
+                __dirname + sandbox.uploadId + '/errors',
                 'utf8',
                 (err2: any, data2: any) => {
                   if (!data2) data2 = ''
@@ -126,11 +126,11 @@ class DockerSandbox {
             else {
               // Since the time is up, we take the partial output and return it.
               readFile(
-                __dirname + sandbox.folder + '/logfile.txt',
+                __dirname + sandbox.uploadId + '/logfile.txt',
                 'utf8',
                 (fileErr: any, fileData: any) => {
                   readFile(
-                    __dirname + sandbox.folder + '/errors',
+                    __dirname + sandbox.uploadId + '/errors',
                     'utf8',
                     (err2: any, errorData: any) => {
                       if (!errorData) errorData = ''
@@ -154,9 +154,13 @@ class DockerSandbox {
 
             // now remove the temporary directory
             console.log(
-              `ATTEMPTING TO REMOVE: ${join(__dirname, 'temp', sandbox.folder)}`,
+              `ATTEMPTING TO REMOVE: ${join(
+                __dirname,
+                'temp',
+                sandbox.uploadId,
+              )}`,
             )
-            await execute(`rm -r ${join(__dirname, 'temp', sandbox.folder)}`)
+            await execute(`rm -r ${join(__dirname, 'temp', sandbox.uploadId)}`)
 
             clearInterval(intid)
           },

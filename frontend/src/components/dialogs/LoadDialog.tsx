@@ -9,7 +9,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { Theme } from '@material-ui/core/styles/createMuiTheme'
-import { UploadState } from '../../types/common'
+import { UploadsState } from '../../types/common'
 import { format } from 'date-fns'
 import skLocale from 'date-fns/locale/sk'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -29,55 +29,60 @@ const styles = (theme: Theme) => ({
 
 interface Props extends WithStyles<typeof styles> {
   closeDialog: () => void
-  loadFiles: (selectedEntry: string) => void
+  getUpload: (uploadId: string) => void
   refetchUploads: () => void
-  uploads: UploadState
+  uploadsState: UploadsState
 }
 
 class LoadDialog extends React.Component<Props> {
-  state = { selectedEntry: undefined, hideAutosaved: true }
+  state = { selectedUploadId: undefined, hideAutosaved: true }
 
   onLoadFiles = () => {
-    const { closeDialog, loadFiles } = this.props
-    const { selectedEntry } = this.state
+    const { closeDialog, getUpload } = this.props
+    const { selectedUploadId } = this.state
 
-    if (selectedEntry) loadFiles(selectedEntry)
+    if (selectedUploadId) getUpload(selectedUploadId)
     closeDialog()
   }
 
   onListItemClick = (clickedItem: string) => () => {
-    this.setState({ selectedEntry: clickedItem })
+    this.setState({ selectedUploadId: clickedItem })
   }
 
   toggleHideAutosaved = () => {
     this.setState({ hideAutosaved: !this.state.hideAutosaved })
   }
 
-  componentDidMount() {
-    const { uploads, refetchUploads } = this.props
+  loadOnEnter = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      this.onLoadFiles()
+    }
+  }
 
-    if (uploads.entries.length > 0) {
-      this.setState({ selectedEntry: uploads.entries[0] })
+  getShowableUploads = () => {
+    const { uploadsState } = this.props
+    const { hideAutosaved } = this.state
+
+    return uploadsState.uploads
+      .filter((upload) => (hideAutosaved ? !upload.isAutosave : true))
+      .sort((e1, e2) => {
+        // latest entries first
+        return Date.parse(e2.createdAt) - Date.parse(e1.createdAt)
+      })
+  }
+
+  componentDidMount() {
+    const { uploadsState, refetchUploads } = this.props
+
+    if (uploadsState.uploads.length > 0) {
+      this.setState({ selectedUploadId: this.getShowableUploads()[0].id })
     }
     refetchUploads()
   }
 
   render() {
-    const { closeDialog, classes, uploads } = this.props
-    const { selectedEntry, hideAutosaved } = this.state
-
-    const uploadEntries = uploads.entries
-      .map((upload) => {
-        const last = upload.lastIndexOf('-')
-        const filename = upload.substr(0, last)
-        const time = parseInt(upload.substr(last + 1), 10)
-        return { filename, time, raw: upload }
-      })
-      .filter((upload) => (hideAutosaved ? upload.filename !== 'Autosave' : true))
-      .sort((e1, e2) => {
-        // latest entries first
-        return e2.time - e1.time
-      })
+    const { closeDialog, classes } = this.props
+    const { selectedUploadId, hideAutosaved } = this.state
 
     return [
       <DialogTitle key="title" id="form-dialog-title">
@@ -86,19 +91,24 @@ class LoadDialog extends React.Component<Props> {
       <DialogContent key="content">
         <DialogContentText>Vyberte, ktoré súbory načítať</DialogContentText>
         <List dense={false} className={classes.list}>
-          {uploadEntries.map(({ raw, time, filename }) => {
+          {this.getShowableUploads().map(({ id, name, createdAt }) => {
             return (
               <ListItem
-                key={raw}
+                key={id}
                 button={true}
-                onClick={this.onListItemClick(raw)}
-                selected={raw === selectedEntry}
+                onClick={this.onListItemClick(id)}
+                selected={selectedUploadId === id}
+                onKeyDown={this.onLoadFiles}
               >
                 <ListItemText
-                  primary={filename}
-                  secondary={format(new Date(time), 'MM-DD-YYYY HH:mm:ss', {
-                    locale: skLocale,
-                  })}
+                  primary={name}
+                  secondary={format(
+                    Date.parse(createdAt),
+                    'DD-MM-YYYY HH:mm:ss',
+                    {
+                      locale: skLocale,
+                    },
+                  )}
                   classes={{ secondary: classes.secondaryText }}
                 />
               </ListItem>
@@ -114,6 +124,7 @@ class LoadDialog extends React.Component<Props> {
             />
           }
           label="Skryť automaticky uložené"
+          onKeyDown={this.loadOnEnter}
         />
       </DialogContent>,
       <DialogActions key="actions">
@@ -124,7 +135,7 @@ class LoadDialog extends React.Component<Props> {
           onClick={this.onLoadFiles}
           color="primary"
           variant="contained"
-          disabled={!selectedEntry}
+          disabled={!selectedUploadId}
         >
           Načítať
         </Button>

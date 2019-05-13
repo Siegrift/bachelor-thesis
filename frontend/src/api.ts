@@ -5,14 +5,21 @@ import {
   Logger,
   ObjectOf,
   PartialTask,
+  PartialUpload,
   SandboxResponse,
   SubmitResponse,
   Task,
+  Upload,
   User,
   UserGroup
 } from './types/common'
-import { BASE_URL, DEFAULT_REQUEST_TIMEOUT } from './constants'
+import {
+  BASE_URL,
+  DEFAULT_REQUEST_TIMEOUT,
+  SAVE_ENTRY_AS_KEY
+} from './constants'
 import { convertToCamelCase } from './utils'
+import { exact } from 'prop-types'
 
 export interface LoginUserRequest {
   name: string
@@ -48,21 +55,36 @@ interface RequestOptions {
   body?: any
   headers?: ObjectOf<string>
   responseAsText?: boolean
-  convertToJson?: boolean
   timeout?: number
   queryParams?: any
 }
 
 interface RunSavedCodeRequestBody {
   input: string
-  savedEntryName: string
+  uploadId: string
   taskId: string
 }
 
 interface SubmitRequestBody {
   userId: string
-  savedEntryName: string
+  uploadId: string
   taskId: string
+}
+
+interface GetUploadsRequest {
+  userId: string
+  taskId: string
+  conjunction: boolean
+  exact: boolean
+}
+
+interface CreateUploadRequestBody {
+  [SAVE_ENTRY_AS_KEY]: string
+  files: ObjectOf<string>
+  taskId: string
+  userId: string
+  createdAt: string
+  isAutosave: boolean
 }
 
 // NOTE: personal advice is to create instance of this class from redux store. Use the exported
@@ -77,16 +99,12 @@ export class Api {
   loginUser(user: LoginUserRequest) {
     return this.request(`/login`, 'POST', {
       body: user,
-      headers: {
-        'Content-Type': 'application/json',
-      },
     })
   }
 
   createUser(user: CreateUserRequest) {
     return this.request(`/users`, 'POST', {
       body: user,
-      headers: { 'Content-Type': 'application/json' },
     })
   }
 
@@ -94,11 +112,10 @@ export class Api {
     return this.request(`/tasks/${taskId}/public`, 'GET')
   }
 
-  saveFiles(files: FormData) {
-    return this.request(`/saveFiles`, 'POST', {
-      body: files,
-      convertToJson: false,
-      responseAsText: true,
+  // TODO: return type
+  createUpload(body: CreateUploadRequestBody) {
+    return this.request(`/uploads`, 'POST', {
+      body,
     })
   }
 
@@ -109,11 +126,13 @@ export class Api {
     })
   }
 
-  listUploads(): Promise<string[]> {
-    return this.request('/uploads', 'GET')
+  getUploads(params: GetUploadsRequest): Promise<PartialUpload[]> {
+    return this.request('/uploads', 'GET', {
+      queryParams: params,
+    })
   }
 
-  listUploadFiles(upload: string): Promise<string[]> {
+  getUpload(upload: string): Promise<Upload> {
     return this.request(`/uploads/${upload}`, 'GET')
   }
 
@@ -162,10 +181,9 @@ export class Api {
     return this.request(`/groups/${groupId}`, 'GET')
   }
 
-  private createRequestBody({ body, convertToJson = true }: RequestOptions) {
+  private createRequestBody({ body }: RequestOptions) {
     // test undefined explicitely as empty string is valid body
     if (body === undefined) return undefined
-    if (!convertToJson) return body
     return JSON.stringify(body)
   }
 
@@ -187,6 +205,7 @@ export class Api {
     const options = {
       method,
       headers: new Headers({
+        'Content-Type': 'application/json',
         ...headers,
       }),
       body: this.createRequestBody(reqOptions),
