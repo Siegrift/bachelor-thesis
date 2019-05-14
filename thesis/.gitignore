@@ -6,3 +6,8 @@ main.toc
 main.out
 main.blg
 main.lot
+main.bbl
+__latexindent_temp.tex
+main.fdb_latexmk
+main.fls
+main.synctex.gz
