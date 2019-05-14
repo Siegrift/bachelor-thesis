@@ -3,7 +3,7 @@
 \label{kap:zdialtelnost} % id kapitoly pre prikaz ref
 
 Myšlienka kolaboratívneho editora bola prvýkrát zaznamenaná už v roku 1968 Douglasom Engelbartom. 
-Do popularity sa však dostala až nedávno, približne 20 rokov od prvého záznamu.
+Do popularity sa však dostala až nedávno, približne 40 rokov od prvého záznamu.
 Kolaboratívny editor umožňuje viacerým používateľom naraz upravovať jeden dokument.
 Tieto editory sa rozdeľujú na dve kategórie podľa typu aplikovania úprav:
 \begin{itemize}
@@ -29,7 +29,7 @@ riešiaci takýto problém by mohol fungovať na základe
 \textit{upravovacieho zámku}. Fungoval by celkom jednoducho:
 \begin{enumerate}
   \item Požiadanie servera o \textit{upravovací zámok}
-  \item Počkanie na schválenie zo servera, že sme na rade s úpravou
+  \item Počkanie na schválenie možnosti úpravy dokumentu zo servera
   \item Úprava dokumentu
   \item Vzdanie sa \textit{upravovacieho zámku}
 \end{enumerate}
@@ -42,10 +42,10 @@ ale ak sú začlenené okamžite, tak pre latenciu komunikácie musia byť ich
 úpravy nevyhnutne vložené do rôznych verzií dokumentu.
 
 Jednou s možností by mohlo byť zamedzenie konkurentných úprav dokumentu (algoritmus by bol podobný
-\ref{algo:nesubezne_editovanie}). To však vytvára zbytočné podmienky na architektúru riešenia,
+\ref{algo:nesubezne_editovanie}). To však vytvára zbytočné limitácie na architektúru riešenia,
 pretože treba vytvorť mechanizmus, ktorý zabezpečuje, že dokument upravuje najviac jeden
-používateľ. Taktiež to vytvára zbytočné obmedzenia pre používateľov, pretože nemôžu naraz
-upravovať daný dokument (musia sa striedať).
+používateľ. Taktiež to zbytočne obmedzuje používateľov, pretože nemôžu naraz
+upravovať daný dokument.
 
 Ďalšou, pre používateľa príjemnejšou, voľbou je optimistická
 replikácia, kde sa zmeny v dokumente uplatňujú postupne a prípadné chyby a nekonzistentnosti sa
@@ -100,8 +100,8 @@ jednoduchšie na implementáciu, ale používateľov výrazne obmedzujú. Ak je 
 príliš vysoká, používateľ musí dlho čakať.
 
 My sme sa v bakalárskej práci rozhodli použiť klient-server model, pričom za synchronizáciu klientov
-je zodpovedný výhradne server. Podobný prístup používa napríklad spoločnost Google v 
-niektorých ich produktoch.
+je zodpovedný výhradne server. Podobný prístup používa napríklad spoločnost Google vo 
+viacerých jej produktoch.
 
 \section{Algoritmy riešiace konkurentné modifikácie}
 Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algoritmov:
@@ -112,5 +112,5 @@ Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algo
 \end{enumerate}
 
 V bakalárskej práci použijeme typ CRDT, pretože typ OT je teoretický model, ktorý predchádza typu CRDT a v praxi
-je jeho implementácia veľmi náročná a často nefunguje tak dobre, ako je spomínané v teórii.
-Taktiež použitie typu OT je vo väčších projektoch neškálovateľné \cite{ot_nonscalable}. 
+je jeho implementácia veľmi náročná a často nefunguje tak dobre ako je spomínané v teórii.
+Taktiež použitie typu OT je vo väčších projektoch neškálovateľné \cite{ot_nonscalable}.

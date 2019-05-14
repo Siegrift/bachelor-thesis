@@ -1,16 +1,15 @@
 \chapter{Implementácia}
 V predošlej kapitole sme popísali návrh aplikácie, ale nevenovali sme sa implementáčným detailom.
 Implementácia klienta a servera je odlišná. Na klientovi riešime implementačné detaily vzhľadu
-stránky, zatiaľ co na serveri štruktúru entít a ich ukladanie v databáze.
+stránky, zatiaľ čo na serveri štruktúru entít a ich ukladanie v databáze.
 
 \subsection{Klient}
 Klient je implementovaný ako jednostránková webová aplikácia. Celý klient je napísaný v knižnici
 \textit{React} a jazyku \textit{Typescript}. Typescript je nadmnožinou jazyka JavaScript, ktorá do
 tohto dynamického a netypovaného jazyka pridáva statické typy. Vďaka tomu je kód menej náchylný na
 chyby a výhodou je tiež automatické navrhovanie kódu, ktoré editor poskytuje, pretože vie, čo je
-akého typu. V implementácii sme zvolili rôzne farby pre rozhranie pre bežného používateľa a pre
-administrátora. Komponenty zobrazované na klientovi využívajú knižnicu \textit{Material-UI}, ktorá
-obsahuje jednoduché komponenty, ktoré sú naštýlované poďla Google dizajnov.
+akého typu. Komponenty zobrazované na klientovi využívajú knižnicu \textit{Material-UI}, ktorá
+obsahuje jednoduché komponenty, ktoré sú naštýlované poďla dizajnov, ktoré používa spoločnosť Google.
 
 Pri načítaní stránky sa používateľovi zobrazí prihlasovacie okno, cez ktoré sa má do aplikácie
 prihlásiť. Ak používateľ ešte účet nemá, vie sa prekliknúť na registráciu.
@@ -31,8 +30,8 @@ prihlásiť. Ak používateľ ešte účet nemá, vie sa prekliknúť na registr
 \caption{Prihlásenie a registrácia}
 \end{figure}
 
-Prihlasovací formulár validuje, či je používateľ zaregistrovaný a či zadal správne heslo. Podobne
-registrovací formulár kontroluje, či je používateľské meno voľné a či sa heslá zhodujú. Prípadné
+Prihlasovací formulár validuje, či je používateľ zaregistrovaný, a či zadal správne heslo. Podobne
+registrovací formulár kontroluje, či je používateľské meno voľné, a či sa heslá zhodujú. Prípadné
 chyby zobrazuje pod formulárom.
 \begin{figure}[H]
 \centering
@@ -72,7 +71,7 @@ a v nich vidí aj ostatných pouźívateľov spolu so zadaniami pre danú skupin
 
 Ak si používateľ vybral zadanie, otvorí sa mu editor, v ktorom vie upravovať všetky súbory dostupné
 pre dané zadanie. Súčasťou editora sú viaceré komponenty, ktoré používateľovi uľahčujú a
-zprehľadňujú prácu s editorom. 
+sprehľadňujú prácu s editorom. 
 \begin{figure}[H]
 \centerline{\includegraphics[width=1\textwidth]{images/bezny_pouzivatel}}
 \caption[Editor zadania]{Editor zadania}
@@ -83,7 +82,7 @@ zprehľadňujú prácu s editorom.
 \paragraph{Panel so zoznamom súborov}\leavevmode\\
 Komponent, ktorý obsahuje hierarchickú schému priečinkov a súborov dostupných v zadaní. Priečinky sa
 dajú otvárať podobne ako pri otváraní súboru na počítači. Súbor alebo priečinok, na ktorý ukazuje
-kurzor sa zvýrazňuje a kurzor sa zmení na ukazateľ, aby používateľ vedel, že môže na daný súbor
+kurzor sa zvýrazní a kurzor sa zmení na ukazateľ, aby používateľ vedel, že môže na daný súbor
 alebo priečinok kliknúť. Ikonky jasne odlišujú súbor od priečinku. Priečinok môže byť v schovanom
 alebo zobrazenom stave. Tieto stavy sú rozlíšené typom ikonky.
 \begin{figure}[H]
@@ -106,9 +105,9 @@ alebo zobrazenom stave. Tieto stavy sú rozlíšené typom ikonky.
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Ovládací panel}\leavevmode\\
 Ovládací panel umožňuje používateľovi vykonávať akcie so svojím zadaním. Používateľ si môže svoj kód
-uložiť, načítať, spustiť na vlastnom vstupe a otestovať na skrytých vstupoch tak ako to bolo 
-napísané v návhu. Pri kliknutí na ľubovolnú akciu sa zobrazí dialóg, v ktorom používateľ doplní
-ďalšie údaje a potvrdí akciu, ktorá sa následne vykoná na serveri.
+uložiť, načítať, spustiť na vlastnom vstupe alebo otestovať na skrytých vstupoch tak ako to bolo 
+napísané v návhu. Pri kliknutí na ľubovolnú akciu sa zobrazí dialóg, v ktorom používateľ vyplní
+údaje a potvrdí akciu, ktorá sa následne odošle na server.
 
 Pri ukladaní zadania je nutné zvoliť identifikátor, pod ktorým sa má zadanie uložiť. Identifikátor
 môže obsahovať ľubovolné znaky, no nesmie byť prázdny. Ak používaťel zadá neplatný 
@@ -130,10 +129,10 @@ identifikátor, klient mu súbor uložiť nedovolí.
 \caption{Uloženie zadania}
 \end{figure}
 
-Pri načítavaní uloženého zadania sa používateľovi zobrazia všetky jemu dostupné uložené zadania v 
-zozname. Používateľ si vie vybrať, ktorý záznam chce načítať poďla identifikátora, ktorý zadával
-pri ukladaní a časovej pečiatky, kedy záznam uložil. Okrem iného, aplikácia niekedy robí ukladanie
-sama od seba. Používateľ si vie povedať, či chce takéto záznamy vidieť v možnostiach.
+Pri načítavaní uloženého zadania sa používateľovi zobrazia všetky jemu dostupné uložené zadania v
+zozname. Používateľ si vie vybrať, ktorý záznam chce načítať poďla identifikátora, ktorý zadával pri
+ukladaní a časovej pečiatky, kedy záznam uložil. Pri spúštaní a odovzdávaní zadania aplikácia sama
+od seba uloží obsah zadania. Používateľ si vie zvoliť, či chce takéto záznamy vidieť v možnostiach.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -151,11 +150,11 @@ sama od seba. Používateľ si vie povedať, či chce takéto záznamy vidieť v
 \caption{Načítanie zadania}
 \end{figure}
 
-Po kliknutí na spustiť sa zobrazí dialóg, v ktorom vie používateľ zadať vlastný vstup a následne 
-spustiť svoj program na danom vstupe. Užívateľ potom v dialógu potvrdí spustenie a program sa spolu
-so vstupom ktorý zadal odošle na server, kde sa momentálny stav zadania automaticky uloží,
-skompiluje a následne spustí. Počas behu programu sa v dialógu zmení tlačítko, ktoré upozorňuje, že
-program beží. Po skončení behu programu sa zobrazí výsledný výstup v dialógu.
+Po spustení sa zobrazí dialóg, v ktorom vie používateľ zadať vlastný vstup a následne spustiť svoj
+program na danom vstupe. Používateľ potom v dialógu potvrdí spustenie a program sa spolu so vstupom,
+ktorý zadal, odošle na server, kde sa momentálny stav zadania automaticky uloží, skompiluje a
+následne spustí. Počas behu programu sa v dialógu zmení tlačítko, ktoré upozorňuje, že program beží.
+Po skončení behu programu sa zobrazí výsledný výstup v dialógu.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.3\textwidth}
@@ -206,7 +205,7 @@ súbor práve upravuje. Nato slúži horný panel editora, v ktorom sú zobrazen
 súbormi. Aktívny súbor je podčiarknutý modrou farbou, aby bolo zvýraznené, ktorý súbor sa práve
 upravuje. Súbory sa v hornom paneli dajú zavrieť v pravej časti karty klikom na krížik. Pri posune
 kurzora nad oblasť krížika sa krížik zväčší, čím upozorní používateľa, že kliknutím zavrie danú
-kartu. Používateľ môže medzi kartami prepínať, čím sa mení obsah editora.
+kartu.
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Editor kódu}\leavevmode\\
@@ -214,8 +213,8 @@ Najdôležitejším komponentom je samotný editor, v ktorom sa dá písať zdro
 práci sa nazýva \textit{Monaco}, ktorý je použitý aj v populárnom editore \textit{VS Code}. 
 
 Monaco automaticky zvýrazňuje syntax zdrojového kódu v práve otvorenom súbore. To, v ktorom jazyku
-je zdrojový kód písaný, editor rozpozná podľa koncovky súboru. Monaco vie zobraziť syntax pre všetky
-bežné programovacie jazyky, pričom sa dajú pridať ďalšie. V prípade, že sa editoru nepodarí
+je zdrojový kód napísaný, editor rozpozná podľa koncovky súboru. Monaco vie zobraziť syntax pre
+všetky bežné programovacie jazyky, pričom sa dajú pridať ďalšie. V prípade, že sa editoru nepodarí
 rozpoznať jazyk, v ktorom je obsah súboru napísaný, bude obsah zobrazený bez špeciálneho zvýraznenia
 syntaxe.
 \begin{figure}[H]
@@ -247,26 +246,25 @@ pohybuje šípkami a možnosť zvolí stlačením klávesy \textit{Enter}.
 \end{figure}
 
 Pri programovaní je dôležité vedieť v kóde nájsť nejaký reťazec, prípadne zmeniť nájdené výsledky na
-nejaký iný reťazec. Monaco túto funkcionalitu podporuje po stlačení skratky \textit{Ctrl + F} pre
-hľadanie a \textit{Ctrl + H} pre hľadanie spolu s nahradzovaním. Obe možnosti podporujú rôzne typy
-vyhľadávania, ako napríklad hľadanie pomocou regulárnych výrazov. Na postupné označovanie nejakého
-reťazca sa dá použiť aj multikurzor funkcionalita. Stačí, ak používateľ označí text a stlačí
-\textit{Ctrl + D}. Tento príkaz nájde a označí ďalší výskyt s rovnakým textom aký používateľ
-označil. 
+nejaký iný reťazec. Monaco túto funkcionalitu podporuje po stlačení klávesovej skratky \textit{Ctrl
++ F} pre hľadanie a \textit{Ctrl + H} pre hľadanie spolu s nahradzovaním. Obe možnosti podporujú
+rôzne typy vyhľadávania, ako napríklad hľadanie pomocou regulárnych výrazov. Na postupné označovanie
+nejakého reťazca sa dá použiť aj multikurzor. Stačí, ak používateľ označí text a stlačí \textit{Ctrl
++ D}. Tento príkaz nájde a označí ďalší výskyt s rovnakým textom aký používateľ označil. 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.7\textwidth]{images/hladanie_nahradzovanie}}
 \caption[Hĺadanie a nahradzovanie]{Hĺadanie a nahradzovanie}
 \label{obr:hladanie_nahradzovanie}
 \end{figure}
 
-Monaco obsahuje aj mnoho ďalších funkcii. Kompletný zoznam sa dá zobraziť stlačením klávesy
+Monaco obsahuje aj mnoho ďalších funkcií. Kompletný zoznam sa dá zobraziť stlačením klávesy
 \textit{F1}. 
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Schované panely}\leavevmode\\
-Oba panely zaberajú značný horizontálny priestor a nie vždy sú pre používateľa nutné. Má teda
-možnosť panely schovať. Priestor, ktorý vznikne schovaním panelov vyplní editor. Používateľ môže
-kedykoľvek panel zobraziť naspäť kliknutím na šípku, ktorá panel vyroluje a editor sa zmenší. 
+Oba panely zaberajú značný horizontálny priestor a nie vždy sú pre používateľa nutné. Používateľ
+môže panely v editore schovať, čím rozšíri priestor určený pre editor. Používateľ môže kedykoľvek
+panel zobraziť naspäť kliknutím na šípku, ktorá panel rozvinie a editor sa znovu zmenší. 
 \begin{figure}[H]
 \centerline{\includegraphics[width=1\textwidth]{images/zcucnute_panely}}
 \caption[Editor zadania so schovanými panelmi]{Editor zadania so schovanými panelmi}
@@ -274,20 +272,20 @@ kedykoľvek panel zobraziť naspäť kliknutím na šípku, ktorá panel vyroluj
 \end{figure}
 
 \subsection{Rozhranie pre administrátora}
-V návrhu aplikácie sme povolili registráciu iba pre bežného používateľa. Zároveň sme v aplikácii,
-neumožnili žiaden spôsob ako spraviť z bežného používateľa administrátora. Vytvorenie administrátora
-preto v klientskej aplikácii nie je možná. Administrátor sa dá vytvoriť iba pridaním
-administrátorského účtu priamo do databázy na serveri. Keď sa adminsitrátor prihlási na klienta, 
+V návrhu aplikácie sme povolili registráciu iba pre bežného používateľa. Zároveň sme v aplikácii
+neumožnili žiaden spôsob, ako spraviť z bežného používateľa administrátora. Preto vytvorenie
+administrátora v klientskej aplikácii nie je možné. Administrátor sa dá vytvoriť iba pridaním
+administrátorského účtu priamo do databázy na serveri. Keď sa administrátor prihlási na klienta,
 zobrazí sa mu automaticky administrátorské rozhranie.
 
-Farby použíté na rozhranie pre adminsitrátora sú úplne iné oproti farbám zvoleným na reozhranie pre
+Farby použíté na rozhranie pre adminsitrátora sú úplne iné oproti farbám zvoleným na rozhranie pre
 bežného používateĺa. Administrátorské rozhranie používa na pozadie bielu farbu a text používa farby
 odtieňov sivej. Tieto farby sú predvolenými farbami knižnice \textit{React admin}, ktorá je použitá
 na vytvorenie rozhrania. Jazyk použítý v rozhraní je anglický, pretože knižnica používa anglický
 jazyk a preklad do slovenčiny by bol náročný a zdĺhavý.
 
 React admin dovoľuje deklaratívne popísať administrátorské rozhranie a jediná požiadavka knižnice je
-webová cestu, na ktorej je dostupný server. Aplikácia potom volá rozhranie servera a výsledné dáta
+webová cesta, na ktorej je dostupný server. Aplikácia potom volá rozhranie servera a výsledné dáta
 zobrazuje. Knižnica je veľmi užitočná, lebo sa dá použíť s ľubovolným typom servera, tiež používa
 \textit{Material-UI} a využíva optimistické zobrazovanie. Veľkým bonusom je aj detailná dokumentácia
 a aktívna komunita podporujúca túto knižnicu.
@@ -312,9 +310,9 @@ ktorú rozdeľujeme na:
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Akcie}\leavevmode\\
-Akcie sa nachaazjú v hornej časti panela a štandardne je v knižnici React admin implemntovaná iba
+Akcie sa nachadzajú v hornej časti panela a štandardne je v knižnici React admin implemntovaná iba
 akcia \textit{exportovať}, ktorá vytvorí CSV súbor so všetkými entitami zobrazenými v tabuľke.
-Ďalšie akcie sa však dajú pridať a vačšina panelov má implementovanú aspoň akciu \textit{vytvor},
+Ďalšie akcie sa však dajú pridať.Väčšina panelov má implementovanú aspoň akciu \textit{vytvor},
 ktorá ponúkne jednoduchý formulár na vyplnenie údajov entity, ktorý sa následne odošle na server,
 kde sa uloží do databázy. Okrem toho poskytuje knižnica možnosť vytvoriť si filtre. Filtre len
 pridávajú parametre, ktoré sa posielajú spolu s požiadavkou na rozhranie servera. Samotné
@@ -322,9 +320,9 @@ filtrovanie sa vykonáva až na serveri.
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Tabuľka entít}\leavevmode\\
-Tabuľka entít zobrazuje dáta, ktoré vráti rozhranie servera. Názvy stĺpcov tabuľky śu klikateľné a
+Tabuľka entít zobrazuje dáta, ktoré vracia rozhranie servera. Na názvy stĺpcov tabuľky sa dá kliknúť a
 služia na triedenie zobrazovaných výsledkov. Podobne ako pri filtrovaní, knižnica iba posiela 
-parametre na server, ktorý zodpovedá za to aby vrátené výsledky boli správne utriedené.
+parametre na server, ktorý zodpovedá za to, aby vrátené výsledky boli správne utriedené.
 Po kliknutí na riadok tabuľky sa zobrazí detailný popis danej entity. Knižnica umožňuje aj meniť 
 údaje entít, záleží na tom, či chceme aby sa daná entita, prípadne nejaká jej časť dala zmeniť.
 \begin{figure}[H]
@@ -345,8 +343,8 @@ Po kliknutí na riadok tabuľky sa zobrazí detailný popis danej entity. Knižn
 \end{figure}
 
 Tabuľka entít vie aj previazať vzťahy medzi entitami. Napríklad v prípade entity používateľov, 
-zobrazené skupiny predstavú klikateľný link na detail danej skupiny. Tiež si treba uvedomiť, že
-entita používateľa zo servera nedostane názov skupín ale iba identifikátory skupín. Knižnica 
+zobrazené skupiny predstavujú klikateľný link na detail danej skupiny. Tiež si treba uvedomiť, že
+entita používateľa zo servera nedostane názov skupín, ale iba identifikátory skupín. Knižnica 
 však dokáže pre každý identifikátor stiahnuť dáta o skupine a potom zobraziť meno danej skupiny.
 \begin{figure}[H]
 \centerline{\includegraphics[width=1\textwidth]{images/zadania}}
@@ -357,14 +355,14 @@ však dokáže pre každý identifikátor stiahnuť dáta o skupine a potom zobr
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Stránkovanie}\leavevmode\\
 V spodnej časti panela sa nachádza stránkovanie, ktoré sa využíva na to, aby v tabuľke nebolo naraz
-príliš veľa výsledkov. Stránkovanie je tiež užitočné kôli šetreniu siete a rýchlosti odpovedania na
+príliš veľa výsledkov. Stránkovanie je tiež užitočné kvôli šetreniu siete a rýchlosti odpovedania na
 požiadavky, pretože v odpovedi na požiadavku stačí posielať menej výsledkov. Počet entít v stránke
-je tiež meniteľný.
+je tiež modifikovateľný.
 
 \section{Server}
-Server je rovnako ako klient napísaný v jazyku Typescript. Kód napísaný v tomto jazyku sa
+Server, je rovnako ako klient, napísaný v jazyku TypeScript. Kód napísaný v tomto jazyku sa
 automaticky preloží na ekvivalentný kód jazyka JavaScript. Server potom tento kód spustí pomocou
-\textit{Node.js}. Node je prostredie, ktoré slúži na spúštanie jayzka JavaScript mimo webového
+\textit{Node.js}. Node je prostredie, ktoré slúži na spúštanie jazyka JavaScript mimo webového
 prehliadača. Okrem toho Node obsahuje viaceré knižnice, ktoré nie sú dostupné v prehliadači ako
 napríklad knižnica na prístup k súborovému systému alebo knižnica na spúštanie systémových volaní.
 Knižnica použítá na vytvorenie webového rozhrania servera sa nazýva \textit{Express}. Express má
@@ -372,7 +370,7 @@ viaceré rozšírenia, ktoré sú dostupné ako samostatné knižnice, ktoré na
 na webové požiadavky, prekladajú formát parametrov poslaných v požiadavke...
 
 Server je zodpovedný za uchovávanie a menežovanie entít. Entity sa uchovávajú v
-databáze a priamo na súborovom systéme servera. V databáze sa ukladá všetko, okrem súborov
+databáze a priamo na súborovom systéme servera. V databáze sa ukladá všetko okrem súborov
 zadania a súborov vytvorených pri ukladaní zadania. Tieto súbory sú uložené v špeciálnych
 priečinkoch, ktoré majú názov rovanký ako identifikátor danej entity v databáze. To znamená, že
 ak server pozná identifikátor entity, vie si jednoducho načítať aj súbory patriace k danej entite.
@@ -392,9 +390,8 @@ vďaka tomu vie tento skript pozmeniť a napríklad nastaviť aby sa kód spúš
 ktorý rozhranie servera dostalo vo webovej požiadavke. Ak sa v kompilačnom skripte nenastaví
 vlastný vstup, tak program sa postupne spustí na všetkých skrytých vstupných súboroch a porovnáva
 ich výstup so správnym výstupom. Skryté súbory majú koncovku \textit{.in} a výstupné \textit{.out}.
-Ak sa výstup programu nezhoduje so správnym výstupom, testovanie sa ukončí.
 
-V spúšťacom skipte vie používateľ nastaviť viaceré parametre testovania ako napríklad spôsob
+V spúšťacom skripte vie používateľ nastaviť viaceré parametre testovania napríklad spôsob
 kompilácie a spúštania, časový limit...
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.8\textwidth]{images/spustaci_skript}}
@@ -403,12 +400,12 @@ kompilácie a spúštania, časový limit...
 \end{figure}
 
 \section{Synchronizácia editora medzi klientami}
-Ak sa používateľ prihĺasi na viacerých počítačoch naraz, kód editora sa medzi nimi synchronizuje. 
-Synchronizáciu zabezpečuje knižnica \textit{yjs}, ktorá nainštalovaná aj na klientovi a aj na 
-serveri. Táto knižnica používa bezkonfliktné replikovateľné dátové typy a skrýva celú ich 
-implementáciu. Knižnica vie fungovať synchronizovať veľa verejne dostupných editorov, ako 
-napríklad Monaco, ktorý používame. Knižnica vie zabezpečiť zdieľanie viacerými spôsobmi ako
-napríklad WebRTC alebo pomocou soketov cez webový server. 
+Ak sa používateľ prihlási na viacerých počítačoch naraz, kód editora sa medzi nimi synchronizuje.
+Synchronizáciu zabezpečuje knižnica \textit{yjs}, ktorá je nainštalovaná aj na klientovi a aj na
+serveri. Táto knižnica používa bezkonfliktné replikovateľné dátové typy a skrýva celú ich
+implementáciu. Knižnica vie fungovať synchronizovať veľa verejne dostupných editorov ako Monaco,
+ktorý používame. Knižnica vie zabezpečiť zdieľanie viacerými spôsobmi ako napríklad WebRTC alebo
+pomocou soketov cez webový server. 
 
 Knižnica však nie je až tak populárna a obsahovala viaceré chybym, ktoré sme museli opraviť.
 Komunita starajúca sa o túto knižnicu je o dosť menšia v porovnaní s ostanými knižnicami použitými v
@@ -434,14 +431,14 @@ popisu vieme následne vytvoriť \textit{Dokerový obraz}. Dokerový obraz preds
 ktorom sú nainštalované všetky balíčky, ktoré sme uviedli v popise. Dôležité je, že balíčky existujú
 iba vo vnútri dokerového obrazu. Z dokerového obrazu sa dá vytvoriť inštancia, ktorá sa nazýva
 \textit{dokerový kontajner}. V kontajneri sa dajú následne spúštať programy, ktoré majú prístup k
-balíčkom nainštalovaným v dokerovom obraze. Kontajnerov vie byť naraz pustených ľubvoľne veľa a sú
+balíčkom nainštalovaným v dokerovom obraze. Kontajnerov môže byť naraz pustených ľubvoľne veľa a sú
 navzájom izolované. 
 
 \subsection{Spúštanie kódu}
 Po nainštalovaní dokera je nutné vytvoriť dokerový obraz, ktorý obsahuje všetky podporované
-jazyky. Ak na server príde požiadavka spustiť kód používateľa, vytvorí sa súbor do ktorého sa
-nakopírujú všetky súbory potrebné na testovanie. Klient má ale iba prístup k verejným súborom ale
-pri testovaní potrebujeme aj skryté súbory zadania. Pri spúštaní programu ale vieme, ktoré zadanie
+jazyky. Ak na server príde požiadavka spustiť kód používateľa, vytvorí sa súbor, do ktorého sa
+nakopírujú všetky súbory potrebné na testovanie. Klient má prístup iba k verejným súborom, ale
+pri testovaní potrebujeme aj skryté súbory zadania. Pri spúštaní programu vieme, ktoré zadanie
 používateľ rieši a teda vieme, ktoré skryté súbory skopírovať. Názov súboru je unikátky
 identifikátor, ktorý zaručuje nezávislosť spúštania viacerých programov naraz. Keď sú všetky súbory
 pripravené, z dokerového obrazu sa vytvorí kontajner, v ktorom sa kód skompiluje a spustí. Výstup
@@ -451,5 +448,5 @@ dokončení behu programu kontajner vytvorí špeciálny súbor, ktorý označuj
 Server pravidelne kontroluje, či daný súbor existuje. Server úmyslne nečaká kým sa spustený program
 v dokeri neskončí, pretože nič nezaručuje, že klientský program niekedy skončí. Vďaka takémuto
 riešeniu vieme implementovať aj časový limit programu, kde po prekročení daného limitu bežiaci
-program ukončíme. Po skončení behu programu vrátime obsah súborov serveru, a celý priečinok, v
+program ukončíme. Po skončení behu programu vrátime obsah súborov serveru a celý priečinok, v
 ktorom boli potrebné súbory na spúštanie vymažeme.

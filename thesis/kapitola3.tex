@@ -4,7 +4,7 @@
 
 \section{Úvod}
 
-Súbežné úpravy dokumentu bez koordinácie medzi jednotlivými používateľskými počítačmi môže viesť k
+Súbežné úpravy dokumentu bez koordinácie medzi jednotlivými používateľskými počítačmi môžu viesť k
 nekonzistentnostiam, ktoré vo všeobecnosti nie je možné vyriešiť. Na zabezpečenie konzistentnosti sa
 v takýchto prípadoch vyžaduje vrátenie \textit{(angl. rollback)} niektorých operácií.
 
@@ -19,7 +19,7 @@ Marc Shapiro, Nuno Preguiça, Carlos Baquero a Marek Zawirski \cite{crdt_definit
 Ide teda o celkom nový koncept, ktorý rýchlo našiel v informatike podporu.
 
 \section{Typy CRDT}
-V súčastnosti sú preskúmané 2 typy CRDT:
+V súčasnosti sú preskúmané 2 typy CRDT:
 \begin{enumerate}
   \item CRDT založené na operáciách
   \item CRDT založené na stavoch
@@ -27,8 +27,8 @@ V súčastnosti sú preskúmané 2 typy CRDT:
 
 \subsection{CRDT založené na operáciách}
 CRDT založené na operáciách sú označované ako komutatívne replikované dátové typy alebo 
-\textit{CmRDT}. CmRDT menia dokument vysielaním iba operácií, ktoré sa potom aplikujú lokálne
-u všetkých používatelia, ktorí dokument zdieľajú. Operácie musia byť komutatívne, avšak nemusia 
+\textit{CmRDT}. CmRDT menia dokument vysielaním iba operácií aplikovaných lokálne
+u všetkých používateľov, ktorí dokument zdieľajú. Operácie musia byť komutatívne, avšak nemusia 
 byť idempotentné. Je preto nutné zaručiť idempotenciu pomocou vhodnej implementácie
 komunikácie (správa musí byť vyslaná práve raz). 
 CmRDT je vhodné použiť napríklad na aktualizovanie počtu zdieľaní
@@ -75,7 +75,7 @@ ním, no menšie ako znak po ňom. Pozície môžu vyzerať zhruba nasledovne:
 \label{obr:relativne}
 \end{figure}
 
-Pridanie znaku potom funguje veľmi jednoducho. Nájdeme v strome vrcholy medzi ktoré
+Pridanie znaku potom funguje veľmi jednoducho. Nájdeme v strome vrcholy, medzi ktoré
 chceme pridať ďalší znak a ako pozíciu mu dáme priemer relatívnych pozícií daných
 vrcholov. Napríklad:
 \begin{figure}[H]

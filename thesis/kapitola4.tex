@@ -10,7 +10,7 @@ V návrhu bakalárskej práce vystupujú rôzne entity medzi ktorými sú rôzne
 \end{figure}
 
 \begin{description}
-\item [Používateľ] - Entita, pomenúvajúca používateľa aplikácie. Používateľov rozdeľujeme na 
+\item [Používateľ] - Entita pomenúvajúca používateľa aplikácie. Používateľov rozdeľujeme na 
 bežných používateľov a administrátorov.
 \item [Bežný používateľ] - Bežní používatelia predstavujú zovšeobecnený pojem pre študentov. Každý
 bežný používateľ patrí do niekoľkých skupín, v ktorých má prístup iba k úlohám prístupným pre danú
@@ -18,8 +18,8 @@ skupinu.
 \item [Administrátor] - Administrátor má plný prístup ku všetkým informáciám na serveri. Okrem
 toho pridáva bežných používateľov do skupín, pridáva zadania, vidí odovzdané zadania bežných
 používateľov...
-\item [Skupina] - Skupina je enita, ktorá sa skladá bežných používateľov. Každé zadanie musí
-patriť do práve jednej skupiny. Toto zadanie je prístupné iba pre používateľov, ktorý patria do
+\item [Skupina] - Skupina je entita, ktorá sa skladá z bežných používateľov. Každé zadanie musí
+patriť do práve jednej skupiny. Toto zadanie je prístupné iba pre používateľov, ktorí patria do
 danej skupiny. 
 \item [Zadanie] - Administrátor vie vytvoriť zadanie pre nejakú skupinu, ktoré môžu bežní
 používatelia riešiť. Zadanie obsahuje verejné a skryté súbory.
@@ -30,16 +30,15 @@ nemal mať prístup.
 \end{description}
 
 Program sa skladá z viacerých častí, ktorých návrhy popíšeme v tejto kapitole.
-Návrh je založený na klient-server architektúre. Program sa preto dá rozdeliť na 
+Aplikácia je založená na klient-server architektúre. Program sa preto dá rozdeliť na 
 podkapitoly \textit{klient} a \textit{server}.
 
 \section{Klient}
 Klient je v bakalárskej práci webová aplikácia cez ktorú používateľ komunikuje so serverom. V návrhu
 klienta sa snažíme hlavne vytvoriť jednoduché používateľské prostredie, ktoré je intuitívne na
-použitie. Kedže aplikácia má byť používaná ako editor, je nutné aby sa jednotlivé časti pohodlne
+použitie. Kedže aplikácia má byť používaná ako editor, je nutné, aby sa jednotlivé časti pohodlne
 čítali a písmo bolo dostatočne veľké. Naopak, nepredpokladáme použitie editora na mobilných
-zariadeniach. Preto je dizajn klienta tvorený pre použitie na počítačoch a na veľkých obrazovkách.
-Klientská aplikácia obsahuje:
+zariadeniach. Klientská aplikácia obsahuje:
 \begin{itemize}
 \item rozhranie pre prihlasovanie a registráciu
 \item administrátorské rozhranie
@@ -47,7 +46,7 @@ Klientská aplikácia obsahuje:
 \end{itemize}
 
 \subsection{Prihlasovanie a registrácia}
-Prihlasovanie slúži na jednoduché kategorizovanie používateľa a na prístup k editoru. Každý
+Prihlasovanie slúži na jednoduché kategorizovanie používateľov a na prístup k editoru. Každý
 používateľ má svoje prihlasovacie meno a heslo, pod ktorým sa zaregistroval. Prihlasovanie a
 registrácia sú pre oba typy používateľov rovnaké.
 
@@ -82,10 +81,9 @@ používateľovi pohodlne preklikávať a zvoliť aktívny súbor, ktorý sa zob
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Zdieľateľný editor}\leavevmode\\
-Najzaujímavejšou častou práce je kolaboratívny editor umožnujúci bežným používateľom naraz
-upravovať kód. V editore musí byť jasné, ktorý súbor sa práve upravuje a bolo by
-tiež dobré vedieť nejaké informácie o vzdialených používaťeloch ako napríklad prihlasovacie meno, 
-pozícia kurzora...
+Najzaujímavejšou častou práce je kolaboratívny editor umožnujúci bežným používateľom naraz upravovať
+kód. V editore musí byť jasné, ktorý súbor sa práve upravuje. Editor môže tiež ponúkať nejaké
+informácie o vzdialených používaťeloch ako prihlasovacie meno, pozícia kurzora...
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Ovládací panel}\leavevmode\\
@@ -95,8 +93,8 @@ upravovaný kód spúštať na vlastnom vstupe alebo na skrytých vstupoch danej
 
 
 \section{Server}
-Server slúži na komunikáciu s klientom a obsahuje všetky potrebné informácie o používateľoch,
-administrátoroch, skupinách a vytvorených zadaniach.
+Server slúži na komunikáciu s klientom a obsahuje všetky potrebné informácie o bežných
+používateľoch, administrátoroch, skupinách a vytvorených zadaniach.
 
 Server má viacero funkcií:
 \begin{itemize}
