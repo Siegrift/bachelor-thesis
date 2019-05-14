@@ -22,7 +22,11 @@ používateľov...
 patriť do práve jednej skupiny. Toto zadanie je prístupné iba pre používateľov, ktorý patria do
 danej skupiny. 
 \item [Zadanie] - Administrátor vie vytvoriť zadanie pre nejakú skupinu, ktoré môžu bežní
-používatelia riešiť.  
+používatelia riešiť. Zadanie obsahuje verejné a skryté súbory.
+\item [Verejné súbory] - Verejné súbory, sú súbory zadania, ktoré sú prístupné pre klienta.
+\item [Skryté súbory] - Skryté súbory by nikdy nemali byť posielané na klienta, a slúžia na 
+vytvorenie skrytých vstupov a správnych riešení, prípadne iných súborov, ku ktorým by klient
+nemal mať prístup.
 \end{description}
 
 Program sa skladá z viacerých častí, ktorých návrhy popíšeme v tejto kapitole.
@@ -48,7 +52,7 @@ používateľ má svoje prihlasovacie meno a heslo, pod ktorým sa zaregistroval
 registrácia sú pre oba typy používateľov rovnaké.
 
 Registrácia umožňuje vytvoriť nového používateľa. Zaujímavá otázka je, či umožniť vytváranie
-administrátorov priamo pri regsitrácii, alebo nejakým iným spôsobom. Rozhodol som sa, že je lepšie
+administrátorov priamo pri regsitrácii, alebo nejakým iným spôsobom. Rozhodli sme sa, že je lepšie
 ak používateľ nemusí pri registrácii riešiť koncept administrátorov, a teda umožniť iba vytváranie
 bežných používateľov. 
 
