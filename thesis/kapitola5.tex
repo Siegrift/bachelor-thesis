@@ -362,8 +362,72 @@ požiadavky, pretože v odpovedi na požiadavku stačí posielať menej výsledk
 je tiež meniteľný.
 
 \section{Server}
-TODO:
+Server je rovnako ako klient napísaný v jazyky Typescript. Server sa potom spustí pomocou
+\textit{Node.js}. Node je prostredie, ktoré slúži na spúštanie jayzka JavaScript mimo webového
+prehliadača. Okrem toho Node obsahuje viaceré knižnice, ktoré nie sú dostupné v prehliadači ako
+napríklad knižnica na prístup k súborovému systému alebo knižnica na spúštanie systémových volaní.
+Knižnica použítá na vytvorenie webového rozhrania servera sa nazýva \textit{Express}. Express má
+viaceré rozšírenia, ktoré sú dostupné ako samostatné knižnice, ktoré komprimujú odpovede na webové
+požiadavky, prekladajú formát parametrov poslaných v požiadavke...
+
+Server je zodpovedný za uchovávanie a menežovanie entít. Entity sa uchovávajú dvoma spôsobmi, v
+databáze a priamo na súborovom systéme servera. V databáze sa ukladá všetko, okrem súborov pre
+zadania a súborov vytvorených pri ukladaní zadania. Tieto súbory sú uložené v špeciálnych
+priečinkoch, ktoré majú názov rovanký ako identifikátor danej entity v databáze. To znamená, že
+ak server pozná identifikátor entity, vie si jednoducho načítať aj súbry patriace k danej entite.
+Použitá databáza je \textit{PostgreSQL}, pretože poskytuje viaceré pokročilé funckie.
+
+Webové rozhranie servera umožňuje zadávať rôzne parametre, ktoré ovpľyvňujú vrátené výsledky. Tieto
+parametre slúžia ako filtre, prípadne triedia výsledky podľa nejakého stĺpca. Tieto parametre sa
+posielajú databázovej vrstve, ktorá ich nastaví pri vytváraní databázovej požiadavky.
+
+% https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
+\paragraph{Spúštací skript}\leavevmode\\
+Okrem menežovania entít, je server zodpovedný za spúštanie kódu. Kód sa spúšta buď na vlastnom
+vstupe alebo na skrytých vstupoch zadania. To ako sa má program spustiť, skompilovať a prípadne
+otestovať hovorí kompilačný skript. Kompilačný skript je skrytý súbor, ktorý má názov
+\textit{run\_script.json}. Tento súbor server načíta ešte predtým ako kód klienta spustí. Server
+vďaka tomu vie tento skript pozmeniť a napríklad nastaviť aby sa kód spúštaľ na vlastnom vstupe,
+ktorý rozhranie servera dostalo vo webovej požiadavke. 
+
+V spúštacom skipte vie používateľ nastaviť všetky parametre testovania ako spôsob kompilácie a
+spúštania, časový limit alebo vlastný vstup. Ak sa v kompilačnom skripte nenastaví vlastný vstup,
+tak program sa postupne spustí na všetkých skrytých vstupných súboroch a porovnáva ich výstup so
+správnym výstupom. Skryté súbory majú koncovku \textit{.in} a výstupné \textit{.out}. Ak sa výstup
+programu nezhoduje so správnym výstupom
+testovanie končí.
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.8\textwidth]{images/spustaci_skript}}
+\caption[Spúštací skript]{Spúštací skript}
+\label{obr:zadania}
+\end{figure}
 
 \section{Izolované spúštanie kódu na serveri}
-Kód spustený na serveri, nesmie narušiť ostatné programy, prípadne inak narušiť prostredie servera.
+Kód spustený na serveri, nesmie narušiť ostatné bežiace programy. Klientský kód, môže obsahovať
+ľubovolné príkazy jazyka, ako napríklad systémové volania, ktoré sú nebezpečné. Okrem bezpečnosti,
+je dôležité aby kódy, ktoré sa práve spúštajú boli nezávislé. 
+
+Myšlienka testovačov pre rôzne jazyky je tu už dlho, a problematika tejto témy je hodná celej
+bakalárskej práce. Rozhodli sme sa pre jednoduché riešenie, ktoré je škálovateľné pre ľubovolné
+jazyky. 
+
+\subsection{Docker}
 TODO:
+
+\subsection{Spúštanie kódu}
+Riešenie je založené na knižnici \textit{Compilebox}, ktorú sme mierne upravili. Základnou
+myšlienkou knižnice je, že kód sa spúšta v dockeri, ktorý zaručuje izolovanosť od ostatných
+procesov na serveri. Po nainštalovaní dockera je nutné vytvoriť dockerový obraz, ktorý obsahuje
+všetky podporované jazyky. Ak na server príde požiadavka spustiť kód používateľa, vytvorí sa súbor
+do ktorého sa nakopírujú všetky súbory potrebné na testovanie. Klient má prístup iba k verejným
+súborom ale pri testovaní potrebujeme aj skryté súbory zadania. Pri spúštaní programu ale vieme,
+ktoré zadanie používateľ rieši a teda vieme, ktoré skryté súbory skopírovať. Názov súboru je
+unikátky identifikátor, ktorý zaručuje nezávislosť spúštania viacerých programov naraz. Keď sú
+všetky súbory pripravené, z dockerového obrazu sa vytvorí kontajner, v ktorom sa kód skompiluje a
+spustí. Výstup programu z testovania je presmerovaný do súboru a prípadné chyby pri kompilácii, či
+behu programu sa zapisujú do zvlášť súborov, ktoré kontajner vytvorí. Server pravidelne kontroluje,
+či dané súbory existujú. Server úmyslne nečaká kým sa spustený program v dockeri neskončí, pretože
+nič nezaručuje, že program niekedy skončí. Vďaka takémuto riešeniu vieme implementovať aj časový
+limit programu, kde po prekročení daného limitu bežiaci program ukončíme. Po skončení behu programu
+vrátime obsah súborov serveru, a celý priečinok, v ktorom boli potrebné súbory na spúštanie
+vymažeme.
