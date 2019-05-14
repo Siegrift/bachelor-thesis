@@ -402,6 +402,18 @@ kompilácie a spúštania, časový limit...
 \label{obr:zadania}
 \end{figure}
 
+\section{Synchronizácia editora medzi klientami}
+Ak sa používateľ prihĺasi na viacerých počítačoch naraz, kód editora sa medzi nimi synchronizuje. 
+Synchronizáciu zabezpečuje knižnica \textit{yjs}, ktorá nainštalovaná aj na klientovi a aj na 
+serveri. Táto knižnica používa bezkonfliktné replikovateľné dátové typy a skrýva celú ich 
+implementáciu. Knižnica vie fungovať synchronizovať veľa verejne dostupných editorov, ako 
+napríklad Monaco, ktorý používame. Knižnica vie zabezpečiť zdieľanie viacerými spôsobmi ako
+napríklad WebRTC alebo pomocou soketov cez webový server. 
+
+Knižnica však nie je až tak populárna a obsahovala viaceré chybym, ktoré sme museli opraviť.
+Komunita starajúca sa o túto knižnicu je o dosť menšia v porovnaní s ostanými knižnicami použitými v
+bakalárskej práci.
+
 \section{Izolované spúštanie kódu na serveri}
 Kód spustený na serveri, nesmie narušiť ostatné bežiace programy. Klientský kód, môže obsahovať
 ľubovolné príkazy jazyka, ako napríklad systémové volania, ktoré sú pre ostatné programy a stav
@@ -411,25 +423,33 @@ boli nezávislé.
 Myšlienka testovačov pre rôzne jazyky je tu už dlho, a problematika tejto témy je hodná celej
 bakalárskej práce. Rozhodli sme sa pre jednoduché riešenie, ktoré je škálovateľné pre ľubovolné
 jazyky. Riešenie je založené na knižnici \textit{Compilebox}, ktorú sme mierne upravili. Základnou
-myšlienkou knižnice je, že kód sa spúšta v \textit{dockeri}, ktorý zaručuje izolovanosť od ostatných
+myšlienkou knižnice je, že kód sa spúšta v \textit{dokeri}, ktorý zaručuje izolovanosť od ostatných
 procesov na serveri. 
 
-\subsection{Docker}
-TODO:
+\subsection{Doker}
+Doker je verejne prístupný projekt, ktorého cieľom je poskytnúť jednotné rozhranie pre izoláciu
+aplikácii do kontajnerov nezávislých od operačného systému. V dokeri vieme popísať aké balíčky a
+knižnice do systému chceme nainštalovať, prípadne napísať nejaké iné systémové príkazy. Z takéhoto
+popisu vieme následne vytvoriť \textit{Dokerový obraz}. Dokerový obraz predstavuje prostredie, v
+ktorom sú nainštalované všetky balíčky, ktoré sme uviedli v popise. Dôležité je, že balíčky existujú
+iba vo vnútri dokerového obrazu. Z dokerového obrazu sa dá vytvoriť inštancia, ktorá sa nazýva
+\textit{dokerový kontajner}. V kontajneri sa dajú následne spúštať programy, ktoré majú prístup k
+balíčkom nainštalovaným v dokerovom obraze. Kontajnerov vie byť naraz pustených ľubvoľne veľa a sú
+navzájom izolované. 
 
 \subsection{Spúštanie kódu}
-Po nainštalovaní dockera je nutné vytvoriť dockerový obraz, ktorý obsahuje všetky podporované
+Po nainštalovaní dokera je nutné vytvoriť dokerový obraz, ktorý obsahuje všetky podporované
 jazyky. Ak na server príde požiadavka spustiť kód používateľa, vytvorí sa súbor do ktorého sa
 nakopírujú všetky súbory potrebné na testovanie. Klient má ale iba prístup k verejným súborom ale
 pri testovaní potrebujeme aj skryté súbory zadania. Pri spúštaní programu ale vieme, ktoré zadanie
 používateľ rieši a teda vieme, ktoré skryté súbory skopírovať. Názov súboru je unikátky
 identifikátor, ktorý zaručuje nezávislosť spúštania viacerých programov naraz. Keď sú všetky súbory
-pripravené, z dockerového obrazu sa vytvorí kontajner, v ktorom sa kód skompiluje a spustí. Výstup
+pripravené, z dokerového obrazu sa vytvorí kontajner, v ktorom sa kód skompiluje a spustí. Výstup
 programu z testovania je presmerovaný do výstupného súboru a prípadné chyby alebo varovania pri
 kompilácii, či behu programu sa zapisujú do samostatných súborov, ktoré kontajner vytvorí. Po
 dokončení behu programu kontajner vytvorí špeciálny súbor, ktorý označuje ukončenie behu programu.
 Server pravidelne kontroluje, či daný súbor existuje. Server úmyslne nečaká kým sa spustený program
-v dockeri neskončí, pretože nič nezaručuje, že klientský program niekedy skončí. Vďaka takémuto
+v dokeri neskončí, pretože nič nezaručuje, že klientský program niekedy skončí. Vďaka takémuto
 riešeniu vieme implementovať aj časový limit programu, kde po prekročení daného limitu bežiaci
 program ukončíme. Po skončení behu programu vrátime obsah súborov serveru, a celý priečinok, v
 ktorom boli potrebné súbory na spúštanie vymažeme.
