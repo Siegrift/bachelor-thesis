@@ -60,6 +60,10 @@ To install follow these steps
 3. Run `./installMint script` (or script for your distro, however 
    **only the script for Mint is working properly**)
 
+If you have the following error: `Error starting daemon: Error initializing network controller:
+could not delete the default bridge network: network bridge has active endpoints` try the solution
+in [this link](https://stackoverflow.com/questions/33600154/docker-not-starting-could-not-delete-the-default-bridge-network-network-bridg/33604859#33604859).
+
 ## Compile and run script
 
 Compile script provides a way how to build the sources and test the code.
