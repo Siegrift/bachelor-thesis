@@ -10,11 +10,11 @@ v takýchto prípadoch vyžaduje vrátenie \textit{(angl. rollback)} niektorých
 
 V distribuovanom výpočte je bezkonfliktný replikovaný dátový typ (CRDT) dátová štruktúra,
 ktorá môže byť replikovaná vo viacerých počítačoch v sieti. Jednotlivé inštancie je možné
-aktualizovať nezávisle a súbežne bez koordinácie medzi ostanými inštanciami, pričom je vždy
+aktualizovať nezávisle a súbežne bez koordinácie medzi ostatnými inštanciami, pričom je vždy
 matematicky možné vyriešiť nezrovnalosti, ktoré by mohli nastať. Z toho vyplýva, že použitím typu
 CRDT nemôže nastať situácia, kedy by sme museli nejakú operáciu vrátiť. 
 
-Koncept CRDT bol formálne definovaný v roku 2011 osobami
+Koncept CRDT formálne definovali v roku 2011 osoby
 Marc Shapiro, Nuno Preguiça, Carlos Baquero a Marek Zawirski \cite{crdt_definition}.
 Ide teda o celkom nový koncept, ktorý rýchlo našiel v informatike podporu.
 
@@ -61,11 +61,11 @@ Zaujímavým aspektom CRDT, ktorý ho odlišuje od OT, sú relatívne pozície z
 nasledovné vlastnosti:
 \begin{enumerate}
   \item žiadne dva CRDT objekty nemajú rovnakú pozíciu
-  \item pozícia nejakého objektu sa nidky nezmení
+  \item pozícia nejakého objektu sa nikdy nezmení
   \item ak dva CRDT objekty A a B operujú na tej istej pozícii v dokumente a objekt A
   nastane skôr než B, tak relatívna pozícia A musí byť menšia ako B.
 \end{enumerate}
-Vytvorenie takýchto pozícií je celkom jednduché.
+Vytvorenie takýchto pozícií je celkom jednoduché.
 Znaky si môžeme predstaviť ako vrcholy na strome, kde každý znak má väčsie číslo ako znak pred
 ním, no menšie ako znak po ňom. Pozície môžu vyzerať zhruba nasledovne:
 
@@ -88,7 +88,7 @@ vrcholov. Napríklad:
 Ak predpokladáme, že pozície spĺňajú podmienky z \ref{def_pozicie}, tak CRDT objekty sú
 komutatívne a idempotentné.
 
-Idempotencia je daná tým, že ak chceme do dokumentu pridať znak s najekou relatívnou pozíciou, a tá
+Idempotencia je daná tým, že ak chceme do dokumentu pridať znak s nejakou relatívnou pozíciou, a tá
 sa tam už nachádza, tak opätovné pridanie už nič neurobí. Ak sa naopak snažíme vymazať niečo na
 pozícii, ktorá sa v dokumente už nenachádza, tak vieme, že uz vymazaná bola. Obe operácie teda
 zachovávajú idempotentnosť.

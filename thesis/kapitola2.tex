@@ -8,14 +8,14 @@ Kolaboratívny editor umožňuje viacerým používateľom naraz upravovať jede
 Tieto editory sa rozdeľujú na dve kategórie podľa typu aplikovania úprav:
 \begin{itemize}
   \item v reálnom čase - zmeny dokumentu sa okamžite zobrazia všetkým používateľom
-  \item s oneskorením - zmeny dokumentu sa nedejú okamžite (podobne ako pri ver --- zionovacích
+  \item s oneskorením - zmeny dokumentu sa nedejú okamžite (podobne ako pri ver\-zio\-no\-va\-cích
   systémoch ako Git, Mercurial)
 \end{itemize}
 V bakalárskej práci sa zaoberáme editormi so zmenami, ktoré aplikujú úpravy v reálnom čase, kde treba
 riešiť synchronizáciu editorových inštancií používateľov a riešenie možných konfliktov.
 
 Problematika kolaboratívnych editorov v reálnom čase sa dá rozdeliť do samostatných zmysluplných 
-podkapitol
+podkapitol:
 \begin{itemize}
 \item  technické výzvy
 \item  algoritmy riešiace konkurentné modifikácie jedného dokumentu
@@ -49,19 +49,19 @@ upravovať daný dokument.
 
 Ďalšou, pre používateľa príjemnejšou, voľbou je optimistická
 replikácia, kde sa zmeny v dokumente uplatňujú postupne a prípadné chyby a nekonzistentnosti sa
-riešia neskôr. Neskôr v texte ukážeme, že existuje spôsob akým docieliť konkurentné úpravy 
+riešia neskôr. Neskôr v texte ukážeme, že existuje spôsob, akým docieliť konkurentné úpravy 
 dokumentu zaručene bez konfliktov. Takýto algoritmus je popísaný v kapitole \ref{kap:cdrt}.
 
 Obmedzíme sa teraz iba na textový editor. Aj keď algoritmus, ktorý neskôr v texte ukážeme, je
 všeobecnejší a fungoval by aj pre iné typy editorov podporujúce zdieľanie iných entít, napríklad
-obrázkov, rôznych variantov textu... 
+obrázkov, rôznych variantov textu a iných.
 
 \medskip
 
 Problém súbežnej modifikácie jedného textového dokumentu je, že jednoduché textové operácie ako
 pridať alebo zmazať znak, nie sú komutatívne \ref{obr:nekomutativita} a ani 
 idempotentné \ref{obr:neidempotentnost}. Keďže používatelia
-modifikujú dokument cez sieť, nie je zaručené v akom poradí sa modifikácie uskutočnia. 
+modifikujú dokument cez sieť, nie je zaručené, v akom poradí sa modifikácie uskutočnia. 
 Ilustrujme tieto problémy na príklade:
 
 \begin{figure}[H]
@@ -101,7 +101,7 @@ príliš vysoká, používateľ musí dlho čakať.
 
 My sme sa v bakalárskej práci rozhodli použiť klient-server model, pričom za synchronizáciu klientov
 je zodpovedný výhradne server. Podobný prístup používa napríklad spoločnost Google vo 
-viacerých jej produktoch.
+viacerých svojich produktoch.
 
 \section{Algoritmy riešiace konkurentné modifikácie}
 Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algoritmov:
@@ -112,5 +112,5 @@ Na riešenie synchronizácie klientov existujú dva dobre preskúmané typy algo
 \end{enumerate}
 
 V bakalárskej práci použijeme typ CRDT, pretože typ OT je teoretický model, ktorý predchádza typu CRDT a v praxi
-je jeho implementácia veľmi náročná a často nefunguje tak dobre ako je spomínané v teórii.
+je jeho implementácia veľmi náročná a často nefunguje tak dobre, ako je spomínané v teórii.
 Taktiež použitie typu OT je vo väčších projektoch neškálovateľné \cite{ot_nonscalable}.

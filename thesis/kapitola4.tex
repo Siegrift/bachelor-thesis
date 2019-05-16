@@ -2,7 +2,7 @@
 
 \label{kap:design} % id kapitoly pre prikaz ref
 
-V návrhu bakalárskej práce vystupujú rôzne entity medzi ktorými sú rôzne vzťahy. 
+V návrhu bakalárskej práce vystupujú rôzne entity, medzi ktorými sú rôzne vzťahy. 
 \begin{figure}[H]
 \centerline{\includegraphics[width=1\textwidth]{images/entity}}
 \caption[Entity v návrhu]{Entity v návrhu}
@@ -16,14 +16,14 @@ bežných používateľov a administrátorov.
 bežný používateľ patrí do niekoľkých skupín, v ktorých má prístup iba k úlohám prístupným pre danú
 skupinu.
 \item [Administrátor] - Administrátor má plný prístup ku všetkým informáciám na serveri. Okrem
-toho pridáva bežných používateľov do skupín, pridáva zadania, vidí odovzdané zadania bežných
+toho pridáva bežných používateľov do skupín, pridáva zadania, vidí o\-dov\-zdané zadania bežných
 používateľov...
 \item [Skupina] - Skupina je entita, ktorá sa skladá z bežných používateľov. Každé zadanie musí
 patriť do práve jednej skupiny. Toto zadanie je prístupné iba pre používateľov, ktorí patria do
 danej skupiny. 
 \item [Zadanie] - Administrátor vie vytvoriť zadanie pre nejakú skupinu, ktoré môžu bežní
 používatelia riešiť. Zadanie obsahuje verejné a skryté súbory.
-\item [Verejné súbory] - Verejné súbory, sú súbory zadania, ktoré sú prístupné pre klienta.
+\item [Verejné súbory] - Verejné súbory sú súbory zadania, ktoré sú prístupné pre používateľa.
 \item [Skryté súbory] - Skryté súbory by nikdy nemali byť posielané na klienta, a slúžia na 
 vytvorenie skrytých vstupov a správnych riešení, prípadne iných súborov, ku ktorým by klient
 nemal mať prístup.
@@ -34,7 +34,7 @@ Aplikácia je založená na klient-server architektúre. Program sa preto dá ro
 podkapitoly \textit{klient} a \textit{server}.
 
 \section{Klient}
-Klient je v bakalárskej práci webová aplikácia cez ktorú používateľ komunikuje so serverom. V návrhu
+Klient je v bakalárskej práci webová aplikácia, cez ktorú používateľ komunikuje so serverom. V návrhu
 klienta sa snažíme hlavne vytvoriť jednoduché používateľské prostredie, ktoré je intuitívne na
 použitie. Kedže aplikácia má byť používaná ako editor, je nutné, aby sa jednotlivé časti pohodlne
 čítali a písmo bolo dostatočne veľké. Naopak, nepredpokladáme použitie editora na mobilných
@@ -51,7 +51,7 @@ používateľ má svoje prihlasovacie meno a heslo, pod ktorým sa zaregistroval
 registrácia sú pre oba typy používateľov rovnaké.
 
 Registrácia umožňuje vytvoriť nového používateľa. Zaujímavá otázka je, či umožniť vytváranie
-administrátorov priamo pri regsitrácii, alebo nejakým iným spôsobom. Rozhodli sme sa, že je lepšie
+administrátorov priamo pri registrácii, alebo nejakým iným spôsobom. Rozhodli sme sa, že je lepšie,
 ak používateľ nemusí pri registrácii riešiť koncept administrátorov, a teda umožniť iba vytváranie
 bežných používateľov. 
 
@@ -67,10 +67,10 @@ od rozhrania pre bežného používateľa. Adminstrátorské rozhranie umožňuj
 \end{itemize}
 
 \subsection{Rozhranie pre bežného používateľa}
-Rozhranie pre bežného používateľa slúži iba nato aby si používateľ mohol vybrať skupinu a zadanie,
+Rozhranie pre bežného používateľa slúži iba nato, aby si používateľ mohol vybrať skupinu a zadanie,
 na ktorom chce pracovať. Po zvolení zadania sa zobrazí editor, v ktorom môže používateľ zadanie
 riešiť. Editor sa automaticky synchronizuje na vzdialených počítačoch, prípadne nových kartách 
-vo webovom prehliadači. Synchronozácia je granulovaná pre používateľa. To znamená, že ak sa dva
+vo webovom prehliadači. Synchronizácia je granulovaná pre používateľa. To znamená, že ak sa dva
 počítače navzájom synchronizujú, sú práve prihlásené pod tým istým používateľom.
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
@@ -83,7 +83,7 @@ používateľovi pohodlne preklikávať a zvoliť aktívny súbor, ktorý sa zob
 \paragraph{Zdieľateľný editor}\leavevmode\\
 Najzaujímavejšou častou práce je kolaboratívny editor umožnujúci bežným používateľom naraz upravovať
 kód. V editore musí byť jasné, ktorý súbor sa práve upravuje. Editor môže tiež ponúkať nejaké
-informácie o vzdialených používaťeloch ako prihlasovacie meno, pozícia kurzora...
+informácie o vzdialených používateľoch ako prihlasovacie meno, pozícia kurzora a ďalších.
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Ovládací panel}\leavevmode\\
@@ -104,8 +104,8 @@ Server má viacero funkcií:
 \item zbiehanie kódu, poskytovanie odpovede klientom
 \end{itemize}
 
-\subsection{Synchronozácia replík klientov}
-Najdôležitejšou funckiou servera je synchronizácia replík klientov ak nastane nejaká zmena
+\subsection{Synchronizácia replík klientov}
+Najdôležitejšou funckiou servera je synchronizácia replík klientov, ak nastane nejaká zmena
 dokumentu. Server na toto nepotrebuje veľkú logiku, ale potrebuje korektne preposielať informácie
 medzi klientami a reagovať na prípadné komunikačné chyby (odoslať správu znovu).
 
@@ -120,7 +120,7 @@ akciu na serveri. Časť rozhrania služi na získanie informácií zo servera a
 na serveri nové položky (používatelia, zadania).
 
 \subsection{Zbiehanie kódu, poskytovanie odpovede klientom}
-Kód, ktorý sa napíše na klientoch sa má dať spustiť v izolovanom prostredí servera. Aplikácia by
+Kód, ktorý sa napíše na klientoch, sa má dať spustiť v izolovanom prostredí servera. Aplikácia by
 mala poskytnúť dve možnosti ako testovať klientský kód:
 \begin{itemize}
 \item na vlastnom vstupe
@@ -136,7 +136,7 @@ behu programu, daná chybová hláška sa má zobraziť ako výstup programu.
 Okrem testovania na vlastných vstupoch si vie používateľ otestovať kód aj na skrytých vstupoch a
 výstupoch zadania. Takéto skryté vstupy vie pridať iba administrátor a nikdy by nemali byť zobrazené
 bežnému používateľovi. Každé testovanie na skrytých vstupoch musí byť uložené na serveri, aby si ho
-administrátor vedel pozrieť keď bude ohodnocovať dané zadanie bežného používateľa. Po odoslaní
+administrátor vedel pozrieť, keď bude ohodnocovať dané zadanie bežného používateľa. Po odoslaní
 požiadavky serveru na otestovanie na skrytých vstupoch by sa mali zobraziť výsledky testovania.
 Skrytých vstupov môže byť viac, ale testuje sa na vstupoch zaradom a keď sa nájde vstup, na ktorom
 program dáva nesprávny výstup, tak sa v testovaní ďalej nepokračuje.
@@ -151,5 +151,5 @@ pre dané zadanie.
 \item RTE - Kompilácia prebehla v poriadku, ale program počas behu programu spadol.
 \item CE - Kompilácia programu sa nepodarila.
 \end{itemize}
-\textit{(V prípade, že jazyk, v ktorom je kód napísaný je interpretovaný, sa kompilácia preskakuje.
+\textit{(V prípade, že jazyk, v ktorom je kód napísaný, je interpretovaný, sa kompilácia preskakuje.
 Stále však môžu nastať všetky výsledky testovania s výnimkou CE)}

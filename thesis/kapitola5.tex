@@ -1,5 +1,5 @@
 \chapter{Implementácia}
-V predošlej kapitole sme popísali návrh aplikácie, ale nevenovali sme sa implementáčným detailom.
+V predošlej kapitole sme popísali návrh aplikácie, ale nevenovali sme sa implementačným detailom.
 Implementácia klienta a servera je odlišná. Na klientovi riešime implementačné detaily vzhľadu
 stránky, zatiaľ čo na serveri štruktúru entít a ich ukladanie v databáze.
 
@@ -57,7 +57,7 @@ je prihlásený administrátor alebo bežný používateľ.
 Pri implementácii rozhrania pre bežného používateľa sme použili kombináciu oďtieňov sivej na pozadia
 a farby editoru a bielu farbu na písmo. Na výraznenie akcií, ktoré vie používateľ na stránke robiť,
 používame špecifický odtieň modrej farby. Poslednou používanou farbou je červená, ktorou
-singalizujeme chyby.
+signalizujeme chyby.
 
 Po prihlásení sa zobrazí bežnému používateľovi rozhranie, v ktorom vidí všetky vytvorené skupiny.
 Nevidí však ani ich obsah, ani prihlásených pouźívateľov patriacich do daných skupín. Do skupín
@@ -105,7 +105,7 @@ alebo zobrazenom stave. Tieto stavy sú rozlíšené typom ikonky.
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Ovládací panel}\leavevmode\\
 Ovládací panel umožňuje používateľovi vykonávať akcie so svojím zadaním. Používateľ si môže svoj kód
-uložiť, načítať, spustiť na vlastnom vstupe alebo otestovať na skrytých vstupoch tak ako to bolo 
+uložiť, načítať, spustiť na vlastnom vstupe alebo otestovať na skrytých vstupoch tak, ako to bolo 
 napísané v návhu. Pri kliknutí na ľubovolnú akciu sa zobrazí dialóg, v ktorom používateľ vyplní
 údaje a potvrdí akciu, ktorá sa následne odošle na server.
 
@@ -178,7 +178,7 @@ Po skončení behu programu sa zobrazí výsledný výstup v dialógu.
 \caption{Spúštanie na vlastnom vstupe}
 \end{figure}
 
-Posledná akcia, ktorú vie používateľ spraviť je otestovanie svojho riešenia na skrytých vstupoch
+Posledná akcia, ktorú vie používateľ spraviť, je otestovanie svojho riešenia na skrytých vstupoch
 uložených na serveri. Po kliknutí na tlačítko sa odošle na server aktuálny stav zadania, ktorý sa
 na serveri uloží a automaticky začne testovať.
 \begin{figure}[H]
@@ -232,8 +232,8 @@ syntaxe.
 \caption{Zvýrazňovanie syntaxe jazyka}
 \end{figure}
 
-Okrem zvýrazňovania syntaxe editor poskytuje základné operácie ako krok spať a krok dopredu. Pre
-jednoduchšie navigáciu v texte je v pravej časti editoru "minimapka". Avšak najužitočnejšou a
+Okrem zvýrazňovania syntaxe editor poskytuje základné operácie ako krok späť a krok dopredu. Pre
+jednoduchú navigáciu v texte je v pravej časti editoru "minimapka". Avšak najužitočnejšou a
 najviac používanou funkcionalitou editora je nepochybne automatický návrh. Ak používateľ napíše pár
 znakov, editor mu ponúkne na výber z možností, ktoré by mohol chcieť napísať. Používateľ môže
 zobraziť návrh aj stlačením klávesovej skratky \textit{Ctrl + medzera}. Do návrhu sa postupne
@@ -250,7 +250,7 @@ nejaký iný reťazec. Monaco túto funkcionalitu podporuje po stlačení kláve
 + F} pre hľadanie a \textit{Ctrl + H} pre hľadanie spolu s nahradzovaním. Obe možnosti podporujú
 rôzne typy vyhľadávania, ako napríklad hľadanie pomocou regulárnych výrazov. Na postupné označovanie
 nejakého reťazca sa dá použiť aj multikurzor. Stačí, ak používateľ označí text a stlačí \textit{Ctrl
-+ D}. Tento príkaz nájde a označí ďalší výskyt s rovnakým textom aký používateľ označil. 
++ D}. Tento príkaz nájde a označí ďalší výskyt s rovnakým textom, aký používateľ označil. 
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.7\textwidth]{images/hladanie_nahradzovanie}}
 \caption[Hĺadanie a nahradzovanie]{Hĺadanie a nahradzovanie}
@@ -281,7 +281,7 @@ zobrazí sa mu automaticky administrátorské rozhranie.
 Farby použíté na rozhranie pre adminsitrátora sú úplne iné oproti farbám zvoleným na rozhranie pre
 bežného používateĺa. Administrátorské rozhranie používa na pozadie bielu farbu a text používa farby
 odtieňov sivej. Tieto farby sú predvolenými farbami knižnice \textit{React admin}, ktorá je použitá
-na vytvorenie rozhrania. Jazyk použítý v rozhraní je anglický, pretože knižnica používa anglický
+na vytvorenie rozhrania. Jazyk použitý v rozhraní je anglický, pretože knižnica používa anglický
 jazyk a preklad do slovenčiny by bol náročný a zdĺhavý.
 
 React admin dovoľuje deklaratívne popísať administrátorské rozhranie a jediná požiadavka knižnice je
@@ -310,7 +310,7 @@ ktorú rozdeľujeme na:
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Akcie}\leavevmode\\
-Akcie sa nachadzajú v hornej časti panela a štandardne je v knižnici React admin implemntovaná iba
+Akcie sa nachádzajú v hornej časti panela a štandardne je v knižnici React admin implemntovaná iba
 akcia \textit{exportovať}, ktorá vytvorí CSV súbor so všetkými entitami zobrazenými v tabuľke.
 Ďalšie akcie sa však dajú pridať.Väčšina panelov má implementovanú aspoň akciu \textit{vytvor},
 ktorá ponúkne jednoduchý formulár na vyplnenie údajov entity, ktorý sa následne odošle na server,
@@ -365,28 +365,28 @@ automaticky preloží na ekvivalentný kód jazyka JavaScript. Server potom tent
 \textit{Node.js}. Node je prostredie, ktoré slúži na spúštanie jazyka JavaScript mimo webového
 prehliadača. Okrem toho Node obsahuje viaceré knižnice, ktoré nie sú dostupné v prehliadači ako
 napríklad knižnica na prístup k súborovému systému alebo knižnica na spúštanie systémových volaní.
-Knižnica použítá na vytvorenie webového rozhrania servera sa nazýva \textit{Express}. Express má
+Knižnica použitá na vytvorenie webového rozhrania servera sa nazýva \textit{Express}. Express má
 viaceré rozšírenia, ktoré sú dostupné ako samostatné knižnice, ktoré napríklad komprimujú odpovede
 na webové požiadavky, prekladajú formát parametrov poslaných v požiadavke...
 
 Server je zodpovedný za uchovávanie a menežovanie entít. Entity sa uchovávajú v
 databáze a priamo na súborovom systéme servera. V databáze sa ukladá všetko okrem súborov
 zadania a súborov vytvorených pri ukladaní zadania. Tieto súbory sú uložené v špeciálnych
-priečinkoch, ktoré majú názov rovanký ako identifikátor danej entity v databáze. To znamená, že
+priečinkoch, ktoré majú názov rovnaký ako identifikátor danej entity v databáze. To znamená, že
 ak server pozná identifikátor entity, vie si jednoducho načítať aj súbory patriace k danej entite.
 Použitá databáza je \textit{PostgreSQL}, pretože poskytuje viaceré pokročilé funkcie.
 
-Webové rozhranie servera umožňuje zadávať rôzne parametre, ktoré ovpľyvňujú vrátené výsledky. Tieto
+Webové rozhranie servera umožňuje zadávať rôzne parametre, ktoré ovplyvňujú vrátené výsledky. Tieto
 parametre slúžia ako filtre, prípadne triedia výsledky podľa nejakého stĺpca. Tieto parametre sa
 posielajú databázovej vrstve, ktorá ich nastaví pri vytváraní databázovej požiadavky.
 
 % https://tex.stackexchange.com/questions/5035/paragraph-style-how-to-force-line-break-paragraph-make-paragraph-a-he
 \paragraph{Spúštací skript}\leavevmode\\
 Okrem menežovania entít, je server zodpovedný aj za spúštanie kódu. Kód sa spúšta buď na vlastnom
-vstupe alebo na skrytých vstupoch zadania. To ako sa má program spustiť, skompilovať a prípadne
-otestovať hovorí kompilačný skript. Je to skrytý súbor, ktorý má názov
-\textit{run\_script.json}. Tento súbor server načíta ešte predtým ako kód klienta spustí. Server
-vďaka tomu vie tento skript pozmeniť a napríklad nastaviť aby sa kód spúštaľ na vlastnom vstupe,
+vstupe alebo na skrytých vstupoch zadania. To, ako sa má program spustiť, skompilovať a prípadne
+otestovať, hovorí kompilačný skript. Je to skrytý súbor, ktorý má názov
+\textit{run\_script.json}. Tento súbor server načíta ešte predtým, ako kód klienta spustí. Server
+vďaka tomu vie tento skript pozmeniť a napríklad nastaviť, aby sa kód spúštal na vlastnom vstupe,
 ktorý rozhranie servera dostalo vo webovej požiadavke. Ak sa v kompilačnom skripte nenastaví
 vlastný vstup, tak program sa postupne spustí na všetkých skrytých vstupných súboroch a porovnáva
 ich výstup so správnym výstupom. Skryté súbory majú koncovku \textit{.in} a výstupné \textit{.out}.
@@ -403,18 +403,18 @@ kompilácie a spúštania, časový limit...
 Ak sa používateľ prihlási na viacerých počítačoch naraz, kód editora sa medzi nimi synchronizuje.
 Synchronizáciu zabezpečuje knižnica \textit{yjs}, ktorá je nainštalovaná aj na klientovi a aj na
 serveri. Táto knižnica používa bezkonfliktné replikovateľné dátové typy a skrýva celú ich
-implementáciu. Knižnica vie fungovať synchronizovať veľa verejne dostupných editorov ako Monaco,
+implementáciu. Knižnica vie synchronizovať veľa verejne dostupných editorov ako Monaco,
 ktorý používame. Knižnica vie zabezpečiť zdieľanie viacerými spôsobmi ako napríklad WebRTC alebo
 pomocou soketov cez webový server. 
 
-Knižnica však nie je až tak populárna a obsahovala viaceré chybym, ktoré sme museli opraviť.
-Komunita starajúca sa o túto knižnicu je o dosť menšia v porovnaní s ostanými knižnicami použitými v
+Knižnica však nie je až tak populárna a obsahovala viaceré chyby, ktoré sme museli opraviť. Komunita
+starajúca sa o túto knižnicu je o dosť menšia v porovnaní s ostatnými knižnicami použitými v
 bakalárskej práci.
 
 \section{Izolované spúštanie kódu na serveri}
 Kód spustený na serveri, nesmie narušiť ostatné bežiace programy. Klientský kód, môže obsahovať
 ľubovolné príkazy jazyka, ako napríklad systémové volania, ktoré sú pre ostatné programy a stav
-servera nebezpečné. Okrem bezpečnosti, je dôležité aby kódy používateľov, ktoré sa práve spúštajú
+servera nebezpečné. Okrem bezpečnosti, je dôležité, aby kódy používateľov, ktoré sa práve spúštajú,
 boli nezávislé.
 
 Myšlienka testovačov pre rôzne jazyky je tu už dlho, a problematika tejto témy je hodná celej
@@ -425,13 +425,13 @@ procesov na serveri.
 
 \subsection{Doker}
 Doker je verejne prístupný projekt, ktorého cieľom je poskytnúť jednotné rozhranie pre izoláciu
-aplikácii do kontajnerov nezávislých od operačného systému. V dokeri vieme popísať aké balíčky a
+aplikácii do kontajnerov nezávislých od operačného systému. V dokeri vieme popísať, aké balíčky a
 knižnice do systému chceme nainštalovať, prípadne napísať nejaké iné systémové príkazy. Z takéhoto
 popisu vieme následne vytvoriť \textit{Dokerový obraz}. Dokerový obraz predstavuje prostredie, v
 ktorom sú nainštalované všetky balíčky, ktoré sme uviedli v popise. Dôležité je, že balíčky existujú
 iba vo vnútri dokerového obrazu. Z dokerového obrazu sa dá vytvoriť inštancia, ktorá sa nazýva
 \textit{dokerový kontajner}. V kontajneri sa dajú následne spúštať programy, ktoré majú prístup k
-balíčkom nainštalovaným v dokerovom obraze. Kontajnerov môže byť naraz pustených ľubvoľne veľa a sú
+balíčkom nainštalovaným v dokerovom obraze. Kontajnerov môže byť naraz pustených ľubovoľne veľa a sú
 navzájom izolované. 
 
 \subsection{Spúštanie kódu}
@@ -445,7 +445,7 @@ pripravené, z dokerového obrazu sa vytvorí kontajner, v ktorom sa kód skompi
 programu z testovania je presmerovaný do výstupného súboru a prípadné chyby alebo varovania pri
 kompilácii, či behu programu sa zapisujú do samostatných súborov, ktoré kontajner vytvorí. Po
 dokončení behu programu kontajner vytvorí špeciálny súbor, ktorý označuje ukončenie behu programu.
-Server pravidelne kontroluje, či daný súbor existuje. Server úmyslne nečaká kým sa spustený program
+Server pravidelne kontroluje, či daný súbor existuje. Server úmyslne nečaká, kým sa spustený program
 v dokeri neskončí, pretože nič nezaručuje, že klientský program niekedy skončí. Vďaka takémuto
 riešeniu vieme implementovať aj časový limit programu, kde po prekročení daného limitu bežiaci
 program ukončíme. Po skončení behu programu vrátime obsah súborov serveru a celý priečinok, v
